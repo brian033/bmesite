@@ -1,0 +1,64 @@
+version: "3.8"
+
+services:
+    mongo:
+        image: mongo
+        container_name: my-mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME} #
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+        volumes:
+            - ./db:/data/db
+        ports:
+            - "27017:27017" # 你也可以拔掉這行讓它只在網路內被看到
+        networks:
+            - dev-net
+
+    nextjs:
+        image: node:20-alpine
+        container_name: next-dev
+        working_dir: /app
+        command: sh -c "npm install && npm run dev"
+        environment:
+            - MONGODB_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/confDb?authSource=admin
+            - MONGODB_DB=confDb
+            - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+            - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+            - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+            - NEXTAUTH_URL=${NEXTAUTH_URL}
+            - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+        volumes:
+            - ./src:/app/src
+            - ./public:/app/public
+            - ./uploads:/app/uploads
+            - ./next.config.ts:/app/next.config.ts
+            - ./next-env.d.ts:/app/next-env.d.ts
+            - ./tsconfig.json:/app/tsconfig.json
+            - ./package.json:/app/package.json
+            - ./package-lock.json:/app/package-lock.json
+            - ./postcss.config.mjs:/app/postcss.config.mjs
+            - ./eslint.config.mjs:/app/eslint.config.mjs
+            - ./README.md:/app/README.md
+            - ./API_Structure.md:/app/API_Structure.md
+            - ./commands.txt:/app/commands.txt
+            - ./db:/app/db
+        ports:
+            - "3000:3000"
+        depends_on:
+            - mongo
+        networks:
+            - dev-net
+
+    # cloudflared:
+    #     image: cloudflare/cloudflared:latest
+    #     container_name: cloudflared
+    #     command: tunnel --no-autoupdate run --token YOUR_TUNNEL_TOKEN
+    #     networks:
+    #         - dev-net
+    #     depends_on:
+    #         - nextjs
+
+networks:
+    dev-net:
+        driver: bridge
