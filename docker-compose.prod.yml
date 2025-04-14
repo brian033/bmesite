@@ -16,10 +16,10 @@ services:
             - dev-net
 
     nextjs:
-        image: node:20-alpine
-        container_name: next-dev
-        working_dir: /app
-        command: sh -c "npm install && npm run dev"
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: next-prod
         environment:
             - MONGODB_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/confDb?authSource=admin
             - MONGODB_DB=confDb
@@ -29,20 +29,7 @@ services:
             - NEXTAUTH_URL=${NEXTAUTH_URL}
             - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
         volumes:
-            - ./src:/app/src
-            - ./public:/app/public
-            - ./uploads:/app/uploads
-            - ./next.config.ts:/app/next.config.ts
-            - ./next-env.d.ts:/app/next-env.d.ts
-            - ./tsconfig.json:/app/tsconfig.json
-            - ./package.json:/app/package.json
-            - ./package-lock.json:/app/package-lock.json
-            - ./postcss.config.mjs:/app/postcss.config.mjs
-            - ./eslint.config.mjs:/app/eslint.config.mjs
-            - ./README.md:/app/README.md
-            - ./API_Structure.md:/app/API_Structure.md
-            - ./commands.txt:/app/commands.txt
-            - ./db:/app/db
+            - ./uploads:/app/uploads # 保留 uploads 可寫入
         ports:
             - "3000:3000"
         depends_on:
@@ -50,15 +37,14 @@ services:
         networks:
             - dev-net
 
-    # cloudflared:
-    #     image: cloudflare/cloudflared:latest
-    #     container_name: cloudflared
-    #     command: tunnel --no-autoupdate run --token YOUR_TUNNEL_TOKEN
-    #     networks:
-    #         - dev-net
-    #     depends_on:
-    #         - nextjs
-
+    cloudflared:
+        image: registry-1.docker.io/cloudflare/cloudflared:latest
+        container_name: cloudflared
+        command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+        networks:
+            - dev-net
+        depends_on:
+            - nextjs
 networks:
     dev-net:
         driver: bridge

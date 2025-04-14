@@ -1,5 +1,0 @@
-docker run -d \
-  --name bime-mongo \
-  -p 27017:27017 \
-  -v /Users/binwei130/Desktop/school/bime_conf/mongoDB:/data/db \
-  mongo
