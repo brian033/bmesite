@@ -11,7 +11,7 @@ const handler = async (req: NextRequest, session: any) => {
         return NextResponse.json({ error: "Missing data" }, { status: 400 });
     }
 
-    const allowedRoles = ["admin", "attendee", "speaker"];
+    const allowedRoles = ["admin", "attendee", "reviewer"];
     if (!allowedRoles.includes(newRole)) {
         return NextResponse.json({ error: "Invalid role" }, { status: 400 });
     }
