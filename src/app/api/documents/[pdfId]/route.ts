@@ -147,16 +147,20 @@ const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
 };
 
 // ✅ 包裝 GET route
-export function GET(req: NextRequest, ctx: { params: { pdfId: string } }) {
+export async function GET(req: NextRequest, ctx: { params: Promise<{ pdfId: string }> }) {
+    const { pdfId } = await ctx.params;
+
     return middlewareFactory({ cors: true, auth: true }, (req, session) =>
-        getHandler(req, session, ctx.params.pdfId)
+        getHandler(req, session, pdfId)
     )(req);
 }
 
 // ✅ 包裝 POST route
-export function POST(req: NextRequest, ctx: { params: { pdfId: string } }) {
+export async function POST(req: NextRequest, ctx: { params: Promise<{ pdfId: string }> }) {
+    const { pdfId } = await ctx.params;
+
     return middlewareFactory({ cors: true, auth: true }, (req, session) =>
-        postHandler(req, session, ctx.params.pdfId)
+        postHandler(req, session, pdfId)
     )(req);
 }
 

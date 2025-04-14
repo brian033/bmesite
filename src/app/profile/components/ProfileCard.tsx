@@ -14,8 +14,20 @@ export default function ProfileCard() {
     if (status === "loading") return <p>載入中...</p>;
     if (!session || !session.user) return <p>未登入</p>;
 
-    const user = session.user;
-    const imageSrc = user.image?.startsWith("/pfp") ? `/api/user_uploads${user.image}` : user.image;
+    const user = session.user as {
+        name?: string;
+        email?: string;
+        image?: string;
+        phone?: string;
+        address?: string;
+        department?: string;
+        payment?: { paid: boolean; payment_id?: string };
+        role?: string;
+    };
+    const imageSrc =
+        typeof user.image === "string" && user.image.startsWith("/pfp")
+            ? `/api/user_uploads${user.image}`
+            : user.image ?? "/default-profile.png"; // 可替換為預設圖片
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];

@@ -55,7 +55,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
     const { slug } = await params;
     return middlewareFactory(
         { cors: true, auth: true, role: ["admin", "reviewer"] },
-        (req, session) => handler(req, session, params.slug)
+        (req, session) => handler(req, session, slug)
     )(req);
 }
 

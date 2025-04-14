@@ -9,6 +9,7 @@ type User = {
     email: string;
     uuid: string;
     role: string;
+    image: string;
     createdAt: string;
     phone: string;
     address: string;
@@ -69,9 +70,10 @@ export default function UserTable({ initialUsers }: { initialUsers: User[] }) {
                             <td style={tdStyle}>
                                 <img
                                     src={
-                                        user.image?.startsWith("/pfp")
+                                        typeof user.image === "string" &&
+                                        user.image.startsWith("/pfp")
                                             ? `/api/user_uploads${user.image}`
-                                            : user.image
+                                            : user.image ?? "/default-profile.png" // 可選擇 fallback 圖片
                                     }
                                     alt="頭貼"
                                     width={50}
@@ -111,14 +113,11 @@ export default function UserTable({ initialUsers }: { initialUsers: User[] }) {
 
 // CSS Styles
 const tableContainerStyle = {
-    overflowX: "auto", // 讓表格可以左右滾動
     margin: "20px 0",
 };
 
 const tableStyle = {
     width: "100%",
-    borderCollapse: "collapse",
-    tableLayout: "auto", // 使表格寬度自動調整
 };
 
 const trStyle = {
@@ -127,14 +126,14 @@ const trStyle = {
 
 const thStyle = {
     padding: "12px 8px",
-    textAlign: "left",
+    // textAlign: "left",
     backgroundColor: "black",
     fontWeight: "bold",
 };
 
 const tdStyle = {
     padding: "8px",
-    textAlign: "left",
+    // textAlign: "left",
     border: "1px solid #ddd",
 };
 

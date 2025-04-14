@@ -2,11 +2,12 @@
 
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
     const { data: session, status } = useSession();
-    const user = session?.user;
-
+    const user = session?.user as { name?: string; email?: string; image?: string; role?: string };
+    const router = useRouter();
     return (
         <nav
             style={{
@@ -32,7 +33,6 @@ export default function Navbar() {
                 <Link href="/schedule">大會議程</Link>
                 <Link href="/travel">住宿與交通</Link>
                 <Link href="/downloads">檔案下載</Link>
-
                 {/* 只要有 sign in 就可以看到這個 */}
                 {user && (
                     <Link
@@ -48,7 +48,6 @@ export default function Navbar() {
                         個人頁面
                     </Link>
                 )}
-
                 {/* 依 role 顯示額外按鈕 */}
                 {user?.role === "admin" && (
                     <Link
@@ -64,7 +63,6 @@ export default function Navbar() {
                         管理使用者
                     </Link>
                 )}
-
                 {(user?.role === "reviewer" || user?.role === "admin") && (
                     <>
                         <Link

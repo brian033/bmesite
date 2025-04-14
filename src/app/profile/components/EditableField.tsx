@@ -1,12 +1,12 @@
 import { useState } from "react";
 
 type EditableFieldProps = {
+    api_value: string; // API 中的欄位名稱，例如 "name"、"phone" 等等
     label: string; // 欄位名稱
     value: string; // 當前顯示的值
-    onSubmit: (newValue: string) => void; // 提交更新的函式
 };
 
-const EditableField = ({ api_value, label, value, onSubmit }: EditableFieldProps) => {
+const EditableField = ({ api_value, label, value }: EditableFieldProps) => {
     const [editing, setEditing] = useState(false);
     const [newValue, setNewValue] = useState(value);
 

@@ -99,8 +99,9 @@ const handler = async (req: NextRequest, session: any, pathParts: string[]) => {
 //         handler(req, session, ctx.params.path)
 //     )(req);
 // }
-export async function GET(req: NextRequest, ctx: { params: { path: string[] } }) {
+export async function GET(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {
     const { path } = await ctx.params;
+
     return middlewareFactory({ cors: true, auth: true }, (req, session) =>
         handler(req, session, path)
     )(req);

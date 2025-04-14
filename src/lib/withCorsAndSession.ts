@@ -1,6 +1,6 @@
 // lib/withCorsAndSession.ts
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authOptions";
 import { NextRequest, NextResponse } from "next/server";
 
 export function withCorsAndSession(handler: (req: NextRequest, session: any) => Promise<Response>) {

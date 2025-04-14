@@ -62,10 +62,12 @@ const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
     return NextResponse.json({ success: true, review: reviewEntry });
 };
 
-export function POST(req: NextRequest, ctx: { params: { pdfId: string } }) {
+export async function POST(req: NextRequest, context: { params: Promise<{ pdfId: string }> }) {
+    const { pdfId } = await context.params;
+
     return middlewareFactory(
         { cors: true, auth: true, role: ["admin", "reviewer"] },
-        (req, session) => postHandler(req, session, ctx.params.pdfId)
+        (req, session) => postHandler(req, session, pdfId)
     )(req);
 }
 

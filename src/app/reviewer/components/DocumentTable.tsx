@@ -15,7 +15,7 @@ export default function DocumentTable({ status }) {
         }
 
         fetchDocs();
-    }, []);
+    });
 
     return (
         <div>
