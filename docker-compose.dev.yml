@@ -41,7 +41,6 @@ services:
             - ./eslint.config.mjs:/app/eslint.config.mjs
             - ./README.md:/app/README.md
             - ./API_Structure.md:/app/API_Structure.md
-            - ./commands.txt:/app/commands.txt
             - ./db:/app/db
         ports:
             - "3000:3000"
@@ -49,15 +48,6 @@ services:
             - mongo
         networks:
             - dev-net
-
-    # cloudflared:
-    #     image: cloudflare/cloudflared:latest
-    #     container_name: cloudflared
-    #     command: tunnel --no-autoupdate run --token YOUR_TUNNEL_TOKEN
-    #     networks:
-    #         - dev-net
-    #     depends_on:
-    #         - nextjs
 
 networks:
     dev-net:
