@@ -25,16 +25,16 @@ export const authOptions = {
 
             if (!existing) {
                 await collection.insertOne({
+                    registered: false,
                     name: user.name,
                     email: user.email,
                     image: user.image,
                     uuid: uuidv4(),
                     role: "attendee",
                     createdAt: new Date(),
-                    contactEmail: user.email, // 預設聯絡信箱為使用者的email
+                    contact_email: "未輸入聯絡用信箱", // 預設聯絡信箱為使用者的email
                     // additional fields:
                     phone: "未輸入電話", // 預設電話
-                    address: "未輸入地址", // 預設地址
                     department: "未輸入單位", // 預設部門
                     payment: {
                         paid: false, // 預設未付款
@@ -64,14 +64,14 @@ export const authOptions = {
             });
 
             if (dbUser) {
+                token.registered = dbUser.registered;
                 token.name = dbUser.name;
                 token.role = dbUser.role;
                 token.uuid = dbUser.uuid;
                 token.email = dbUser.email;
-                token.contactEmail = dbUser.contactEmail; // 新增 contactEmail
+                token.contact_email = dbUser.contactEmail; // 新增 contactEmail
                 token.image = dbUser.image;
                 token.phone = dbUser.phone; // 新增 phone
-                token.address = dbUser.address; // 新增 address
                 token.department = dbUser.department; // 新增 department
                 token.payment = dbUser.payment; // 新增 payment
                 token.uploaded_pdfs = dbUser.uploaded_pdfs; // 新增 uploaded_pdfs
@@ -82,14 +82,14 @@ export const authOptions = {
         },
 
         async session({ session, token }) {
+            session.user.registered = token.registered;
             session.user.name = token.name;
             session.user.role = token.role;
             session.user.uuid = token.uuid;
-            session.user.contactEmail = token.contactEmail; // 新增 contactEmail
+            session.user.contact_email = token.contactEmail; // 新增 contactEmail
             session.user.email = token.email;
             session.user.image = token.image;
             session.user.phone = token.phone; // 新增 phone
-            session.user.address = token.address; // 新增 address
             session.user.department = token.department; // 新增 department
             session.user.payment = token.payment; // 新增 payment
             session.user.uploaded_pdfs = token.uploaded_pdfs; // 新增 uploaded_pdfs

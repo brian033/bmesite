@@ -44,7 +44,7 @@ import clientPromise from "@/lib/mongodb";
 import { NextRequest, NextResponse } from "next/server";
 
 const handler = async (req: NextRequest, session: any) => {
-    const allowedFields = ["name", "phone", "address", "department"];
+    const allowedFields = ["contact_email", "name", "phone", "department"];
     const data = await req.json();
 
     for (const key in data) {
@@ -64,6 +64,15 @@ const handler = async (req: NextRequest, session: any) => {
     }
 
     const updatedUser = await collection.findOne({ email: session.user.email });
+
+    // 🔽 檢查是否所有欄位都已填寫（非 "未輸入"），並設定 registered 為 true
+    if (
+        updatedUser.contact_email !== "未輸入聯絡用信箱" &&
+        updatedUser.department !== "未輸入單位"
+    ) {
+        await collection.updateOne({ email: session.user.email }, { $set: { registered: true } });
+        updatedUser.registered = true; // 同步給前端回傳
+    }
 
     return NextResponse.json({ success: true, updatedUser });
 };

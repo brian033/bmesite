@@ -20,9 +20,11 @@ type User = {
     };
     uploaded_pdfs: {
         abstracts: { pdf: string; uploadedAt: string; pdfId: string }[];
-        final_paper: { pdf: string; uploadedAt: string; pdfId: string }[];
-        poster: { pdf: string; uploadedAt: string; pdfId: string }[];
-        others: { pdf: string; uploadedAt: string; pdfId: string }[];
+        full_paper: { pdf: string; uploadedAt: string; pdfId: string }[];
+    };
+    sumission: {
+        abstracts: { caseId: number }[];
+        full_paper: { caseId: number }[];
     };
 };
 

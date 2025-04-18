@@ -21,9 +21,7 @@ const DocumentManager = () => {
     return (
         <div>
             <DocumentCard key="1" pdfType={"abstracts"} documents={documents?.abstracts} />
-            <DocumentCard key="2" pdfType={"poster"} documents={documents?.poster} />
-            <DocumentCard key="3" pdfType={"final_paper"} documents={documents?.final_paper} />
-            <DocumentCard key="4" pdfType={"others"} documents={documents?.others} />
+            <DocumentCard key="2" pdfType={"full_paper"} documents={documents?.full_paper} />
         </div>
     );
 };

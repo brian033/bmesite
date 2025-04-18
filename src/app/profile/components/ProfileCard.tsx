@@ -16,13 +16,14 @@ export default function ProfileCard() {
 
     const user = session.user as {
         name?: string;
-        email?: string;
+        contact_email?: string;
         image?: string;
         phone?: string;
         address?: string;
         department?: string;
         payment?: { paid: boolean; payment_id?: string };
         role?: string;
+        registered?: boolean;
     };
     const imageSrc =
         typeof user.image === "string" && user.image.startsWith("/pfp")
@@ -109,12 +110,13 @@ export default function ProfileCard() {
                     flexGrow: 1,
                 }}
             >
-                <span style={lineStyle}>
-                    <p>電子郵件: </p> <p>{user.email}</p>
-                </span>
+                <EditableField
+                    api_value="contact_email"
+                    label="聯絡用Email"
+                    value={user.contact_email}
+                />
                 <EditableField api_value="name" label="姓名" value={user.name} />
                 <EditableField api_value="phone" label="聯絡電話" value={user.phone} />
-                <EditableField api_value="address" label="聯絡地址" value={user.address} />
                 <EditableField api_value="department" label="單位" value={user.department} />
                 <span style={lineStyle}>
                     <p>付款狀態: </p>
@@ -133,6 +135,7 @@ export default function ProfileCard() {
                             : user.role === "reviewer"
                             ? "審稿者"
                             : "與會者"}
+                        {user.registered ? "(已填寫資料)" : "(請更新聯絡用Email/單位)"}
                     </p>
                 </span>
             </div>
