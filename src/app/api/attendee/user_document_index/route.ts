@@ -29,11 +29,31 @@ import { NextRequest, NextResponse } from "next/server";
 const handler = async (req: NextRequest, session: any) => {
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DB);
-    const collection = db.collection("users");
+    const userDB = db.collection("users");
+    const documentsDB = db.collection("documents");
+    const user = await userDB.findOne({ email: session.user.email });
+    if (!user) {
+        return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+    const uploadedPdfs = user.uploaded_pdfs || {};
+    const result: Record<string, any[]> = {};
 
-    const result = await collection.findOne({ email: session.user.email });
+    for (const pdfType of Object.keys(uploadedPdfs)) {
+        const files = uploadedPdfs[pdfType];
+        const pdfIds = files.map((f: any) => f.pdfId);
 
-    return NextResponse.json(result?.uploaded_pdfs || {}, { status: 200 });
+        // 批次查找文件
+        const docs = await documentsDB.find({ documentId: { $in: pdfIds } }).toArray();
+        const docMap = new Map(docs.map((d) => [d.documentId, d]));
+
+        // 加入 detailedInfo
+        result[pdfType] = files.map((file: any) => ({
+            ...file,
+            detailedInfo: docMap.get(file.pdfId) || null,
+        }));
+    }
+    return NextResponse.json(result, { status: 200 });
+    // return NextResponse.json(result?.uploaded_pdfs || {}, { status: 200 });
 };
 
 export const GET = middlewareFactory({ cors: true, auth: true }, handler);

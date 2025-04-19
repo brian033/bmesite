@@ -105,7 +105,7 @@ const DocumentCard = ({ pdfType, documents }) => {
                 <CardTitle>Manage your {pdfType}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                {documents.length === 0 ? (
+                {!documents ? (
                     <p className="text-muted-foreground">尚未上傳任何檔案。</p>
                 ) : (
                     documents.map((doc, i) => (
@@ -158,8 +158,9 @@ const DocumentCard = ({ pdfType, documents }) => {
                         //     </div>
                         //     <Separator className="my-4" />
                         // </div>
+
                         <div key={doc.pdfId || i} className="space-y-2">
-                            {doc.status !== "pending" ? (
+                            {doc.detailedInfo.documentStatus === "pending" ? (
                                 <details>
                                     <summary className="cursor-pointer font-semibold text-lg text-gray-700">
                                         📄 文件標題：{doc.title}（已送審）
@@ -171,7 +172,6 @@ const DocumentCard = ({ pdfType, documents }) => {
                                         <DocumentViewer fileUrl={`/api/user_uploads${doc.pdf}`} />
                                         <Separator className="my-4" />
                                     </div>
-                                    <p>{JSON.stringify(doc)}</p>
                                 </details>
                             ) : (
                                 <div className="space-y-2">
