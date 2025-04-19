@@ -64,14 +64,21 @@ const handler = async (req: NextRequest, session: any) => {
     }
 
     const updatedUser = await collection.findOne({ email: session.user.email });
-
-    // 🔽 檢查是否所有欄位都已填寫（非 "未輸入"），並設定 registered 為 true
-    if (
-        updatedUser.contact_email !== "未輸入聯絡用信箱" &&
-        updatedUser.department !== "未輸入單位"
-    ) {
-        await collection.updateOne({ email: session.user.email }, { $set: { registered: true } });
-        updatedUser.registered = true; // 同步給前端回傳
+    updatedUser.reload = false; // 預設不需要重新載入資料
+    // 如果還沒註冊再檢查
+    if (!updatedUser.registered) {
+        // 🔽 檢查是否所有欄位都已填寫（非 "未輸入"），並設定 registered 為 true
+        if (
+            updatedUser.contact_email !== "未輸入聯絡用信箱" &&
+            updatedUser.department !== "未輸入單位"
+        ) {
+            await collection.updateOne(
+                { email: session.user.email },
+                { $set: { registered: true } }
+            );
+            updatedUser.registered = true; // 同步給前端回傳
+            updatedUser.reload = true; // 讓前端知道要重新載入資料
+        }
     }
 
     return NextResponse.json({ success: true, updatedUser });

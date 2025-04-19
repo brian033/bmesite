@@ -19,8 +19,9 @@ const DocumentCard = ({ pdfType, documents }) => {
                 ) : (
                     documents.map((doc, i) => (
                         <div key={doc.pdfId || i} style={{ marginTop: "1rem" }}>
+                            <p> Title: {doc.title}</p>
+
                             <DocumentViewer fileUrl={`/api/user_uploads${doc.pdf}`} />
-                            <p>{JSON.stringify(doc, null, 2)}</p>
                             <button
                                 onClick={async () => {
                                     const res = await fetch(`/api/documents/${doc.pdfId}`, {
@@ -45,6 +46,37 @@ const DocumentCard = ({ pdfType, documents }) => {
                                 }}
                             >
                                 📤 送出審稿！
+                            </button>
+                            <button
+                                onClick={async () => {
+                                    const res = await fetch("/api/attendee/remove_document", {
+                                        method: "POST",
+                                        headers: { "Content-Type": "application/json" },
+                                        body: JSON.stringify({
+                                            pdfId: doc.pdfId,
+                                            pdftype: pdfType,
+                                        }),
+                                    });
+                                    const data = await res.json();
+                                    if (res.ok) {
+                                        alert("🗑️ 成功移除檔案！");
+                                        location.reload();
+                                    } else {
+                                        alert(`❌ 移除失敗: ${data.error}`);
+                                    }
+                                }}
+                                style={{
+                                    marginTop: "0.5rem",
+                                    marginLeft: "0.5rem",
+                                    padding: "0.5rem 1rem",
+                                    backgroundColor: "#f44336",
+                                    color: "white",
+                                    border: "none",
+                                    borderRadius: "4px",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                🗑️ 移除檔案
                             </button>
                         </div>
                     ))

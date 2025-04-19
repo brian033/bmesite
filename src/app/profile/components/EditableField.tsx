@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 type EditableFieldProps = {
     api_value: string; // API 中的欄位名稱，例如 "name"、"phone" 等等
     label: string; // 欄位名稱
@@ -35,6 +34,10 @@ const EditableField = ({ api_value, label, value }: EditableFieldProps) => {
             const data = await res.json();
             console.log(`Updated ${fieldToUpdate}:`, data.updatedUser);
             setEditing(false); // 提交後退出編輯模式
+            if (data.updatedUser.reload) {
+                alert("感謝您填寫資料，頁面重新整理後您將可以開始使用完整功能!");
+                window.location.reload(); // 如果需要重新載入頁面
+            }
         } else {
             alert("更新失敗");
         }

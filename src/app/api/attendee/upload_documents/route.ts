@@ -15,7 +15,8 @@ const handler = async (req: NextRequest, session: any) => {
     const file = formData.get("file") as File | null;
     const note = formData.get("note") as string | null;
     const pdftype = formData.get("pdftype") as string | null;
-
+    const title = formData.get("title") as string | null;
+    const description = formData.get("description") as string | null;
     // 檢查檔案是否存在
     if (!file || !file.name || file.size === 0) {
         return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
@@ -61,6 +62,8 @@ const handler = async (req: NextRequest, session: any) => {
                     pdf: relativePath,
                     uploadedAt: upLoadTime,
                     pdfId: pdfId, // 新增 pdfId
+                    title: title,
+                    description: description || "",
                 },
             },
         }
@@ -72,8 +75,10 @@ const handler = async (req: NextRequest, session: any) => {
         documentLocation: `/${session.user.uuid}${relativePath}`,
         documentOwner: session.user.uuid,
         documentStatus: "uploaded",
+        title: title,
+        description: description || "",
         reviewedBy: [],
-        notes: [`上傳者: ${note}`],
+        notes: [],
         createdAt: upLoadTime,
     });
 

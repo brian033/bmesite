@@ -38,7 +38,8 @@ const DocumentUploader = ({ pdfType }) => {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("pdftype", pdfType);
-        formData.append("note", JSON.stringify({ title: noteTitle, description: noteDescription }));
+        formData.append("title", noteTitle);
+        formData.append("description", noteDescription);
 
         setUploading(true);
         setError(null);
