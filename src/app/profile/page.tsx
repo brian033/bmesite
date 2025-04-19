@@ -8,6 +8,7 @@ import ProfileCard from "./components/ProfileCard";
 import DocumentManager from "./components/DocumentManager";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Info } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export default async function AttendeePage() {
     const session = await getServerSession(authOptions);
@@ -32,10 +33,23 @@ export default async function AttendeePage() {
     }
 
     return (
-        <div style={{ padding: "2rem" }}>
-            <h1>個人資料設定</h1>
-            <ProfileCard />
-            <DocumentManager />
+        <div className="mx-auto p-6 space-y-8">
+            <h1 className="text-3xl font-semibold text-gray-800">個人資料設定</h1>
+
+            {/* 個人資料區塊 */}
+            <Card>
+                <CardContent>
+                    <ProfileCard />
+                </CardContent>
+            </Card>
+
+            <h1 className="text-3xl font-semibold text-gray-800">文件管理</h1>
+            {/* 文件管理區塊 */}
+            <Card>
+                <CardContent>
+                    <DocumentManager />
+                </CardContent>
+            </Card>
         </div>
     );
 }

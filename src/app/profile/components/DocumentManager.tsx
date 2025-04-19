@@ -15,13 +15,34 @@ const DocumentManager = () => {
         fetchDocuments();
     }, []);
 
+    // if (!documents) {
+    //     return <p>載入中...</p>; // 或你要顯示 spinner、骨架螢幕都可以
+    // }
+    // return (
+    //     <div>
+    //         <DocumentCard key="1" pdfType={"abstracts"} documents={documents?.abstracts} />
+    //         <DocumentCard key="2" pdfType={"full_paper"} documents={documents?.full_paper} />
+    //     </div>
+    // );
+
     if (!documents) {
-        return <p>載入中...</p>; // 或你要顯示 spinner、骨架螢幕都可以
+        return <p className="text-gray-600 text-center">📄 文件載入中...</p>;
     }
+
     return (
-        <div>
-            <DocumentCard key="1" pdfType={"abstracts"} documents={documents?.abstracts} />
-            <DocumentCard key="2" pdfType={"full_paper"} documents={documents?.full_paper} />
+        <div className="flex gap-6 overflow-x-auto pb-4">
+            {/* <DocumentCard key="abstracts" pdfType="abstracts" documents={documents.abstracts} />
+            <DocumentCard key="full_paper" pdfType="full_paper" documents={documents.full_paper} /> */}
+            <div className="min-w-[50%]">
+                <DocumentCard key="abstracts" pdfType="abstracts" documents={documents.abstracts} />
+            </div>
+            <div className="min-w-[50%]">
+                <DocumentCard
+                    key="full_paper"
+                    pdfType="full_paper"
+                    documents={documents.full_paper}
+                />
+            </div>
         </div>
     );
 };

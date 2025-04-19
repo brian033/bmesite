@@ -56,7 +56,7 @@ export default function ProfileCard() {
     };
 
     return (
-        <Card className="max-w-4xl p-6 flex gap-6">
+        <Card className="max-w-4xl mx-auto p-6 flex gap-6">
             <div className="text-center">
                 <img
                     src={imageSrc}

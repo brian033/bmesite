@@ -61,6 +61,7 @@ const handler = async (req: NextRequest, session: any) => {
                 [`uploaded_pdfs.${pdftype}`]: {
                     pdf: relativePath,
                     uploadedAt: upLoadTime,
+                    documentType: pdftype,
                     pdfId: pdfId, // 新增 pdfId
                     title: title,
                     description: description || "",
@@ -76,6 +77,7 @@ const handler = async (req: NextRequest, session: any) => {
         documentOwner: session.user.uuid,
         documentStatus: "uploaded",
         title: title,
+        pdfType: pdftype,
         description: description || "",
         reviewedBy: [],
         notes: [],
