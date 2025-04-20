@@ -34,13 +34,19 @@ const DocumentManager = () => {
             {/* <DocumentCard key="abstracts" pdfType="abstracts" documents={documents.abstracts} />
             <DocumentCard key="full_paper" pdfType="full_paper" documents={documents.full_paper} /> */}
             <div className="min-w-[50%]">
-                <DocumentCard key="abstracts" pdfType="abstracts" documents={documents.abstracts} />
+                <DocumentCard
+                    key="abstracts"
+                    pdfType="abstracts"
+                    documents={documents.abstracts}
+                    submissions={documents.submissions.abstracts}
+                />
             </div>
             <div className="min-w-[50%]">
                 <DocumentCard
                     key="full_paper"
                     pdfType="full_paper"
                     documents={documents.full_paper}
+                    submissions={documents.submissions.full_paper}
                 />
             </div>
         </div>

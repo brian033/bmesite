@@ -58,8 +58,63 @@ const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
             }
         );
     }
-
+    await recordSubmissionReview(db, pdfId, reviewer, reviewerEmail, approved, note);
     return NextResponse.json({ success: true, review: reviewEntry });
+};
+// ✅ Side Effect: Update review info in submission
+const recordSubmissionReview = async (
+    db: any,
+    pdfId: string,
+    reviewer: string,
+    reviewerEmail: string,
+    approved: boolean,
+    note: string
+) => {
+    const submissionDB = db.collection("submissions");
+
+    // 找出包含這個 pdfId 的 submission（submissionFiles 陣列中包含該 ID）
+    const submission = await submissionDB.findOne({ submissionFiles: pdfId });
+    if (!submission) return;
+
+    // 找出該文件在 submissionFiles 中的 index
+    const fileIndex = submission.submissionFiles.indexOf(pdfId);
+    if (fileIndex === -1) return;
+
+    const reviewRecord = {
+        index: fileIndex,
+        reviewer,
+        opinion: approved ? "approved" : "rejected",
+        comment: note,
+        reviewerEmail,
+        reviewedAt: new Date().toISOString(),
+    };
+
+    await submissionDB.updateOne(
+        { submissionId: submission.submissionId },
+        {
+            // 先移除舊紀錄
+            $pull: {
+                submissionReviewedBy: {
+                    reviewerEmail,
+                    index: fileIndex,
+                },
+            },
+        }
+    );
+
+    // 再 push 兩筆
+    await submissionDB.updateOne(
+        { submissionId: submission.submissionId },
+        {
+            $push: {
+                submissionReviewedBy: reviewRecord,
+            },
+            $set: {
+                submissionReviewedAt: new Date().toISOString(),
+            },
+        },
+        { upsert: false }
+    );
 };
 
 export async function POST(req: NextRequest, context: { params: Promise<{ pdfId: string }> }) {

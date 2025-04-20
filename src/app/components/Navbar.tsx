@@ -158,7 +158,7 @@ export default function Navbar() {
 
                 {user && (
                     <Link href="/profile">
-                        <Button variant="secondary" size="sm">
+                        <Button className="bg-lime-400 text-black hover:bg-lime-300" size="sm">
                             個人頁面
                         </Button>
                     </Link>
@@ -183,7 +183,7 @@ export default function Navbar() {
                             </Button>
                         </Link>
                         <Link href="/reviewer/reviewed">
-                            <Button className="bg-lime-500 text-black hover:bg-lime-400" size="sm">
+                            <Button className="bg-cyan-500 text-black hover:bg-cyan-400" size="sm">
                                 已審稿件
                             </Button>
                         </Link>

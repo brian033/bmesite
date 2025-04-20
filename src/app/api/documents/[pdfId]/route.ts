@@ -105,7 +105,7 @@ const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
                 { uuid: session.user.uuid },
                 {
                     $push: {
-                        [`submission.${doc.pdftype}`]: newSubmission.submissionId,
+                        [`submission.${doc.pdfType}`]: newSubmission.submissionId,
                     },
                 }
             );
