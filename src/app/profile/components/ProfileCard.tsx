@@ -6,8 +6,8 @@ import EditableField from "./EditableField";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export default function ProfileCard() {
     const { data: session, status } = useSession();
@@ -58,21 +58,19 @@ export default function ProfileCard() {
     return (
         <Card className="max-w-4xl mx-auto p-6 flex gap-6">
             <div className="text-center">
-                <img
-                    src={imageSrc}
-                    alt="頭貼"
-                    width={160}
-                    height={160}
-                    className="rounded-full object-cover mx-auto"
-                />
-                <Button
-                    variant="outline"
+                <button
+                    className="relative w-48 h-48 rounded-full overflow-hidden border-none p-0 cursor-pointer"
                     onClick={() => inputRef.current?.click()}
-                    className="cursor-pointer mt-4"
                     disabled={uploading}
                 >
-                    {uploading ? "上傳中..." : "換頭貼"}
-                </Button>
+                    <Avatar className="w-full h-full">
+                        <AvatarImage src={imageSrc} />
+                        <AvatarFallback>👤</AvatarFallback>
+                    </Avatar>
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white opacity-0 hover:opacity-100 transition-opacity duration-300">
+                        換頭貼
+                    </div>
+                </button>
                 <Input
                     ref={inputRef}
                     type="file"
@@ -83,14 +81,13 @@ export default function ProfileCard() {
             </div>
 
             <div className="flex flex-col gap-4 flex-grow">
+                <EditableField api_value="name" label="姓名" value={user.name} />
                 <EditableField
                     mandatory={true}
                     api_value="contact_email"
                     label="聯絡用Email"
                     value={user.contact_email}
                 />
-                <EditableField api_value="name" label="姓名" value={user.name} />
-                <EditableField api_value="phone" label="聯絡電話" value={user.phone} />
                 <EditableField
                     mandatory={true}
                     api_value="department"
@@ -98,6 +95,7 @@ export default function ProfileCard() {
                     value={user.department}
                 />
 
+                <EditableField api_value="phone" label="聯絡電話" value={user.phone} />
                 <div className="flex items-center justify-between gap-x-4">
                     <span className="font-medium whitespace-nowrap">付款狀態:</span>
                     <span className="text-sm text-gray-800">
