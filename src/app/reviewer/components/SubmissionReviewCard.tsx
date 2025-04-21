@@ -28,8 +28,15 @@ export default function SubmissionReviewCard({ submission }: { submission: any }
         <Card className="w-full shadow">
             <CardHeader className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                 <div>
-                    <CardTitle className="text-xl font-semibold">
-                        審稿案：{submission.submissionTitle}
+                    <CardTitle className="text-xl font-semibold leading-snug">
+                        標題：<span className="text-primary">{submission.submissionTitle}</span>
+                        <div className="mt-1 text-sm text-muted-foreground">
+                            上傳者：{submission.submissionOwnerDetails?.name || "未知"}（
+                            {submission.submissionOwnerDetails?.department || "無單位"}）
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                            聯絡信箱：{submission.submissionOwnerDetails?.contact_email || "未提供"}
+                        </div>
                     </CardTitle>
                     <Badge className={statusColor[submission.submissionStatus]}>
                         狀態：{submission.submissionStatus}
@@ -39,7 +46,12 @@ export default function SubmissionReviewCard({ submission }: { submission: any }
                     <p className="text-sm text-muted-foreground">
                         建立於 {submission.submissionCreatedAt}
                     </p>
-                    <Button size="sm" onClick={() => setExpanded(!expanded)} variant="outline">
+                    <Button
+                        className="cursor-pointer"
+                        size="sm"
+                        onClick={() => setExpanded(!expanded)}
+                        variant="outline"
+                    >
                         {expanded
                             ? "⬆️ 收合此審稿案"
                             : `📂 展開 [${reviewedLatest ? "無新文件待審核" : "有新文件待審核"}]`}

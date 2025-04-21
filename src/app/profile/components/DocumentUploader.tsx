@@ -1,19 +1,25 @@
 "use client";
 
 import { useState } from "react";
-
+import {
+    Select,
+    SelectTrigger,
+    SelectValue,
+    SelectContent,
+    SelectItem,
+} from "@/components/ui/select";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-const DocumentUploader = ({ pdfType }) => {
+const DocumentUploader = ({ pdfType, existing_titles }) => {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
-
+    const [useNewTitle, setUseNewTitle] = useState(existing_titles?.length === 0);
     const [noteTitle, setNoteTitle] = useState("");
     const [noteDescription, setNoteDescription] = useState("");
 
@@ -70,104 +76,61 @@ const DocumentUploader = ({ pdfType }) => {
             setUploading(false);
         }
     };
-
-    // return (
-    //     <div
-    //         style={{
-    //             maxWidth: "300px",
-    //             margin: "0 auto",
-    //             padding: "20px",
-    //             borderRadius: "8px",
-    //             backgroundColor: "#f9f9f9",
-    //             boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-    //             color: "black",
-    //         }}
-    //     >
-    //         <h2 style={{ textAlign: "center", fontSize: "24px", marginBottom: "20px" }}>
-    //             Upload Document
-    //         </h2>
-    //         <form
-    //             onSubmit={handleSubmit}
-    //             style={{ display: "flex", flexDirection: "column", gap: "15px" }}
-    //         >
-    //             <div>
-    //                 <label>PDF File:</label>
-    //                 <input type="file" accept="application/pdf" onChange={handleFileChange} />
-    //             </div>
-
-    //             <div>
-    //                 <label>Title:</label>
-    //                 <input
-    //                     type="text"
-    //                     value={noteTitle}
-    //                     onChange={(e) => setNoteTitle(e.target.value)}
-    //                     placeholder="Enter title"
-    //                 />
-    //             </div>
-
-    //             <div>
-    //                 <label>Description:</label>
-    //                 <textarea
-    //                     value={noteDescription}
-    //                     onChange={(e) => setNoteDescription(e.target.value)}
-    //                     placeholder="Enter description"
-    //                     style={{
-    //                         resize: "none",
-    //                         height: "100px",
-    //                         border: "1px solid #ccc",
-    //                         borderRadius: "4px",
-    //                         padding: "8px",
-    //                     }}
-    //                 />
-    //             </div>
-
-    //             {error && <p style={{ color: "red", fontSize: "14px" }}>{error}</p>}
-    //             {successMessage && (
-    //                 <p style={{ color: "green", fontSize: "14px" }}>{successMessage}</p>
-    //             )}
-
-    //             <button
-    //                 type="submit"
-    //                 disabled={uploading}
-    //                 style={{
-    //                     backgroundColor: "#4caf50",
-    //                     color: "black",
-    //                     border: "none",
-    //                     padding: "10px",
-    //                     fontSize: "16px",
-    //                     borderRadius: "4px",
-    //                     cursor: "pointer",
-    //                 }}
-    //             >
-    //                 {uploading ? "Uploading..." : "Upload PDF"}
-    //             </button>
-    //         </form>
-    //     </div>
-    // );
     return (
         <Card className="max-w-md mx-auto">
             <CardHeader>
-                <CardTitle className="text-center text-2xl">Upload Document</CardTitle>
+                <CardTitle className="text-center text-2xl">上傳文件</CardTitle>
+                <p className="text-sm text-muted-foreground mb-4">
+                    📌
+                    每個標題會建立一個對應的審查案件，若再次送出相同標題的文件，系統將自動更新原有的審查案。
+                    <br />
+                    ✍️ 簡短敘述是提供給審稿者的內容說明。
+                </p>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1">
-                        <Label>PDF File</Label>
+                        <Label>PDF檔案</Label>
                         <Input type="file" accept="application/pdf" onChange={handleFileChange} />
                     </div>
 
                     <div className="space-y-1">
-                        <Label>Title</Label>
-                        <Input
-                            type="text"
-                            value={noteTitle}
-                            onChange={(e) => setNoteTitle(e.target.value)}
-                            placeholder="Enter title"
-                        />
+                        <Label>標題</Label>
+                        {useNewTitle || existing_titles?.length === 0 ? (
+                            <Input
+                                type="text"
+                                value={noteTitle}
+                                onChange={(e) => setNoteTitle(e.target.value)}
+                                placeholder="Enter new title"
+                            />
+                        ) : (
+                            <Select onValueChange={(value) => setNoteTitle(value)}>
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Select an existing title" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {existing_titles.map((title: string, index: number) => (
+                                        <SelectItem key={index} value={title}>
+                                            {title}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        )}
+                        {existing_titles?.length > 0 && (
+                            <Button
+                                variant="link"
+                                type="button"
+                                className="text-sm text-blue-600 p-0"
+                                onClick={() => setUseNewTitle(!useNewTitle)}
+                            >
+                                {useNewTitle ? "選擇已存在的標題" : "新增新的標題"}
+                            </Button>
+                        )}
                     </div>
 
                     <div className="space-y-1">
-                        <Label>Description</Label>
+                        <Label>簡短敘述</Label>
                         <Textarea
                             value={noteDescription}
                             onChange={(e) => setNoteDescription(e.target.value)}

@@ -1,0 +1,34 @@
+export type User = {
+    _id: string;
+    registered: boolean;
+    name: string;
+    email: string;
+    image: string;
+    uuid: string;
+    role: "admin" | "reviewer" | "attendee";
+    createdAt: string;
+    contact_email: string;
+    phone: string;
+    department: string;
+    payment: {
+        paid: boolean;
+        payment_id: string;
+    };
+    uploaded_pdfs: {
+        abstracts: UploadedPdf[];
+        full_paper: UploadedPdf[];
+    };
+    submission: {
+        abstracts: string[];
+        full_paper: string[];
+    };
+};
+
+export type UploadedPdf = {
+    pdf: string;
+    uploadedAt: string;
+    documentType: "abstracts" | "full_paper";
+    pdfId: string;
+    title: string;
+    description: string;
+};

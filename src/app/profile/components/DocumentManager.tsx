@@ -15,16 +15,6 @@ const DocumentManager = () => {
         fetchDocuments();
     }, []);
 
-    // if (!documents) {
-    //     return <p>載入中...</p>; // 或你要顯示 spinner、骨架螢幕都可以
-    // }
-    // return (
-    //     <div>
-    //         <DocumentCard key="1" pdfType={"abstracts"} documents={documents?.abstracts} />
-    //         <DocumentCard key="2" pdfType={"full_paper"} documents={documents?.full_paper} />
-    //     </div>
-    // );
-
     if (!documents) {
         return <p className="text-gray-600 text-center">📄 文件載入中...</p>;
     }

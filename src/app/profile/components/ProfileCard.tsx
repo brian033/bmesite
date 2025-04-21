@@ -68,7 +68,7 @@ export default function ProfileCard() {
                 <Button
                     variant="outline"
                     onClick={() => inputRef.current?.click()}
-                    className="mt-4"
+                    className="cursor-pointer mt-4"
                     disabled={uploading}
                 >
                     {uploading ? "上傳中..." : "換頭貼"}
@@ -84,26 +84,32 @@ export default function ProfileCard() {
 
             <div className="flex flex-col gap-4 flex-grow">
                 <EditableField
+                    mandatory={true}
                     api_value="contact_email"
                     label="聯絡用Email"
                     value={user.contact_email}
                 />
                 <EditableField api_value="name" label="姓名" value={user.name} />
                 <EditableField api_value="phone" label="聯絡電話" value={user.phone} />
-                <EditableField api_value="department" label="單位" value={user.department} />
+                <EditableField
+                    mandatory={true}
+                    api_value="department"
+                    label="單位"
+                    value={user.department}
+                />
 
-                <div className="flex justify-between text-sm">
-                    <span>付款狀態:</span>
-                    <span>
+                <div className="flex items-center justify-between gap-x-4">
+                    <span className="font-medium whitespace-nowrap">付款狀態:</span>
+                    <span className="text-sm text-gray-800">
                         {user.payment?.paid
                             ? `已付款, 付款編號: ${user.payment.payment_id}`
                             : "未付款"}
                     </span>
                 </div>
 
-                <div className="flex justify-between text-sm">
-                    <span>身份別:</span>
-                    <span>
+                <div className="flex items-center justify-between gap-x-4">
+                    <span className="font-medium whitespace-nowrap">身份別:</span>
+                    <span className="text-sm text-gray-800">
                         {user.role === "admin"
                             ? "管理員"
                             : user.role === "reviewer"

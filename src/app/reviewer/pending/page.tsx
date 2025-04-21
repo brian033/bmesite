@@ -43,6 +43,16 @@ const queryDocumentDetail = async (submissions: any[], db: any) => {
     const docMap = new Map(cleanDocs.map((d) => [d.documentId, d]));
 
     // Clean and map each submission
+    const userDB = db.collection("users");
+
+    // 取得所有 submissionOwner 的 UUID，去重後查詢
+    const allOwnerUUIDs = [...new Set(submissions.map((sub) => sub.submissionOwner))];
+    const owners = await userDB
+        .find({ uuid: { $in: allOwnerUUIDs } })
+        .project({ _id: 0, uuid: 1, name: 1, department: 1, contact_email: 1 }) // 精簡欄位
+        .toArray();
+
+    const ownerMap = new Map(owners.map((user) => [user.uuid, user]));
 
     return submissions.map((sub) => ({
         ...sub,
@@ -54,6 +64,7 @@ const queryDocumentDetail = async (submissions: any[], db: any) => {
         submssionFileDetail: sub.submissionFiles
             .map((id: string) => docMap.get(id))
             .filter(Boolean),
+        submissionOwnerDetails: ownerMap.get(sub.submissionOwner) || null,
     }));
 };
 

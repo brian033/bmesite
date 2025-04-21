@@ -89,7 +89,7 @@ export default function DocumentReviewCard({
                         上傳時間：{new Date(createdAt).toLocaleString()}
                     </span>
                 </div>
-                <Button size="sm" onClick={() => setExpanded(!expanded)}>
+                <Button className="cursor-pointer" size="sm" onClick={() => setExpanded(!expanded)}>
                     {expanded ? "折疊內容" : "展開內容"}
                 </Button>
             </CardHeader>
@@ -97,12 +97,6 @@ export default function DocumentReviewCard({
             {expanded && (
                 <CardContent className="space-y-4">
                     <div className="grid gap-1 text-sm">
-                        <p>
-                            <strong>作者：</strong> {ownerInfo?.name || "未知"}
-                        </p>
-                        <p>
-                            <strong>單位：</strong> {ownerInfo?.department || "未知"}
-                        </p>
                         <div>
                             <strong>備註：</strong>
                             {notes?.length === 0
@@ -119,8 +113,9 @@ export default function DocumentReviewCard({
                                 ? "無"
                                 : reviewedBy.map((entry: any, i: number) => (
                                       <div key={i} className="ml-2">
-                                          [{entry.reviewedAt}] {entry.reviewer}（
-                                          {entry.approved ? "通過" : "拒絕"}）: {entry.note}
+                                          [{new Date(entry.reviewedAt).toUTCString()}]{" "}
+                                          {entry.reviewer}（{entry.approved ? "通過" : "拒絕"}）:{" "}
+                                          {entry.note}
                                       </div>
                                   ))}
                         </div>
@@ -163,51 +158,54 @@ export default function DocumentReviewCard({
                             placeholder="寫下你的備註..."
                         />
                         <Button
-                            className="mt-2"
+                            className="cursor-pointer mt-2"
                             onClick={handleAddNote}
                             disabled={isSubmitting || !noteText}
                         >
                             新增備註
                         </Button>
                     </div>
-
-                    {/* 審稿欄位 */}
-                    <div>
-                        <h4 className="text-sm font-medium mb-2">審核文件：</h4>
-                        <Textarea
-                            rows={3}
-                            value={reviewNote}
-                            onChange={(e) => setReviewNote(e.target.value)}
-                            placeholder="輸入審稿備註"
-                        />
-                        <div className="flex items-center gap-4 mt-2">
-                            <label className="flex items-center gap-1">
-                                <input
-                                    type="radio"
-                                    value="approve"
-                                    checked={approved}
-                                    onChange={() => setApproved(true)}
-                                />
-                                通過
-                            </label>
-                            <label className="flex items-center gap-1">
-                                <input
-                                    type="radio"
-                                    value="reject"
-                                    checked={!approved}
-                                    onChange={() => setApproved(false)}
-                                />
-                                拒絕
-                            </label>
+                    {isLatest ? (
+                        <div>
+                            <h4 className="text-sm font-medium mb-2">審核文件：</h4>
+                            <Textarea
+                                rows={3}
+                                value={reviewNote}
+                                onChange={(e) => setReviewNote(e.target.value)}
+                                placeholder="輸入審稿備註"
+                            />
+                            <div className="flex items-center gap-4 mt-2">
+                                <label className="flex items-center gap-1">
+                                    <input
+                                        type="radio"
+                                        value="approve"
+                                        checked={approved}
+                                        onChange={() => setApproved(true)}
+                                    />
+                                    通過
+                                </label>
+                                <label className="flex items-center gap-1">
+                                    <input
+                                        type="radio"
+                                        value="reject"
+                                        checked={!approved}
+                                        onChange={() => setApproved(false)}
+                                    />
+                                    拒絕
+                                </label>
+                            </div>
+                            <Button
+                                className="cursor-pointer mt-2 bg-lime-500 hover:bg-lime-500/85"
+                                onClick={handleSubmitReview}
+                                disabled={isSubmitting || !reviewNote}
+                            >
+                                {hasReviewed ? "更新審核" : "送出審核"}
+                            </Button>
                         </div>
-                        <Button
-                            className="mt-2 bg-destructive hover:bg-destructive/90"
-                            onClick={handleSubmitReview}
-                            disabled={isSubmitting || !reviewNote}
-                        >
-                            送出審核
-                        </Button>
-                    </div>
+                    ) : (
+                        ""
+                    )}
+                    {/* 審稿欄位 */}
                 </CardContent>
             )}
         </Card>

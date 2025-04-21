@@ -24,7 +24,7 @@ export default function SubmissionCard({ submissions }: SubmissionCardProps) {
     return (
         <Card className="mt-4">
             <CardContent className="p-4">
-                <Button onClick={() => setOpen(!open)} className="mb-4">
+                <Button onClick={() => setOpen(!open)} className="cursor-pointer mb-4">
                     {open ? "隱藏我的審稿案" : "查看我的審稿案"}
                 </Button>
 
