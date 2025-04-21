@@ -3,6 +3,30 @@ import { withRoleProtection } from "@/lib/withRoleProtection";
 import SubmissionReviewCard from "../components/SubmissionReviewCard";
 import clientPromise from "@/lib/mongodb";
 
+function cleanObject(obj: any): any {
+    if (obj instanceof Date) {
+        return obj.toISOString();
+    }
+
+    if (obj && typeof obj === "object") {
+        if (typeof obj.toString === "function" && obj.toString().startsWith("ObjectId(")) {
+            return obj.toString(); // 或者 obj.toHexString() 如果是 _id
+        }
+
+        if (Array.isArray(obj)) {
+            return obj.map(cleanObject);
+        }
+
+        const result: Record<string, any> = {};
+        for (const key in obj) {
+            result[key] = cleanObject(obj[key]);
+        }
+        return result;
+    }
+
+    return obj;
+}
+
 const queryDocumentDetail = async (submissions: any[], db: any) => {
     const documentsDB = db.collection("documents");
 
@@ -14,21 +38,19 @@ const queryDocumentDetail = async (submissions: any[], db: any) => {
     const docs = await documentsDB.find({ documentId: { $in: uniqueFileIds } }).toArray();
 
     // Convert documents to pure JSON
-    const cleanDocs = docs.map((doc) => ({
-        ...doc,
-        _id: doc._id.toString(),
-        createdAt: doc.createdAt?.toISOString?.() ?? null,
-        reviewedAt: doc.reviewedAt?.map?.((d: Date) => d.toISOString?.()) ?? [],
-    }));
+    const cleanDocs = docs.map(cleanObject);
 
     const docMap = new Map(cleanDocs.map((d) => [d.documentId, d]));
 
     // Clean and map each submission
+
     return submissions.map((sub) => ({
         ...sub,
         _id: sub._id?.toString?.() ?? undefined,
         submissionCreatedAt: sub.submissionCreatedAt?.toISOString?.() ?? null,
-        submissionUpdatedAt: sub.submissionUpdatedAt?.toISOString?.() ?? null,
+        submissionUpdatedAt: Array.isArray(sub.submissionUpdatedAt)
+            ? sub.submissionUpdatedAt.map((d: Date) => d?.toISOString?.())
+            : sub.submissionUpdatedAt?.toISOString?.() ?? null,
         submssionFileDetail: sub.submissionFiles
             .map((id: string) => docMap.get(id))
             .filter(Boolean),
@@ -36,7 +58,7 @@ const queryDocumentDetail = async (submissions: any[], db: any) => {
 };
 
 export default async function ReviewerPendingPage() {
-    const session = await withRoleProtection(["reviewer", "admin"]);
+    await withRoleProtection(["reviewer", "admin"]);
 
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DB);
