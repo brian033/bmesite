@@ -10,6 +10,9 @@ const handler = async (req: NextRequest, session: any) => {
     if (!email || !newRole) {
         return NextResponse.json({ error: "Missing data" }, { status: 400 });
     }
+    if (email === session.user.email) {
+        return NextResponse.json({ error: "Cannot change your own role" }, { status: 400 });
+    }
 
     const allowedRoles = ["admin", "attendee", "reviewer"];
     if (!allowedRoles.includes(newRole)) {

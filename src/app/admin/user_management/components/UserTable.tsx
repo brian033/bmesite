@@ -2,35 +2,39 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
+import { User } from "@/types/user";
+import { Document } from "@/types/document";
+import { Submission } from "@/types/submission";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import UserDetailCard from "./UserDetailCard";
 
-type User = {
-    name: string;
-    email: string;
-    uuid: string;
-    role: string;
-    image: string;
-    createdAt: string;
-    phone: string;
-    address: string;
-    department: string;
-    payment: {
-        paid: boolean;
-        payment_id: string;
-    };
-    uploaded_pdfs: {
-        abstracts: { pdf: string; uploadedAt: string; pdfId: string }[];
-        full_paper: { pdf: string; uploadedAt: string; pdfId: string }[];
-    };
-    sumission: {
-        abstracts: { caseId: number }[];
-        full_paper: { caseId: number }[];
-    };
-};
-
-export default function UserTable({ initialUsers }: { initialUsers: User[] }) {
+export default function UserTable({
+    db_user,
+    db_documents,
+    db_submissions,
+}: {
+    db_user: User[];
+    db_documents: Document[];
+    db_submissions: Submission[];
+}) {
     const { data: session } = useSession();
-    const [users, setUsers] = useState(initialUsers);
+    const [users, setUsers] = useState(db_user);
 
     const handleRoleChange = async (email: string, newRole: string) => {
         const res = await fetch("/api/admin/set_role", {
@@ -49,101 +53,81 @@ export default function UserTable({ initialUsers }: { initialUsers: User[] }) {
     };
 
     return (
-        <div style={tableContainerStyle}>
-            <table style={tableStyle} border={1} cellPadding={8}>
-                <thead>
-                    <tr style={trStyle}>
-                        <th style={thStyle}>Name</th>
-                        <th style={thStyle}>頭貼</th>
-                        <th style={thStyle}>Email</th>
-                        <th style={thStyle}>Phone</th>
-                        <th style={thStyle}>Address</th>
-                        <th style={thStyle}>Department</th>
-                        <th style={thStyle}>Payment</th>
-                        <th style={thStyle}>UUID</th>
-                        <th style={thStyle}>Role</th>
-                        <th style={thStyle}>Created At</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <div className="overflow-x-auto">
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>姓名</TableHead>
+                        <TableHead>頭貼</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>電話</TableHead>
+                        <TableHead>單位</TableHead>
+                        <TableHead>付款</TableHead>
+                        <TableHead>UUID</TableHead>
+                        <TableHead>身份</TableHead>
+                        <TableHead>建立時間</TableHead>
+                        <TableHead>詳細資料</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
                     {users.map((user) => (
-                        <tr key={user.uuid} style={trStyle}>
-                            <td style={tdStyle}>{user.name}</td>
-                            <td style={tdStyle}>
-                                <img
-                                    src={
-                                        typeof user.image === "string" &&
-                                        user.image.startsWith("/pfp")
-                                            ? `/api/user_uploads${user.image}`
-                                            : user.image ?? "/default-profile.png" // 可選擇 fallback 圖片
-                                    }
-                                    alt="頭貼"
-                                    width={50}
-                                    height={50}
-                                    style={{ borderRadius: "999px", objectFit: "cover" }}
-                                />
-                            </td>
-                            <td style={tdStyle}>{user.email}</td>
-                            <td style={tdStyle}>{user.phone}</td>
-                            <td style={tdStyle}>{user.address}</td>
-                            <td style={tdStyle}>{user.department}</td>
-                            <td style={tdStyle}>
-                                {user.payment.paid ? "已付款" : "未付款"} (ID:{" "}
-                                {user.payment.payment_id})
-                            </td>
-                            <td style={tdStyle}>{user.uuid}</td>
-                            <td style={tdStyle}>
-                                <select
-                                    value={user.role}
-                                    onChange={(e) => handleRoleChange(user.email, e.target.value)}
+                        <TableRow key={user.uuid}>
+                            <TableCell>{user.name}</TableCell>
+                            <TableCell>
+                                <Avatar className="h-10 w-10">
+                                    <AvatarImage
+                                        src={
+                                            typeof user.image === "string" &&
+                                            user.image.startsWith("/pfp")
+                                                ? `/api/user_uploads${user.image}`
+                                                : user.image ?? "/default-profile.png"
+                                        }
+                                    />
+                                    <AvatarFallback>👤</AvatarFallback>
+                                </Avatar>
+                            </TableCell>
+                            <TableCell>{user.email}</TableCell>
+                            <TableCell>{user.phone}</TableCell>
+                            <TableCell>{user.department}</TableCell>
+                            <TableCell>
+                                {user.payment?.paid ? (
+                                    <Badge variant="default">已付款</Badge>
+                                ) : (
+                                    <Badge variant="destructive">未付款</Badge>
+                                )}
+                                <div className="text-xs text-muted-foreground">
+                                    ID: {user.payment?.payment_id ?? "None"}
+                                </div>
+                            </TableCell>
+                            <TableCell className="text-xs">{user.uuid}</TableCell>
+                            <TableCell>
+                                <Select
+                                    defaultValue={user.role}
+                                    onValueChange={(val) => handleRoleChange(user.email, val)}
                                     disabled={session?.user?.email === user.email}
-                                    style={selectStyle}
                                 >
-                                    <option value="attendee">attendee</option>
-                                    <option value="reviewer">reviewer</option>
-                                    <option value="admin">admin</option>
-                                </select>
-                            </td>
-                            <td style={tdStyle}>{new Date(user.createdAt).toLocaleString()}</td>
-                        </tr>
+                                    <SelectTrigger className="w-[120px]">
+                                        <SelectValue placeholder="角色" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="attendee">與會者</SelectItem>
+                                        <SelectItem value="reviewer">審稿者</SelectItem>
+                                        <SelectItem value="admin">管理員</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </TableCell>
+                            <TableCell>{new Date(user.createdAt).toLocaleString()}</TableCell>
+                            <TableCell>
+                                <UserDetailCard
+                                    user={user}
+                                    documents={db_documents}
+                                    submissions={db_submissions}
+                                />
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }
-
-// CSS Styles
-const tableContainerStyle = {
-    margin: "20px 0",
-};
-
-const tableStyle = {
-    width: "100%",
-};
-
-const trStyle = {
-    borderBottom: "1px solid #ddd",
-};
-
-const thStyle = {
-    padding: "12px 8px",
-    // textAlign: "left",
-    backgroundColor: "black",
-    fontWeight: "bold",
-};
-
-const tdStyle = {
-    padding: "8px",
-    // textAlign: "left",
-    border: "1px solid #ddd",
-};
-
-const selectStyle = {
-    padding: "6px",
-    borderRadius: "4px",
-    border: "1px solid #ccc",
-    backgroundColor: "white",
-    color: "black",
-    cursor: "pointer",
-};

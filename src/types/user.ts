@@ -5,7 +5,7 @@ export type User = {
     email: string;
     image: string;
     uuid: string;
-    role: "admin" | "reviewer" | "attendee";
+    role: string;
     createdAt: string;
     contact_email: string;
     phone: string;
