@@ -9,6 +9,7 @@ export type Document = {
     title: string;
     pdfType: "abstracts" | "full_paper";
     topic: string;
+    present_type: "oral" | "poster";
     description: string;
     reviewedBy: {
         reviewer_uuid?: string;

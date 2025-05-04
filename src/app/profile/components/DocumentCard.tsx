@@ -115,7 +115,7 @@ const DocumentCard = ({ pdfType, documents, submissions }) => {
 
     return (
         <div>
-            <SubmissionCard submissions={submissions} />
+            <SubmissionCard submissions={submissions} documents={otherDocuments} />
             <Card className="mb-6">
                 <CardHeader>
                     <CardTitle>Manage your {pdfType}</CardTitle>
@@ -124,11 +124,12 @@ const DocumentCard = ({ pdfType, documents, submissions }) => {
                 <CardContent className="space-y-4">
                     <DocumentListViewer documents={uploadedDocuments} pdfType={pdfType} />
                     <Separator className="my-4" />
-                    <DocumentListViewer documents={otherDocuments} pdfType={pdfType} />
+                    {/* <DocumentListViewer documents={otherDocuments} pdfType={pdfType} /> */}
                     {/* uploader 放最下面 */}
                     <DocumentUploader
                         pdfType={pdfType}
                         existing_titles={submissions.map((s) => s.submissionTitle)}
+                        add_new_title={true}
                     />
                 </CardContent>
             </Card>

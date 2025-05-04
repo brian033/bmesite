@@ -18,6 +18,7 @@ const handler = async (req: NextRequest, session: any) => {
     const title = formData.get("title") as string | null;
     const description = formData.get("description") as string | null;
     const topic = formData.get("topic") as string | null;
+    const presentType = formData.get("presentType") as "oral" | "poster";
 
     // 檢查檔案是否存在
     if (!file || !file.name || file.size === 0) {
@@ -83,7 +84,8 @@ const handler = async (req: NextRequest, session: any) => {
         reviewedBy: [],
         notes: [],
         createdAt: upLoadTime,
-        topic: formData.get("topic") as string | undefined, // <-- 新欄位
+        topic: topic, // <-- 新欄位
+        present_type: presentType, // <-- 新增欄位
     };
 
     await db.collection("documents").insertOne(doc);

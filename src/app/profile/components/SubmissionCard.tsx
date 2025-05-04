@@ -4,7 +4,19 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import DocumentViewer from "@/app/components/DocumentViewer";
 
+type Document = {
+    uploadedAt: string;
+    detailedInfo: {
+        [x: string]: string;
+        documentStatus: string;
+    };
+    submissionInfo?: {
+        submissionUpdatedAt?: string;
+    };
+    [key: string]: any;
+};
 interface Submission {
     submissionId: string;
     submissionTitle: string;
@@ -16,9 +28,10 @@ interface Submission {
 
 interface SubmissionCardProps {
     submissions: Submission[];
+    documents: Document[];
 }
 
-export default function SubmissionCard({ submissions }: SubmissionCardProps) {
+export default function SubmissionCard({ submissions, documents }: SubmissionCardProps) {
     const [open, setOpen] = useState(false);
 
     return (
@@ -55,6 +68,37 @@ export default function SubmissionCard({ submissions }: SubmissionCardProps) {
                                         最後更新：{new Date(s.submissionUpdatedAt).toLocaleString()}
                                     </p>
                                     <Separator className="my-2" />
+                                    {documents
+                                        .filter((d) => d.title === s.submissionTitle)
+                                        .map((doc, j) => (
+                                            <details key={doc.documentId || j}>
+                                                <summary className="cursor-pointer font-medium text-gray-800">
+                                                    📄 版本 {j + 1}:{" "}
+                                                    {doc.detailedInfo.pdfType === "full_paper"
+                                                        ? "全文"
+                                                        : "摘要"}
+                                                    （
+                                                    {doc.detailedInfo.documentStatus === "pending"
+                                                        ? "已送審"
+                                                        : "未送審"}
+                                                    ）
+                                                </summary>
+                                                <div className="ml-4 mt-1 space-y-1 text-sm text-muted-foreground">
+                                                    <p>
+                                                        上傳時間：
+                                                        {new Date(doc.uploadedAt).toLocaleString()}
+                                                    </p>
+                                                    <p>描述：{doc.description || "（無）"}</p>
+                                                    <p>主題：{doc.topic || "（未設定）"}</p>
+                                                    <div>
+                                                        PDF 預覽：
+                                                        <DocumentViewer
+                                                            fileUrl={`/api/user_uploads${doc.pdf}`}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </details>
+                                        ))}
                                 </div>
                             ))
                         )}

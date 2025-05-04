@@ -14,12 +14,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-const DocumentUploader = ({ pdfType, existing_titles }) => {
+const DocumentUploader = ({ pdfType, existing_titles, add_new_title }) => {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
-    const [useNewTitle, setUseNewTitle] = useState(existing_titles?.length === 0);
+    const [presentType, setPresentType] = useState("");
     const [noteTitle, setNoteTitle] = useState("");
     const [noteDescription, setNoteDescription] = useState("");
     const [noteTopic, setNoteTopic] = useState("");
@@ -51,6 +51,10 @@ const DocumentUploader = ({ pdfType, existing_titles }) => {
             setError("請選擇投稿主題。");
             return;
         }
+        if (!presentType.trim()) {
+            setError("請選擇發表形式。");
+            return;
+        }
 
         const formData = new FormData();
         formData.append("file", file);
@@ -58,6 +62,7 @@ const DocumentUploader = ({ pdfType, existing_titles }) => {
         formData.append("title", noteTitle);
         formData.append("description", noteDescription);
         formData.append("topic", noteTopic);
+        formData.append("presentType", presentType);
 
         setUploading(true);
         setError(null);
@@ -102,37 +107,12 @@ const DocumentUploader = ({ pdfType, existing_titles }) => {
 
                     <div className="space-y-1">
                         <Label>標題</Label>
-                        {useNewTitle || existing_titles?.length === 0 ? (
-                            <Input
-                                type="text"
-                                value={noteTitle}
-                                onChange={(e) => setNoteTitle(e.target.value)}
-                                placeholder="Enter new title"
-                            />
-                        ) : (
-                            <Select onValueChange={(value) => setNoteTitle(value)}>
-                                <SelectTrigger className="w-full">
-                                    <SelectValue placeholder="Select an existing title" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {existing_titles.map((title: string, index: number) => (
-                                        <SelectItem key={index} value={title}>
-                                            {title}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                        )}
-                        {existing_titles?.length > 0 && (
-                            <Button
-                                variant="link"
-                                type="button"
-                                className="text-sm text-blue-600 p-0"
-                                onClick={() => setUseNewTitle(!useNewTitle)}
-                            >
-                                {useNewTitle ? "選擇已存在的標題" : "新增新的標題"}
-                            </Button>
-                        )}
+                        <Input
+                            type="text"
+                            value={noteTitle}
+                            onChange={(e) => setNoteTitle(e.target.value)}
+                            placeholder="輸入標題"
+                        />
                     </div>
                     <div className="space-y-1">
                         <Label>投稿主題</Label>
@@ -161,13 +141,25 @@ const DocumentUploader = ({ pdfType, existing_titles }) => {
                             </SelectContent>
                         </Select>
                     </div>
+                    <div className="space-y-1">
+                        <Label>發表形式</Label>
+                        <Select onValueChange={(value) => setPresentType(value)}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="請選擇發表形式" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="poster">海報發表（Poster）</SelectItem>
+                                <SelectItem value="oral">口頭發表（Oral）</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
 
                     <div className="space-y-1">
                         <Label>簡短敘述</Label>
                         <Textarea
                             value={noteDescription}
                             onChange={(e) => setNoteDescription(e.target.value)}
-                            placeholder="Enter description"
+                            placeholder="輸入簡短敘述"
                         />
                     </div>
 
