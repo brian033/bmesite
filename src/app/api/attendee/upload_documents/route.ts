@@ -5,6 +5,7 @@ import clientPromise from "@/lib/mongodb";
 import path from "path";
 import fs from "fs/promises";
 import { v4 as uuidv4 } from "uuid"; // 引入 uuid 用來生成唯一的 pdfId
+import { Document } from "@/types/document";
 
 // 可接受的 pdftype 類型
 const validPdfTypes = ["abstracts", "full_paper"];
@@ -13,10 +14,11 @@ const handler = async (req: NextRequest, session: any) => {
     // 從表單數據中提取文件和 pdf 類型
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-    const note = formData.get("note") as string | null;
     const pdftype = formData.get("pdftype") as string | null;
     const title = formData.get("title") as string | null;
     const description = formData.get("description") as string | null;
+    const topic = formData.get("topic") as string | null;
+
     // 檢查檔案是否存在
     if (!file || !file.name || file.size === 0) {
         return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
@@ -70,19 +72,21 @@ const handler = async (req: NextRequest, session: any) => {
         }
     );
 
-    // 插入新文件到 documents collection
-    await db.collection("documents").insertOne({
+    const doc: Document = {
         documentId: pdfId,
         documentLocation: `/${session.user.uuid}${relativePath}`,
         documentOwner: session.user.uuid,
         documentStatus: "uploaded",
-        title: title,
-        pdfType: pdftype,
+        title: title!,
+        pdfType: pdftype as "abstracts" | "full_paper",
         description: description || "",
         reviewedBy: [],
         notes: [],
         createdAt: upLoadTime,
-    });
+        topic: formData.get("topic") as string | undefined, // <-- 新欄位
+    };
+
+    await db.collection("documents").insertOne(doc);
 
     return NextResponse.json({ success: true, filePath: relativePath });
 };

@@ -22,6 +22,7 @@ const DocumentUploader = ({ pdfType, existing_titles }) => {
     const [useNewTitle, setUseNewTitle] = useState(existing_titles?.length === 0);
     const [noteTitle, setNoteTitle] = useState("");
     const [noteDescription, setNoteDescription] = useState("");
+    const [noteTopic, setNoteTopic] = useState("");
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
@@ -46,12 +47,17 @@ const DocumentUploader = ({ pdfType, existing_titles }) => {
             setError("Please enter both title and description.");
             return;
         }
+        if (!noteTopic.trim()) {
+            setError("請選擇投稿主題。");
+            return;
+        }
 
         const formData = new FormData();
         formData.append("file", file);
         formData.append("pdftype", pdfType);
         formData.append("title", noteTitle);
         formData.append("description", noteDescription);
+        formData.append("topic", noteTopic);
 
         setUploading(true);
         setError(null);
@@ -127,6 +133,33 @@ const DocumentUploader = ({ pdfType, existing_titles }) => {
                                 {useNewTitle ? "選擇已存在的標題" : "新增新的標題"}
                             </Button>
                         )}
+                    </div>
+                    <div className="space-y-1">
+                        <Label>投稿主題</Label>
+                        <Select onValueChange={(value) => setNoteTopic(value)}>
+                            <SelectTrigger className="w-full">
+                                <SelectValue placeholder="請選擇投稿主題" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="生物產業機械">生物產業機械（A）</SelectItem>
+                                <SelectItem value="生物生產工程">生物生產工程（B）</SelectItem>
+                                <SelectItem value="畜牧自動化與污染防治">
+                                    畜牧自動化與污染防治（C）
+                                </SelectItem>
+                                <SelectItem value="農業設施與環控工程">
+                                    農業設施與環控工程（D）
+                                </SelectItem>
+                                <SelectItem value="生物機電控制">生物機電控制（E）</SelectItem>
+                                <SelectItem value="生醫工程與微奈米機電">
+                                    生醫工程與微奈米機電（F）
+                                </SelectItem>
+                                <SelectItem value="生物資訊與系統">生物資訊與系統（G）</SelectItem>
+                                <SelectItem value="能源與節能技術">能源與節能技術（H）</SelectItem>
+                                <SelectItem value="AI與大數據分析">AI與大數據分析（I）</SelectItem>
+                                <SelectItem value="精準農業自動化">精準農業自動化（J）</SelectItem>
+                                <SelectItem value="其他新興科技">其他新興科技（K）</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div className="space-y-1">
