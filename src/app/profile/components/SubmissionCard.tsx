@@ -4,7 +4,9 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Submission } from "@/types/submission";
 import DocumentViewer from "@/app/components/DocumentViewer";
+import SubmissionUploadButton from "./SubmissionUploadButton";
 
 type Document = {
     uploadedAt: string;
@@ -17,14 +19,6 @@ type Document = {
     };
     [key: string]: any;
 };
-interface Submission {
-    submissionId: string;
-    submissionTitle: string;
-    submissionStatus: string;
-    submissionCreatedAt: string;
-    submissionUpdatedAt: string;
-    submissionFiles: string[];
-}
 
 interface SubmissionCardProps {
     submissions: Submission[];
@@ -46,8 +40,9 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                         {submissions.length === 0 ? (
                             <p className="text-muted-foreground text-sm">尚無審稿紀錄</p>
                         ) : (
-                            submissions.map((s, i) => (
+                            submissions.map((s: Submission, i) => (
                                 <div key={s.submissionId} className="p-4 border rounded-md">
+                                    <SubmissionUploadButton submission={s} />
                                     <p className="font-semibold">
                                         {" "}
                                         🔍 文件標題: {s.submissionTitle}

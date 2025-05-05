@@ -1,10 +1,12 @@
+import { ObjectId } from "mongodb";
 export type Submission = {
-    _id: string;
+    _id?: ObjectId;
     submissionId: string;
     submissionTitle: string;
     submissionType: "abstracts" | "full_paper";
     submissionStatus: "pending" | "replied" | "rejected" | "approved"; //new
     submissionTopic: string; // new
+    submissionPresentType: "oral" | "poster"; // new
     submissionOwner: string;
     submissionFiles: string[];
     submissionCreatedAt: string;

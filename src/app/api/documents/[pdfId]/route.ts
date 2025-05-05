@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { v4 as uuidv4 } from "uuid"; // 這個 uuid 是用來產生新的 submissionId 的
 import { Submission } from "@/types/submission";
+import { Document } from "@/types/document";
 // ✅ GET handler：取得文件資訊
 const getHandler = async (req: NextRequest, session: any, pdfId: string) => {
     try {
@@ -56,8 +57,8 @@ const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
         const documentsDB = db.collection("documents");
         const submissionDB = db.collection("submissions");
         const usersDB = db.collection("users");
-
-        const doc = await documentsDB.findOne({ documentId: pdfId });
+        // this is Document
+        const doc = (await documentsDB.findOne({ documentId: pdfId })) as Document;
 
         if (!doc) {
             return NextResponse.json({ error: "Document not found" }, { status: 404 });
@@ -86,17 +87,19 @@ const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
         // submission status: " pending" | "approved" | "rejected"
         if (!existingSubmission) {
             // 如果沒有同title的submission，則新建一個 submission
-            const newSubmission = {
+            const newSubmission: Submission = {
                 submissionId: uuidv4(),
                 submissionTitle: doc.title,
                 submissionType: doc.pdfType,
                 submissionStatus: "pending",
                 submissionOwner: session.user.uuid,
+                submissionTopic: doc.topic,
+                submissionPresentType: doc.present_type,
                 submissionFiles: [pdfId],
-                submissionCreatedAt: new Date(),
-                submissionUpdatedAt: new Date(),
+                submissionCreatedAt: new Date().toISOString(),
+                submissionUpdatedAt: new Date().toISOString(),
                 submissionReviewedBy: [],
-                submissionReviewedAt: [],
+                submissionReviewedAt: "",
             };
             await submissionDB.insertOne(newSubmission);
 
