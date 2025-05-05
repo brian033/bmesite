@@ -155,6 +155,7 @@ const DocumentListViewer = ({ documents, pdfType }) => {
             ) : (
                 documents.map((doc, i) => (
                     <div key={doc.pdfId || i} className="space-y-2">
+                        {JSON.stringify(doc)}
                         {doc.detailedInfo.documentStatus === "pending" ? (
                             <details>
                                 <summary className="cursor-pointer font-semibold text-lg text-gray-700">

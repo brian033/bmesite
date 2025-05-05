@@ -3,7 +3,8 @@ export type Submission = {
     submissionId: string;
     submissionTitle: string;
     submissionType: "abstracts" | "full_paper";
-    submissionStatus: "pending" | "accepted" | "rejected";
+    submissionStatus: "pending" | "replied" | "rejected" | "approved"; //new
+    submissionTopic: string; // new
     submissionOwner: string;
     submissionFiles: string[];
     submissionCreatedAt: string;

@@ -3,7 +3,7 @@ import { middlewareFactory } from "@/lib/middlewareFactory";
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { v4 as uuidv4 } from "uuid"; // 這個 uuid 是用來產生新的 submissionId 的
-
+import { Submission } from "@/types/submission";
 // ✅ GET handler：取得文件資訊
 const getHandler = async (req: NextRequest, session: any, pdfId: string) => {
     try {
@@ -122,35 +122,14 @@ const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
                 { status: 200 }
             );
         } else {
-            // 有這個 summission，檢查 status
-            if (existingSubmission.submissionStatus !== "pending") {
-                // 如果 status 不是 pending，則不需要再 submit
-                return NextResponse.json(
-                    { error: "This submission title is not in pending status." },
-                    { status: 400 }
-                );
-            } else {
-                // 如果 status 是 pending，則把這個文件掛在這個 submission 的 files list 裡
-                await submissionDB.updateOne(
-                    { submissionId: existingSubmission.submissionId },
-                    {
-                        $push: { submissionFiles: pdfId },
-                        $set: { submissionUpdatedAt: new Date() },
-                    }
-                );
-                await documentsDB.updateOne(
-                    { documentId: pdfId },
-                    { $set: { documentStatus: "pending" } }
-                );
-                return NextResponse.json(
-                    {
-                        success: true,
-                        newStatus: "pending",
-                        message: `成功更新標題為\"${doc.title}\"之審稿案，若之後想再更新此審稿案，請上傳同樣標題的文件後再送出。`,
-                    },
-                    { status: 200 }
-                );
-            }
+            // 有這個 summission，那就不給上傳
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: `已經有一個標題為\"${existingSubmission.submissionTitle}\"的審稿案在進行中，請至審稿區查看！`,
+                },
+                { status: 400 }
+            );
         }
     } catch (err) {
         console.error("Submit error:", err);
