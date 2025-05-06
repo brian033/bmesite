@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid"; // 引入 uuid 用來生成唯一的 pdfId
 import { Document } from "@/types/document";
 import { Submission } from "@/types/submission";
 
+// post handler to upload file to a submission by user.
 const handler = async (req: NextRequest, session: any) => {
     // 從表單數據中提取文件和 pdf 類型
     const formData = await req.formData();
@@ -127,7 +128,7 @@ const handler = async (req: NextRequest, session: any) => {
         }
     );
 
-    await db.collection("documents").insertOne(doc);
+    await db.collection("documents").insertOne(doc as any);
 
     return NextResponse.json({ success: true, filePath: relativePath });
 };

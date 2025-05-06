@@ -1,5 +1,5 @@
 import { withRoleProtection } from "@/lib/withRoleProtection";
-import SubmissionReviewCard from "./components/SubmissionReviewCard";
+import SubmissionReviewCard2 from "./components/SubmissionReviewCard2";
 import { Submission } from "@/types/submission";
 import clientPromise from "@/lib/mongodb";
 import { Collection } from "mongodb";
@@ -50,8 +50,8 @@ export default async function ReviewerPendingPage({
             .toArray()
             .then((s) => {
                 return s.map((submission) => ({
-                    _id: submission._id.toString(),
                     ...submission,
+                    _id: submission._id?.toString(),
                 }));
             })) as Submission[];
     } else {
@@ -60,8 +60,8 @@ export default async function ReviewerPendingPage({
             .toArray()
             .then((s) => {
                 return s.map((submission) => ({
-                    _id: submission._id.toString(),
                     ...submission,
+                    _id: submission._id?.toString(),
                 }));
             })) as Submission[];
     }
@@ -80,8 +80,8 @@ export default async function ReviewerPendingPage({
         .then((docs) => {
             return docs.map((doc) => {
                 return {
-                    _id: doc._id.toString(),
                     ...doc,
+                    _id: doc._id?.toString(), // 確保 _id 被正確轉成 string
                 };
             });
         })) as Document[];
@@ -91,8 +91,8 @@ export default async function ReviewerPendingPage({
         .then((users) => {
             return users.map((user) => {
                 return {
-                    _id: user._id.toString(),
                     ...user,
+                    _id: user._id?.toString(),
                 };
             });
         })) as User[];
@@ -112,5 +112,14 @@ export default async function ReviewerPendingPage({
             };
         }
     );
-    return <div></div>;
+    return (
+        <div className="flex flex-col gap-4">
+            <h1 className="text-2xl font-bold">待審稿件</h1>
+            <div className="flex flex-col gap-4">
+                {submissionsWithDetailedInfo.map((submission) => (
+                    <SubmissionReviewCard2 key={submission.submissionId} submission={submission} />
+                ))}
+            </div>
+        </div>
+    );
 }

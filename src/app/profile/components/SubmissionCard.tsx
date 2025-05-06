@@ -26,12 +26,17 @@ const submissionSerialRules = {
     精準農業智動化: "J",
     其他新興科技: "K",
 };
-export const getSerial = (submission: Submission) => {
-    // submission Serial規則: [字母]+submissionId轉成10進位後的錢5位數字
-    const present_type = submission.submissionPresentType == "oral" ? "O" : "P";
-    const prefix = submissionSerialRules[submission.submissionTopic || "其他新興科技"];
-    const submissionId = parseInt(submission.submissionId, 16);
-    const serial = submissionId.toString(10).padStart(5, "0");
+export const getSerial = (
+    submissionPresentType: "oral" | "poster",
+    submisssionTopic: string,
+    submission_Id: string
+) => {
+    // submission Serial規則: [字母]+submissionId第一個part轉成數字後的前10位數字
+    const present_type = submissionPresentType == "oral" ? "O" : "P";
+    const prefix = submissionSerialRules[submisssionTopic || "其他新興科技"];
+    const submissionIdPart = submission_Id.split("-")[0]; // 取UUID的第一個部分
+    const numericValue = BigInt(`0x${submissionIdPart}`); // 將其轉為數字
+    const serial = numericValue.toString().padStart(10, "0").slice(0, 10); // 取前10位並pad 0
     return `${present_type}${prefix ? prefix : "X"}${serial}`;
 };
 
@@ -63,7 +68,15 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                         審稿案主題：{s.submissionTopic || "（未設定）"}
                                     </p>
                                     <p className="text-sm text-muted-foreground">
-                                        審稿案編號：{getSerial(s)}
+                                        發表形式：{s.submissionPresentType || "（未設定）"}
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                        審稿案編號：
+                                        {getSerial(
+                                            s.submissionPresentType,
+                                            s.submissionTopic,
+                                            s.submissionId
+                                        )}
                                     </p>
                                     <p className="text-sm text-muted-foreground">
                                         檔案數量：{s.submissionFiles.length}
@@ -100,7 +113,6 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
 function DocumentDetail({
     document,
     version,
-    key,
 }: {
     document: Document;
     version: number;
@@ -115,6 +127,7 @@ function DocumentDetail({
                 <p>上傳時間：{document.createdAt}</p>
                 <p>描述：{document.description || "（無）"}</p>
                 <p>主題：{document.topic || "（未設定）"}</p>
+                <p>檔案類型：{document.pdfType === "full_paper" ? "全文" : "摘要"}</p>
                 {document.pdfType === "abstracts" && (
                     <div>
                         PDF 預覽：

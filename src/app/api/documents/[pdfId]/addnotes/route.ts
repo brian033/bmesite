@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { middlewareFactory } from "@/lib/middlewareFactory";
 import clientPromise from "@/lib/mongodb";
-
+import { note } from "@/types/document";
 const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
     const body = await req.json();
     const note = body.note;
@@ -26,17 +26,18 @@ const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const now = new Date();
-    const formattedTime = `[${now.toLocaleDateString("en-GB").slice(0, 5)} ${now
-        .toTimeString()
-        .slice(0, 5)}]`; // e.g., [06/23 17:25]
-    const fullNote = `${formattedTime} ${session.user.name}: ${note}`;
+    const newNote: note = {
+        note: note,
+        createdAt: new Date().toISOString(),
+        noteCreatorId: session.user.uuid,
+        noteCreatorName: session.user.name,
+    };
 
     await db
         .collection("documents")
-        .updateOne({ documentId: pdfId }, { $push: { notes: fullNote } });
+        .updateOne({ documentId: pdfId }, { $push: { notes: newNote } });
 
-    return NextResponse.json({ success: true, newNote: fullNote });
+    return NextResponse.json({ success: true, newNote: newNote });
 };
 
 export async function POST(req: NextRequest, ctx: { params: Promise<Record<string, string>> }) {
