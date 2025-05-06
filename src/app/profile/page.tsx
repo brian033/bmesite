@@ -1,6 +1,6 @@
 // app/profile/page.tsx
 
-import { getServerSession } from "next-auth";
+import { getTypedSession } from "@/lib/getTypedSession";
 import { authOptions } from "@/lib/authOptions";
 import { redirect } from "next/navigation";
 
@@ -11,7 +11,7 @@ import { Info } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export default async function AttendeePage() {
-    const session = await getServerSession(authOptions);
+    const session = await getTypedSession();
 
     if (!session || !session.user) {
         redirect("/"); // 🔥 server-side redirect to homepage
@@ -47,7 +47,7 @@ export default async function AttendeePage() {
             {/* 文件管理區塊 */}
             <Card>
                 <CardContent>
-                    <DocumentManager />
+                    <DocumentManager session={session} />
                 </CardContent>
             </Card>
         </div>

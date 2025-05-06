@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useSession } from "next-auth/react";
 import DocumentReviewCard from "./DocumentReviewCard";
+import { getSerial } from "@/app/profile/components/SubmissionCard";
 
 export default function SubmissionReviewCard({ submission }: { submission: any }) {
     const [expanded, setExpanded] = useState(false);
@@ -23,6 +24,7 @@ export default function SubmissionReviewCard({ submission }: { submission: any }
     );
 
     const documentCounts = submission.submssionFileDetail.length;
+    const serial = getSerial(submission);
 
     return (
         <Card className="w-full shadow">
@@ -30,6 +32,7 @@ export default function SubmissionReviewCard({ submission }: { submission: any }
                 <div>
                     <CardTitle className="text-xl font-semibold leading-snug">
                         標題：<span className="text-primary">{submission.submissionTitle}</span>
+                        編號：<span className="text-primary">{serial}</span>
                         <div className="mt-1 text-sm text-muted-foreground">
                             上傳者：{submission.submissionOwnerDetails?.name || "未知"}（
                             {submission.submissionOwnerDetails?.department || "無單位"}）

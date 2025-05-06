@@ -14,11 +14,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-const DocumentUploader = ({ pdfType, existing_titles, add_new_title }) => {
+const DocumentUploader = ({ pdfType, add_new_title }) => {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [presentType, setPresentType] = useState("");
     const [noteTitle, setNoteTitle] = useState("");
     const [noteDescription, setNoteDescription] = useState("");
@@ -66,7 +65,6 @@ const DocumentUploader = ({ pdfType, existing_titles, add_new_title }) => {
 
         setUploading(true);
         setError(null);
-        setSuccessMessage(null);
 
         try {
             const response = await fetch("/api/attendee/upload_documents", {
@@ -80,7 +78,8 @@ const DocumentUploader = ({ pdfType, existing_titles, add_new_title }) => {
                 throw new Error(data.error || "Upload failed");
             }
 
-            setSuccessMessage(`上傳成功，請重新整理後查看更新！`);
+            // refresh window
+            window.location.reload();
         } catch (err) {
             setError(err.message || "Error uploading file");
         } finally {
@@ -136,7 +135,7 @@ const DocumentUploader = ({ pdfType, existing_titles, add_new_title }) => {
                                 <SelectItem value="生物資訊與系統">生物資訊與系統（G）</SelectItem>
                                 <SelectItem value="能源與節能技術">能源與節能技術（H）</SelectItem>
                                 <SelectItem value="AI與大數據分析">AI與大數據分析（I）</SelectItem>
-                                <SelectItem value="精準農業自動化">精準農業自動化（J）</SelectItem>
+                                <SelectItem value="精準農業智動化">精準農業智動化（J）</SelectItem>
                                 <SelectItem value="其他新興科技">其他新興科技（K）</SelectItem>
                             </SelectContent>
                         </Select>
@@ -164,7 +163,6 @@ const DocumentUploader = ({ pdfType, existing_titles, add_new_title }) => {
                     </div>
 
                     {error && <p className="text-red-500 text-sm">{error}</p>}
-                    {successMessage && <p className="text-green-600 text-sm">{successMessage}</p>}
 
                     <Button type="submit" disabled={uploading} className="w-full">
                         {uploading ? "Uploading..." : "Upload PDF"}

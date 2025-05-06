@@ -21,6 +21,7 @@ export default function SubmissionUploadButton({ submission }: Props) {
     const [open, setOpen] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
+    const [description, setDescription] = useState("");
 
     const handleUpload = async () => {
         if (!file) {
@@ -32,6 +33,7 @@ export default function SubmissionUploadButton({ submission }: Props) {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("submissionId", submission.submissionId);
+        formData.append("description", description);
 
         try {
             const res = await fetch("/api/submissions", {
@@ -45,6 +47,7 @@ export default function SubmissionUploadButton({ submission }: Props) {
             setMessage("上傳成功 ✅");
             setFile(null);
             setOpen(false);
+            location.reload();
         } catch (err: any) {
             setMessage(err.message || "上傳失敗");
         } finally {
@@ -67,6 +70,16 @@ export default function SubmissionUploadButton({ submission }: Props) {
                         accept=".pdf,.doc,.docx"
                         onChange={(e) => setFile(e.target.files?.[0] || null)}
                     />
+                    <div className="mt-4">
+                        <label className="text-sm font-medium">備註說明</label>
+                        <textarea
+                            className="w-full mt-1 p-2 border rounded-md text-sm"
+                            rows={3}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            placeholder="選填"
+                        />
+                    </div>
 
                     {message && <p className="text-sm text-muted-foreground mt-2">{message}</p>}
 

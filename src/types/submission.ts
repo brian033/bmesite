@@ -4,7 +4,7 @@ export type Submission = {
     submissionId: string;
     submissionTitle: string;
     submissionType: "abstracts" | "full_paper";
-    submissionStatus: "pending" | "replied" | "rejected" | "approved"; //new
+    submissionStatus: "pending" | "replied" | "rejected" | "approved" | "waiting"; //new
     submissionTopic: string; // new
     submissionPresentType: "oral" | "poster"; // new
     submissionOwner: string;

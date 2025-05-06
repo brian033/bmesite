@@ -12,6 +12,7 @@ const handler = async (req: NextRequest, session: any) => {
     // 從表單數據中提取文件和 pdf 類型
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
+    const description = formData.get("description") as string | null;
     const submissionId = formData.get("submissionId") as string | null;
 
     // 檢查檔案是否存在
@@ -37,10 +38,10 @@ const handler = async (req: NextRequest, session: any) => {
                 { status: 403 }
             );
         }
-        // 如果他是abstract的話，那abstract的時候如果是pending的話，不給更新文件
-        if (submission.submissionType == "abstracts" && submission.submissionStatus === "pending") {
+        // 是pending的話，不給更新文件
+        if (submission.submissionStatus === "pending") {
             return NextResponse.json(
-                { error: "Cannot update file for pending abstracts" },
+                { error: "Cannot update file for pending cases" },
                 { status: 403 }
             );
         }
@@ -61,10 +62,22 @@ const handler = async (req: NextRequest, session: any) => {
         );
     }
 
-    // 檢查檔案是否是 PDF 檔案 或者 word檔案
+    // 檢查檔案是否是 PDF 檔案  when it's abstracts, 其他時候只允許word
     const fileExt = path.extname(file.name).toLowerCase();
-    if (fileExt !== ".pdf" && fileExt !== ".docx" && fileExt !== ".doc") {
-        return NextResponse.json({ error: "Only PDF and Word files are allowed" }, { status: 400 });
+    if (submission.submissionType === "abstracts") {
+        if (fileExt !== ".pdf") {
+            return NextResponse.json(
+                { error: "Only PDF files are allowed on absstracts submission" },
+                { status: 400 }
+            );
+        }
+    } else {
+        if (fileExt !== ".docx" && fileExt !== ".doc") {
+            return NextResponse.json(
+                { error: "Only Word files are allowed on full paper submission" },
+                { status: 400 }
+            );
+        }
     }
 
     const timestamp = Date.now();
@@ -88,11 +101,11 @@ const handler = async (req: NextRequest, session: any) => {
     const doc: Document = {
         documentId: pdfId,
         documentLocation: `/${session.user.uuid}${relativePath}`,
-        documentOwner: session.user.uuid,
+        documentOwner: submission.submissionOwner,
         documentStatus: "pending",
         title: submission.submissionTitle,
         pdfType: submission.submissionType,
-        description: "submission update",
+        description: description || "submission update",
         reviewedBy: [],
         notes: [],
         createdAt: upLoadTime,

@@ -2,6 +2,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import clientPromise from "@/lib/mongodb";
 import { v4 as uuidv4 } from "uuid";
+import type { User as DBUser } from "@/types/user";
 
 export const authOptions = {
     providers: [
@@ -14,6 +15,8 @@ export const authOptions = {
     adapter: MongoDBAdapter(clientPromise),
     session: {
         strategy: "jwt" as const,
+        maxAge: 60 * 60 * 24 * 7, // JWT 存活時間（秒），這裡是 7 天
+        updateAge: 60 * 60 * 24, // 每 24 小時觸發一次自動刷新 JWT
     },
     callbacks: {
         async signIn({ user }) {
@@ -31,7 +34,7 @@ export const authOptions = {
                     image: user.image,
                     uuid: uuidv4(),
                     role: "attendee",
-                    createdAt: new Date(),
+                    createdAt: new Date().toISOString(),
                     contact_email: "未輸入聯絡用信箱", // 預設聯絡信箱為使用者的email
                     // additional fields:
                     phone: "未輸入電話", // 預設電話
@@ -48,7 +51,7 @@ export const authOptions = {
                         abstracts: [],
                         full_paper: [],
                     },
-                });
+                } as DBUser);
             }
 
             return true;
@@ -59,41 +62,21 @@ export const authOptions = {
             const db = client.db(process.env.MONGODB_DB);
             const collection = db.collection("users");
 
-            const dbUser = await collection.findOne({
+            // const dbUser = await collection.findOne({
+            //     email: token.email ?? user?.email,
+            // });
+            const dbUser = (await collection.findOne({
                 email: token.email ?? user?.email,
-            });
+            })) as DBUser;
 
             if (dbUser) {
-                token.registered = dbUser.registered;
-                token.name = dbUser.name;
-                token.role = dbUser.role;
-                token.uuid = dbUser.uuid;
-                token.email = dbUser.email;
-                token.contact_email = dbUser.contact_email; // 新增 contactEmail
-                token.image = dbUser.image;
-                token.phone = dbUser.phone; // 新增 phone
-                token.department = dbUser.department; // 新增 department
-                token.payment = dbUser.payment; // 新增 payment
-                token.uploaded_pdfs = dbUser.uploaded_pdfs; // 新增 uploaded_pdfs
-                token.submission = dbUser.submission; // 新增 submission
+                Object.assign(token as typeof token & Partial<DBUser>, dbUser);
             }
-
             return token;
         },
 
         async session({ session, token }) {
-            session.user.registered = token.registered;
-            session.user.name = token.name;
-            session.user.role = token.role;
-            session.user.uuid = token.uuid;
-            session.user.contact_email = token.contact_email; // 新增 contactEmail
-            session.user.email = token.email;
-            session.user.image = token.image;
-            session.user.phone = token.phone; // 新增 phone
-            session.user.department = token.department; // 新增 department
-            session.user.payment = token.payment; // 新增 payment
-            session.user.uploaded_pdfs = token.uploaded_pdfs; // 新增 uploaded_pdfs
-            token.submission = token.submission; // 新增 submission
+            Object.assign(session.user as typeof session.user & Partial<DBUser>, token);
             return session;
         },
     },
