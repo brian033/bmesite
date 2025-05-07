@@ -7,6 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Document } from "@/types/document";
+import { useSession } from "next-auth/react";
+import DocxPreview from "@/app/components/DocxPreview";
 
 export default function DocumentReviewCard2({
     document,
@@ -21,87 +23,216 @@ export default function DocumentReviewCard2({
 }) {
     const [expanded, setExpanded] = useState(false);
     const [noteText, setNoteText] = useState("");
-    const [reviewNote, setReviewNote] = useState("");
-    const [approved, setApproved] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    // 添加本地狀態來存儲評論
+    const [localNotes, setLocalNotes] = useState(document.notes || []);
+    // 獲取 session 資訊
+    const { data: session } = useSession();
+
+    // 判斷是否為審稿者上傳的文件
+    const isReviewerDocument = document.isReviewerUpload === true;
+
+    // 判斷當前用戶是否為文件上傳者
+    const isCurrentUserUploader = session?.user?.uuid === document.reviewerId;
+
     const handleAddNote = async () => {
+        if (!noteText.trim()) return;
+
         setIsSubmitting(true);
-        const res = await fetch(`/api/documents/${document.documentId}/addnotes`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ note: noteText }),
-        });
-        setIsSubmitting(false);
-        if (res.ok) {
-            alert("新增備註成功！");
-            setNoteText("");
-        } else {
-            alert("新增備註失敗！");
+        try {
+            const res = await fetch(`/api/documents/${document.documentId}/addnotes`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ note: noteText }),
+            });
+
+            if (!res.ok) {
+                throw new Error("Failed to add note");
+            }
+
+            const data = await res.json();
+
+            if (data.success && data.newNote) {
+                // 更新本地評論狀態
+                setLocalNotes((prevNotes) => [...prevNotes, data.newNote]);
+                setNoteText(""); // 清空文本框
+                // 如果這是首次評論，更新 hasReviewed 狀態
+                if (!hasReviewed && data.newNote.noteCreatorId === session?.user?.uuid) {
+                    hasReviewed = true;
+                }
+            } else {
+                throw new Error("Note data missing in response");
+            }
+        } catch (error) {
+            console.error("添加評論時出錯:", error);
+            alert("新增評論失敗！");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
+    // 處理文件說明顯示
+    const fileDescription = document.description
+        ? document.description.replace(/^\[審稿者修改\]\s*/, "")
+        : "";
+
     return (
         <Card>
-            <CardHeader className="flex flex-col md:flex-row justify-between gap-2">
-                <CardTitle className="text-base font-medium">
-                    <span>
-                        📄 {latest ? "最新版本" : `版本 ${version}`}（
-                        {hasReviewed ? "您已評論過此文件" : "您未評論過此文件"}）
-                    </span>
-                    <span className="text-sm text-muted-foreground">
+            <CardHeader className={`flex flex-col md:flex-row justify-between gap-2 `}>
+                <div>
+                    <CardTitle className="text-base font-medium flex items-start gap-2">
+                        <span>
+                            📄 [{document.pdfType}] {latest ? "最新文件" : `文件 ${version}`}
+                            {/* 只有非審稿者上傳的文件才顯示評論狀態 */}
+                        </span>
+
+                        {isReviewerDocument ? (
+                            <Badge className="bg-blue-500 hover:bg-blue-600">審稿者修改版</Badge>
+                        ) : (
+                            <Badge className="bg-green-500 hover:bg-green-600">投稿者版本</Badge>
+                        )}
+                    </CardTitle>
+
+                    <div className="text-sm text-muted-foreground mt-1">
                         上傳時間：{document.createdAt}
-                    </span>
-                </CardTitle>
-                <Button className="cursor-pointer" size="sm" onClick={() => setExpanded(!expanded)}>
+                        {/* 如果有文件描述，顯示部分簡短描述 */}
+                        {fileDescription && (
+                            <div className="mt-1">
+                                簡短說明：
+                                {fileDescription.length > 50
+                                    ? `${fileDescription.substring(0, 50)}...`
+                                    : fileDescription}
+                            </div>
+                        )}
+                        {/* 顯示上傳者信息 */}
+                        <div
+                            className={`mt-1 font-medium ${
+                                isReviewerDocument ? "text-blue-600" : "text-green-700"
+                            }`}
+                        >
+                            {isReviewerDocument
+                                ? isCurrentUserUploader
+                                    ? "由您上傳"
+                                    : `由審稿者 ${document.reviewerName || "未知"} 上傳`
+                                : `由投稿者上傳`}
+                        </div>
+                    </div>
+                </div>
+
+                <Button
+                    className="cursor-pointer"
+                    size="sm"
+                    onClick={() => setExpanded(!expanded)}
+                    variant={isReviewerDocument ? "default" : "outline"}
+                >
                     {expanded ? "折疊內容" : "展開內容"}
                 </Button>
             </CardHeader>
 
             {expanded && (
                 <CardContent className="space-y-4">
+                    {/* 如果是審稿者上傳的文件，顯示說明 */}
+                    {isReviewerDocument && (
+                        <div className="bg-blue-50 border border-blue-200 rounded-md p-3 text-sm">
+                            <p className="font-medium text-blue-700">
+                                這是由{isCurrentUserUploader ? "您" : "審稿者"}上傳的修改版本
+                            </p>
+                            {fileDescription && (
+                                <p className="mt-1 text-blue-600 whitespace-pre-line">
+                                    說明：{fileDescription}
+                                </p>
+                            )}
+                        </div>
+                    )}
+
+                    {/* 投稿者上傳的文件且有描述時顯示描述 */}
+                    {!isReviewerDocument && fileDescription && (
+                        <div className="border border-green-200 rounded-md p-3 text-sm">
+                            <p className="font-medium text-green-700">這是由投稿者上傳的原始文件</p>
+                            <p className="mt-1 text-green-600 whitespace-pre-line">
+                                說明：{fileDescription}
+                            </p>
+                        </div>
+                    )}
+
                     <div className="grid gap-1 text-sm">
                         <div>
                             <strong>評論：</strong>
-                            {document.notes?.length === 0
-                                ? "無"
-                                : document.notes.map((note, i) => (
-                                      <div key={i} className="ml-2 text-muted-foreground">
-                                          <span className="font-semibold">
-                                              {note.noteCreatorName}：
-                                          </span>
-                                          {note.note}@
-                                          <span className="text-xs text-muted-foreground">
-                                              {new Date(note.createdAt).toLocaleString()}
-                                          </span>
-                                      </div>
-                                  ))}
+                            {localNotes.length === 0 ? (
+                                <span className="text-muted-foreground ml-2">無評論</span>
+                            ) : (
+                                localNotes.map((note, i) => (
+                                    <div
+                                        key={i}
+                                        className="ml-2 text-muted-foreground mt-1 p-2 border-l-2 border-gray-200"
+                                    >
+                                        <span className="font-semibold text-primary">
+                                            {note.noteCreatorName}：
+                                        </span>
+                                        <span className="whitespace-pre-line">{note.note}</span>
+                                        <div className="text-xs text-muted-foreground mt-1">
+                                            {new Date(note.createdAt).toLocaleString()}
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
 
                     <div className="flex gap-2 flex-wrap">
-                        <Button className="w-full" variant="secondary" asChild>
+                        <Button
+                            variant="secondary"
+                            asChild
+                            className={`w-full ${
+                                isReviewerDocument ? " hover:bg-blue-200" : " hover:bg-green-200"
+                            }`}
+                        >
                             <a
                                 href={`/api/admin/user_uploads${document.documentLocation}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                查看文件（新分頁）
+                                {document.pdfType === "abstracts"
+                                    ? "新分頁打開PDF檔案"
+                                    : "下載Word檔案"}
                             </a>
                         </Button>
-                        {/* <details className="w-full">
-                            <summary className="cursor-pointer text-sm font-medium bg-muted px-3 py-1.5 rounded-md hover:bg-muted/80">
-                                查看文件（預覽）
-                            </summary>
-                            <div className="mt-2">
+                        {document.pdfType === "abstracts" ? (
+                            <details className="w-full">
+                                <summary
+                                    className={`cursor-pointer text-sm font-medium px-3 py-1.5 rounded-md ${
+                                        isReviewerDocument
+                                            ? " hover:bg-blue-200"
+                                            : " hover:bg-green-200"
+                                    }`}
+                                >
+                                    預覽PDF
+                                </summary>
                                 <embed
-                                    src={`/api/admin/user_uploads${documentLocation}`}
+                                    src={`/api/admin/user_uploads${document.documentLocation}`}
                                     width="100%"
                                     height="900px"
                                     type="application/pdf"
                                 />
-                            </div>
-                        </details> */}
+                            </details>
+                        ) : (
+                            <details className="w-full">
+                                <summary
+                                    className={`cursor-pointer text-sm font-medium px-3 py-1.5 rounded-md ${
+                                        isReviewerDocument
+                                            ? " hover:bg-blue-200"
+                                            : " hover:bg-green-200"
+                                    }`}
+                                >
+                                    預覽Word檔(建議下載後使用)
+                                </summary>
+                                <DocxPreview
+                                    fileUrl={`/api/admin/user_uploads${document.documentLocation}`}
+                                    height="900px"
+                                />
+                            </details>
+                        )}
                     </div>
 
                     <Separator />
@@ -115,13 +246,18 @@ export default function DocumentReviewCard2({
                             onChange={(e) => setNoteText(e.target.value)}
                             placeholder="寫下你的評論..."
                         />
-                        <Button
-                            className="cursor-pointer mt-2"
-                            onClick={handleAddNote}
-                            disabled={isSubmitting || !noteText}
-                        >
-                            新增評論
-                        </Button>
+                        <div className="flex justify-between items-center mt-2">
+                            <Button
+                                className="cursor-pointer"
+                                onClick={handleAddNote}
+                                disabled={isSubmitting || !noteText.trim()}
+                            >
+                                {isSubmitting ? "提交中..." : "新增評論"}
+                            </Button>
+                            <span className="text-xs text-muted-foreground">
+                                {noteText.length} 個字元
+                            </span>
+                        </div>
                     </div>
                 </CardContent>
             )}

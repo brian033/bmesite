@@ -107,7 +107,6 @@ const handler = async (req: NextRequest, session: any) => {
         title: submission.submissionTitle,
         pdfType: submission.submissionType,
         description: description || "submission update",
-        reviewedBy: [],
         notes: [],
         createdAt: upLoadTime,
         topic: submission.submissionTopic, // <-- 新欄位

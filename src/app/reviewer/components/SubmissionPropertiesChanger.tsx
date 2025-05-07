@@ -112,7 +112,7 @@ export function SubmissionPropertiesChanger({
     return (
         <div className="space-y-4 border rounded-md p-4 bg-gray-50">
             <div className="flex items-center justify-between">
-                <h3 className="font-medium">審稿案分類/</h3>
+                <h3 className="font-medium">審稿案分類</h3>
                 {!editing ? (
                     <Button onClick={handleEditClick} variant="outline" size="sm">
                         編輯屬性

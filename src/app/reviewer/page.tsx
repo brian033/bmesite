@@ -112,9 +112,9 @@ export default async function ReviewerPendingPage({
             };
         }
     );
+
     return (
         <div className="flex flex-col gap-4">
-            <h1 className="text-2xl font-bold">待審稿件</h1>
             <div className="flex flex-col gap-4">
                 {submissionsWithDetailedInfo.map((submission) => (
                     <SubmissionReviewCard2 key={submission.submissionId} submission={submission} />

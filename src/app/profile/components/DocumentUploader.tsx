@@ -87,7 +87,7 @@ const DocumentUploader = ({ pdfType, add_new_title }) => {
         }
     };
     return (
-        <Card className="max-w-md mx-auto">
+        <Card className="max-w-full mx-auto">
             <CardHeader>
                 <CardTitle className="text-center text-2xl">上傳文件</CardTitle>
                 <p className="text-sm text-muted-foreground mb-4">

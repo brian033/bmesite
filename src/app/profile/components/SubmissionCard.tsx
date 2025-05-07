@@ -4,15 +4,37 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { Submission } from "@/types/submission";
 import DocumentViewer from "@/app/components/DocumentViewer";
+import DocxPreview from "@/app/components/DocxPreview";
 import SubmissionUploadButton from "./SubmissionUploadButton";
 import { Document } from "@/types/document";
+import { FileText, Clock, Calendar, Info, ExternalLink } from "lucide-react";
 
 interface SubmissionCardProps {
     submissions: Submission[];
     documents: Document[];
 }
+
+// 狀態顯示名稱對應
+const STATUS_DISPLAY = {
+    pending: "審核中",
+    accepted: "已接受",
+    rejected: "已拒絕",
+    replied: "需修改重新提交",
+    waiting: "等待提交全文",
+};
+
+// 狀態顏色對應
+const STATUS_COLOR = {
+    pending: "bg-yellow-100 text-yellow-800 border-yellow-200",
+    accepted: "bg-green-100 text-green-800 border-green-200",
+    rejected: "bg-red-100 text-red-800 border-red-200",
+    replied: "bg-orange-100 text-orange-800 border-orange-200",
+    waiting: "bg-blue-100 text-blue-800 border-blue-200",
+};
+
 const submissionSerialRules = {
     生物產業機械: "A",
     生物生產工程: "B",
@@ -26,6 +48,7 @@ const submissionSerialRules = {
     精準農業智動化: "J",
     其他新興科技: "K",
 };
+
 export const getSerial = (
     submissionPresentType: "oral" | "poster",
     submisssionTopic: string,
@@ -43,65 +66,206 @@ export const getSerial = (
 export default function SubmissionCard({ submissions, documents }: SubmissionCardProps) {
     const [open, setOpen] = useState(false);
 
+    // 檢查是否有狀態為 replied 或 waiting 的提交案
+    const hasActionRequiredSubmissions = submissions.some(
+        (s) => s.submissionStatus === "replied" || s.submissionStatus === "waiting"
+    );
+
     return (
         <Card className="mt-4">
-            {/* {JSON.stringify(submissions)}
-            {JSON.stringify(documents)} */}
             <CardContent className="p-4">
-                <Button onClick={() => setOpen(!open)} className="cursor-pointer mb-4">
-                    {open ? "隱藏我的審稿案" : "查看我的審稿案"}
-                </Button>
+                <div className="flex justify-between items-center mb-4">
+                    <Button
+                        onClick={() => setOpen(!open)}
+                        className="cursor-pointer"
+                        variant={hasActionRequiredSubmissions ? "default" : "outline"}
+                    >
+                        {open ? "隱藏我的審稿案" : "查看我的審稿案"}
+                        {hasActionRequiredSubmissions && (
+                            <Badge className="ml-2 bg-red-500">需要處理</Badge>
+                        )}
+                    </Button>
+                    <div className="text-sm text-muted-foreground">
+                        總案件數: {submissions.length}
+                    </div>
+                </div>
 
                 {open && (
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                         {submissions.length === 0 ? (
-                            <p className="text-muted-foreground text-sm">尚無審稿紀錄</p>
+                            <p className="text-muted-foreground text-sm text-center p-4 border rounded-md bg-gray-50">
+                                尚無審稿紀錄
+                            </p>
                         ) : (
-                            submissions.map((s: Submission, i) => (
-                                <div key={s.submissionId} className="p-4 border rounded-md">
-                                    <SubmissionUploadButton submission={s} />
-                                    <p className="font-semibold">
-                                        {" "}
-                                        🔍 文件標題: {s.submissionTitle}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        審稿案主題：{s.submissionTopic || "（未設定）"}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        發表形式：{s.submissionPresentType || "（未設定）"}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        審稿案編號：
-                                        {getSerial(
-                                            s.submissionPresentType,
-                                            s.submissionTopic,
-                                            s.submissionId
+                            submissions.map((s: Submission, i) => {
+                                // 計算這個提交案中的審稿者文件數量
+                                const reviewerDocumentsCount = documents.filter(
+                                    (doc) =>
+                                        s.submissionFiles.includes(doc.documentId) &&
+                                        doc.isReviewerUpload
+                                ).length;
+
+                                // 檢查是否可以上傳文件
+                                const canUpload =
+                                    s.submissionStatus === "replied" ||
+                                    s.submissionStatus === "waiting";
+
+                                // 提交案的文件數組，包括投稿者和審稿者的
+                                const submissionDocs = documents.filter((doc) =>
+                                    s.submissionFiles.includes(doc.documentId)
+                                );
+
+                                // 生成序列號
+                                const serial = getSerial(
+                                    s.submissionPresentType,
+                                    s.submissionTopic,
+                                    s.submissionId
+                                );
+
+                                return (
+                                    <div
+                                        key={s.submissionId}
+                                        className={`p-4 border-2 rounded-md ${
+                                            canUpload
+                                                ? "border-orange-300 bg-orange-50"
+                                                : "border-gray-200"
+                                        }`}
+                                    >
+                                        {/* 審稿案標題和狀態區塊 */}
+                                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 mb-4">
+                                            <div>
+                                                <h3 className="text-lg font-semibold flex items-center gap-2">
+                                                    <FileText className="h-5 w-5 text-gray-600" />
+                                                    {s.submissionTitle}
+                                                </h3>
+                                                <p className="text-sm text-muted-foreground">
+                                                    編號: {serial}
+                                                </p>
+                                            </div>
+                                            <div className="flex flex-wrap gap-2 items-center">
+                                                <Badge
+                                                    className={`${
+                                                        STATUS_COLOR[s.submissionStatus] ||
+                                                        "bg-gray-100"
+                                                    } px-3 py-1 text-sm`}
+                                                >
+                                                    {STATUS_DISPLAY[s.submissionStatus] ||
+                                                        s.submissionStatus}
+                                                </Badge>
+
+                                                {reviewerDocumentsCount > 0 && (
+                                                    <Badge
+                                                        variant="outline"
+                                                        className="bg-blue-50 text-blue-700 border-blue-200"
+                                                    >
+                                                        {reviewerDocumentsCount} 個審稿回饋文件
+                                                    </Badge>
+                                                )}
+
+                                                <Badge variant="outline" className="bg-gray-50">
+                                                    {s.submissionType === "abstracts"
+                                                        ? "摘要"
+                                                        : "全文"}
+                                                </Badge>
+                                            </div>
+                                        </div>
+
+                                        {/* 如果需要上傳，顯示醒目的提示和上傳按鈕 */}
+                                        {canUpload && (
+                                            <div className="bg-orange-100 border border-orange-200 rounded-md p-3 mb-4">
+                                                <div className="flex items-start gap-3">
+                                                    <Info className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                                                    <div>
+                                                        <p className="font-medium text-orange-800">
+                                                            {s.submissionStatus === "replied"
+                                                                ? "請修改後再次提交"
+                                                                : "請提交全文"}
+                                                        </p>
+                                                        <p className="text-sm text-orange-700 mt-1">
+                                                            {s.submissionStatus === "replied"
+                                                                ? "審稿者要求您針對意見修改後重新提交。"
+                                                                : "您的摘要已通過審核，請提交全文論文。"}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="mt-3">
+                                                    <SubmissionUploadButton submission={s} />
+                                                </div>
+                                            </div>
                                         )}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        檔案數量：{s.submissionFiles.length}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        狀態：{s.submissionStatus}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        建立時間：{new Date(s.submissionCreatedAt).toLocaleString()}
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        最後更新：{new Date(s.submissionUpdatedAt).toLocaleString()}
-                                    </p>
-                                    <Separator className="my-2" />
-                                    {documents
-                                        .filter((doc) => s.submissionFiles.includes(doc.documentId))
-                                        .map((doc: Document, j: number) => (
-                                            <DocumentDetail
-                                                document={doc}
-                                                key={doc.documentId}
-                                                version={j}
-                                            />
-                                        ))}
-                                </div>
-                            ))
+
+                                        {/* 審稿案信息區塊 */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-4">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-muted-foreground w-24">
+                                                    主題:
+                                                </span>
+                                                <span>{s.submissionTopic || "（未設定）"}</span>
+                                            </div>
+
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-muted-foreground w-24">
+                                                    發表形式:
+                                                </span>
+                                                <span>
+                                                    {s.submissionPresentType === "oral"
+                                                        ? "口頭發表(oral)"
+                                                        : "海報發表(poster)"}
+                                                </span>
+                                            </div>
+
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-muted-foreground w-24">
+                                                    檔案數量:
+                                                </span>
+                                                <span>{s.submissionFiles.length}</span>
+                                            </div>
+
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-muted-foreground w-24">
+                                                    建立時間:
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <Calendar className="h-4 w-4" />
+                                                    {new Date(
+                                                        s.submissionCreatedAt
+                                                    ).toLocaleDateString()}
+                                                </span>
+                                            </div>
+
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-muted-foreground w-24">
+                                                    最後更新:
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <Clock className="h-4 w-4" />
+                                                    {new Date(
+                                                        s.submissionUpdatedAt
+                                                    ).toLocaleDateString()}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <Separator className="my-4" />
+
+                                        {/* 文件列表 */}
+                                        <div className="space-y-1 mt-2">
+                                            <h4 className="font-medium mb-3 flex items-center gap-2">
+                                                <ExternalLink className="h-4 w-4" />
+                                                相關文件 ({submissionDocs.length})
+                                            </h4>
+
+                                            {submissionDocs.map((doc, j) => (
+                                                <DocumentDetail
+                                                    document={doc}
+                                                    key={doc.documentId}
+                                                    version={j}
+                                                />
+                                            ))}
+                                        </div>
+                                    </div>
+                                );
+                            })
                         )}
                     </div>
                 )}
@@ -118,38 +282,144 @@ function DocumentDetail({
     version: number;
     key: string;
 }) {
+    // 判斷是否為審稿者上傳
+    const isReviewerDocument = document.isReviewerUpload === true;
+
     return (
-        <details>
-            <summary className="cursor-pointer font-medium text-gray-800">
-                📄 版本 {version + 1}: {document.pdfType === "full_paper" ? "全文" : "摘要"}
+        <details
+            className={`border rounded-lg p-2 my-2 ${
+                isReviewerDocument ? "border-blue-300 bg-blue-50" : "border-green-300 bg-green-50"
+            }`}
+        >
+            <summary className="cursor-pointer font-medium text-gray-800 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <span>
+                        📄 版本 {version + 1}: {document.pdfType === "full_paper" ? "全文" : "摘要"}
+                    </span>
+                    {isReviewerDocument ? (
+                        <Badge className="bg-blue-500 hover:bg-blue-600">審稿者上傳</Badge>
+                    ) : (
+                        <Badge className="bg-green-500 hover:bg-green-600">投稿者上傳</Badge>
+                    )}
+                </div>
+                <span className="text-xs text-gray-500">
+                    {new Date(document.createdAt).toLocaleDateString()}
+                </span>
             </summary>
-            <div className="ml-4 mt-1 space-y-1 text-sm text-muted-foreground">
-                <p>上傳時間：{document.createdAt}</p>
-                <p>描述：{document.description || "（無）"}</p>
+
+            <div className="ml-4 mt-3 space-y-2 text-sm">
+                <p className="font-medium">
+                    {isReviewerDocument ? (
+                        <span className="text-blue-600">
+                            審稿者 {document.reviewerName || "未知"} 上傳的文件
+                        </span>
+                    ) : (
+                        <span className="text-green-600">您自行上傳的文件</span>
+                    )}
+                </p>
+
+                <p>上傳時間：{new Date(document.createdAt).toLocaleString()}</p>
+
+                {document.description && (
+                    <div
+                        className={`p-2 rounded-md ${
+                            isReviewerDocument
+                                ? "bg-blue-100 border border-blue-200"
+                                : "bg-green-100 border border-green-200"
+                        }`}
+                    >
+                        <p className="font-medium mb-1">文件說明：</p>
+                        <p className="whitespace-pre-line">{document.description}</p>
+                    </div>
+                )}
+
                 <p>主題：{document.topic || "（未設定）"}</p>
                 <p>檔案類型：{document.pdfType === "full_paper" ? "全文" : "摘要"}</p>
-                {document.pdfType === "abstracts" && (
-                    <div>
-                        PDF 預覽：
-                        <DocumentViewer
-                            fileUrl={`/api/user_uploads${document.documentLocation.replace(
+
+                <div className="mt-4">
+                    <Button
+                        variant="secondary"
+                        className={`w-full ${
+                            isReviewerDocument
+                                ? "bg-blue-100 hover:bg-blue-200"
+                                : "bg-green-100 hover:bg-green-200"
+                        }`}
+                        asChild
+                    >
+                        <a
+                            href={`/api/user_uploads${document.documentLocation.replace(
                                 /^\/[^/]+/,
                                 ""
                             )}`}
-                        />
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            download={document.pdfType === "full_paper"}
+                        >
+                            {document.pdfType === "abstracts"
+                                ? "新分頁打開PDF檔案"
+                                : "下載Word檔案"}
+                        </a>
+                    </Button>
+
+                    {document.pdfType === "abstracts" ? (
+                        <details className="w-full mt-2">
+                            <summary
+                                className={`cursor-pointer text-sm font-medium px-3 py-1.5 rounded-md ${
+                                    isReviewerDocument
+                                        ? "bg-blue-100 hover:bg-blue-200"
+                                        : "bg-green-100 hover:bg-green-200"
+                                }`}
+                            >
+                                預覽PDF
+                            </summary>
+                            <div className="mt-2">
+                                <DocumentViewer
+                                    fileUrl={`/api/user_uploads${document.documentLocation.replace(
+                                        /^\/[^/]+/,
+                                        ""
+                                    )}`}
+                                />
+                            </div>
+                        </details>
+                    ) : (
+                        <details className="w-full mt-2">
+                            <summary
+                                className={`cursor-pointer text-sm font-medium px-3 py-1.5 rounded-md ${
+                                    isReviewerDocument
+                                        ? "bg-blue-100 hover:bg-blue-200"
+                                        : "bg-green-100 hover:bg-green-200"
+                                }`}
+                            >
+                                預覽Word檔(建議下載後使用)
+                            </summary>
+                            <div className="mt-2">
+                                <DocxPreview
+                                    fileUrl={`/api/user_uploads${document.documentLocation.replace(
+                                        /^\/[^/]+/,
+                                        ""
+                                    )}`}
+                                    height="600px"
+                                />
+                            </div>
+                        </details>
+                    )}
+                </div>
+
+                {document.notes && document.notes.length > 0 && (
+                    <div className="mt-4">
+                        <p className="font-medium mb-2">審稿評論：</p>
+                        {document.notes.map((note, index) => (
+                            <div key={index} className="border-l-2 border-gray-300 pl-3 py-1 mb-2">
+                                <p className="font-medium text-gray-700">
+                                    {note.noteCreatorName || "審稿者"}
+                                </p>
+                                <p className="whitespace-pre-line">{note.note}</p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    {new Date(note.createdAt).toLocaleString()}
+                                </p>
+                            </div>
+                        ))}
                     </div>
-                )}
-                {document.pdfType === "full_paper" && (
-                    <a
-                        href={`/api/user_uploads${document.documentLocation.replace(
-                            /^\/[^/]+/,
-                            ""
-                        )}`}
-                        download
-                        className="text-blue-600 underline hover:text-blue-800"
-                    >
-                        檔案下載
-                    </a>
                 )}
             </div>
         </details>

@@ -24,9 +24,13 @@ export type Document = {
     description: string;
     notes: note[];
     createdAt: string;
+    isReviewerUpload?: boolean;
+    reviewerId?: string;
+    reviewerName?: string;
+    originalSubmissionId?: string;
 };
 
-type note = {
+export type note = {
     note: string;
     createdAt: string;
     noteCreatorId: string;

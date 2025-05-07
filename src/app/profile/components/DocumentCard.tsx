@@ -120,17 +120,19 @@ const DocumentCard = ({ pdfType, documents, submissions, session }: DocumentCard
     return (
         <div>
             <SubmissionCard submissions={submissions} documents={documents} />
-            <Card className="mb-6">
-                <CardHeader>
-                    <CardTitle>Manage your {pdfType}</CardTitle>
-                </CardHeader>
+            {pdfType === "abstracts" && (
+                <Card className="mb-6">
+                    <CardHeader>
+                        <CardTitle>上傳你的 {pdfType}</CardTitle>
+                    </CardHeader>
 
-                <CardContent className="space-y-4">
-                    <DocumentListViewer documents={uploadedDocumentList} pdfType={pdfType} />
-                    <Separator className="my-4" />
-                    {/* <DocumentListViewer documents={otherDocuments} pdfType={pdfType} /> */}
-                </CardContent>
-            </Card>
+                    <CardContent className="space-y-4">
+                        <DocumentListViewer documents={uploadedDocumentList} pdfType={pdfType} />
+                        <Separator className="my-4" />
+                        {/* <DocumentListViewer documents={otherDocuments} pdfType={pdfType} /> */}
+                    </CardContent>
+                </Card>
+            )}
         </div>
     );
 };
@@ -145,7 +147,6 @@ const DocumentListViewer = ({ documents, pdfType }: { documents: Document[]; pdf
             ) : (
                 documents.map((doc, i) => (
                     <div key={doc.documentId || i} className="space-y-2">
-                        {JSON.stringify(doc)}
                         <details>
                             <summary className="cursor-pointer font-semibold text-lg text-gray-700">
                                 📄 文件標題：
