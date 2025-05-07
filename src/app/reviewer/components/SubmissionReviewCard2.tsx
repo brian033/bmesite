@@ -33,6 +33,14 @@ declare module "next-auth" {
     }
 }
 
+const STATUS_DISPLAY = {
+    pending: "待審核",
+    accepted: "已接受",
+    rejected: "已拒絕",
+    replied: "退回修改",
+    waiting: "等待全文",
+};
+
 export default function SubmissionReviewCard2({
     submission,
 }: {
@@ -192,26 +200,49 @@ export default function SubmissionReviewCard2({
 
             <CardHeader className="flex flex-col md:flex-row md:items-center justify-between gap-2">
                 <div>
-                    <CardTitle className="text-xl font-semibold leading-snug">
-                        <span className="text-primary">標題： {submission.submissionTitle}</span>
-                        <br />
-                        <span className="text-primary">編號： {serial}</span>
-                        <div className="mt-1 text-sm text-muted-foreground">
-                            上傳者：{submission.submissionOwner.name || "未知"}（
-                            {submission.submissionOwner.department || "無單位"}）
+                    <CardTitle className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <span className="text-xl font-semibold text-primary">
+                                {submission.submissionTitle}
+                            </span>
+                            {submissionData.submissionStatus === "pending" && (
+                                <Badge className="bg-red-500 text-white">需要審核</Badge>
+                            )}
                         </div>
+
+                        <div className="flex flex-wrap gap-2 items-center">
+                            <Badge
+                                className={
+                                    statusColor[submissionData.submissionStatus] ||
+                                    "bg-gray-200 text-gray-800"
+                                }
+                            >
+                                狀態：
+                                {STATUS_DISPLAY[submissionData.submissionStatus] ||
+                                    submissionData.submissionStatus}
+                            </Badge>
+
+                            <Badge variant="outline" className="bg-gray-50">
+                                {submissionData.submissionType === "abstracts" ? "摘要" : "全文"}
+                            </Badge>
+                        </div>
+
+                        <div className="text-base font-medium text-primary">編號： {serial}</div>
+
                         <div className="text-sm text-muted-foreground">
-                            聯絡信箱：{submission.submissionOwner.contact_email || "未提供"}
+                            <div className="flex items-center gap-1">
+                                <span className="font-medium">上傳者：</span>
+                                <span>{submission.submissionOwner.name || "未知"}</span>
+                                <span className="text-gray-400">
+                                    （{submission.submissionOwner.department || "無單位"}）
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                                <span className="font-medium">聯絡信箱：</span>
+                                <span>{submission.submissionOwner.contact_email || "未提供"}</span>
+                            </div>
                         </div>
                     </CardTitle>
-                    <Badge
-                        className={
-                            statusColor[submissionData.submissionStatus] ||
-                            "bg-gray-200 text-gray-800"
-                        }
-                    >
-                        狀態：{submissionData.submissionStatus}
-                    </Badge>
                 </div>
                 <div className="flex flex-col md:items-end gap-1">
                     <p className="text-sm text-muted-foreground">
@@ -221,11 +252,21 @@ export default function SubmissionReviewCard2({
                         <Button
                             className="cursor-pointer"
                             size="sm"
-                            onClick={openUploadDialog}
-                            variant="default"
+                            variant="outline"
+                            onClick={() => {
+                                // 創建包含單個審稿案ID的JSON字符串作為查詢參數
+                                const submissionParam = JSON.stringify([submission.submissionId]);
+                                // 構建URL
+                                const url = `/reviewer?submissions=${encodeURIComponent(
+                                    submissionParam
+                                )}`;
+                                // 在新分頁中打開
+                                window.open(url, "_blank");
+                            }}
                         >
-                            📤 上傳審稿修改文件
+                            在新分頁開啟
                         </Button>
+
                         <Button
                             className="cursor-pointer"
                             size="sm"
@@ -259,10 +300,19 @@ export default function SubmissionReviewCard2({
                         </div>
                     ))}
                     {/* 狀態變更器 */}
+                    <Button
+                        className="cursor-pointer w-full"
+                        size="sm"
+                        onClick={openUploadDialog}
+                        variant="default"
+                    >
+                        📤 上傳審稿修改文件
+                    </Button>
                     <SubmissionStatusChanger
                         submission={submissionData}
                         onStatusChange={handleStatusChange}
                     />
+
                     <div className="text-center text-sm text-muted-foreground">
                         總文件數量：{documentFiles.length}
                     </div>

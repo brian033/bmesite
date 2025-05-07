@@ -174,17 +174,12 @@ export default function Navbar() {
 
                 {(user?.role === "reviewer" || user?.role === "admin") && (
                     <>
-                        <Link href="/reviewer/pending">
+                        <Link href="/reviewer">
                             <Button
                                 className="bg-yellow-400 text-black hover:bg-yellow-300"
                                 size="sm"
                             >
-                                待審稿件
-                            </Button>
-                        </Link>
-                        <Link href="/reviewer/reviewed">
-                            <Button className="bg-cyan-500 text-black hover:bg-cyan-400" size="sm">
-                                已審稿件
+                                待審介面
                             </Button>
                         </Link>
                     </>

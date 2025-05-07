@@ -5,6 +5,7 @@ import clientPromise from "@/lib/mongodb";
 import { Collection } from "mongodb";
 import { Document } from "@/types/document";
 import { User } from "@/types/user";
+import SubmissionSearchWrapper from "./components/SubmissionSearchWrapper";
 function processParam(param: string | undefined): string[] | null {
     if (!param) {
         return null; // 如果 param 是 undefined，直接返回 null
@@ -116,9 +117,12 @@ export default async function ReviewerPendingPage({
     return (
         <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-4">
-                {submissionsWithDetailedInfo.map((submission) => (
+                {/* {submissionsWithDetailedInfo.map((submission) => (
                     <SubmissionReviewCard2 key={submission.submissionId} submission={submission} />
-                ))}
+                ))} */}
+                <div className="flex flex-col gap-4">
+                    <SubmissionSearchWrapper submissions={submissionsWithDetailedInfo} />
+                </div>
             </div>
         </div>
     );

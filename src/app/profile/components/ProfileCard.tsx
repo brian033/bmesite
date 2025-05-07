@@ -88,6 +88,7 @@ export default function ProfileCard() {
                     label="聯絡用Email"
                     value={user.contact_email}
                 />
+
                 <EditableField
                     mandatory={true}
                     api_value="department"
