@@ -18,6 +18,7 @@ export const authOptions = {
         maxAge: 60 * 60 * 24 * 7, // JWT 存活時間（秒），這裡是 7 天
         updateAge: 60 * 60 * 24, // 每 24 小時觸發一次自動刷新 JWT
     },
+
     callbacks: {
         async signIn({ user }) {
             const client = await clientPromise;
@@ -78,6 +79,11 @@ export const authOptions = {
         async session({ session, token }) {
             Object.assign(session.user as typeof session.user & Partial<DBUser>, token);
             return session;
+        },
+        // 簡化版本的 redirect 回調
+        async redirect({ url, baseUrl }) {
+            // 總是重定向到個人資料頁
+            return `${baseUrl}/profile`;
         },
     },
 };

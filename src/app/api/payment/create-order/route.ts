@@ -14,8 +14,8 @@ const ECPAY_API_URL =
     process.env.ECPAY_API_URL || "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5";
 
 const RETURN_URL = process.env.NEXT_PUBLIC_SITE_URL
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}/api/payment/return`
-    : "http://localhost:3000/api/payment/return";
+    ? `${process.env.NEXT_PUBLIC_SITE_URL}/profile`
+    : "http://localhost:3000/profile";
 
 export function getCheckMac(params: any): string {
     // 1. 過濾不需要加入檢查碼的參數
