@@ -17,7 +17,7 @@ export default function ProfileCard() {
     if (status === "loading") return <p>載入中...</p>;
     if (!session || !session.user) return <p>未登入</p>;
 
-    const user = session.user as {
+    const user = session.user as unknown as {
         name?: string;
         contact_email?: string;
         image?: string;
@@ -97,14 +97,6 @@ export default function ProfileCard() {
                 />
 
                 <EditableField api_value="phone" label="聯絡電話" value={user.phone} />
-                <div className="flex items-center justify-between gap-x-4">
-                    <span className="font-medium whitespace-nowrap">付款狀態:</span>
-                    <span className="text-sm text-gray-800">
-                        {user.payment?.paid
-                            ? `已付款, 付款編號: ${user.payment.payment_id}`
-                            : "未付款"}
-                    </span>
-                </div>
 
                 <div className="flex items-center justify-between gap-x-4">
                     <span className="font-medium whitespace-nowrap">身份別:</span>

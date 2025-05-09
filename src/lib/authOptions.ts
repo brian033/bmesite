@@ -41,7 +41,7 @@ export const authOptions = {
                     department: "未輸入單位", // 預設部門
                     payment: {
                         paid: false, // 預設未付款
-                        payment_id: "None", // 預設無付款ID
+                        payment_id: [], // 預設無付款ID
                     },
                     uploaded_pdfs: {
                         abstracts: [],

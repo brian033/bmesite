@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 
 export type User = {
-    _id?: ObjectId | string;
+    _id?: ObjectId;
     registered: boolean;
     name: string;
     email: string;
@@ -14,7 +14,7 @@ export type User = {
     department: string;
     payment: {
         paid: boolean;
-        payment_id: string;
+        payment_id: string[];
     };
     uploaded_pdfs: {
         abstracts: UploadedPdf[];
