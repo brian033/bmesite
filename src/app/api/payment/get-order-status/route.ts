@@ -13,12 +13,22 @@ const ECPAY_QUERY_API_URL =
  */
 function checkPaymentStatus(responseData: Record<string, string>) {
     // 只有 TradeStatus 為 "1" 時才算已付款
-    const isPaid = responseData.TradeStatus === "1";
-
-    return {
-        isPaid,
-        status: isPaid ? "付款已完成" : "付款未完成",
-    };
+    if (responseData.TradeStatus === "1") {
+        return {
+            isPaid: true,
+            status: "paid",
+        };
+    } else if (responseData.TradeStatus === "0") {
+        return {
+            isPaid: false,
+            status: "created",
+        };
+    } else if (responseData.TradeStatus === "10200095") {
+        return {
+            isPaid: false,
+            status: "failed",
+        };
+    }
 }
 
 const handler = async (req: NextRequest) => {
@@ -87,6 +97,22 @@ const handler = async (req: NextRequest) => {
 
         // 判斷支付狀態
         const paymentStatus = checkPaymentStatus(responseData);
+        if (paymentStatus.status === "failed") {
+            const client = await clientPromise;
+            const db = client.db(process.env.MONGODB_DB);
+
+            // 更新支付記錄
+            await db.collection("payments").updateOne(
+                { paymentId: merchantTradeNo },
+                {
+                    $set: {
+                        paymentStatus: "failed",
+                        updatedAt: new Date(),
+                        ecpayResponse: responseData,
+                    },
+                }
+            );
+        }
 
         // 如果訂單已付款，更新我們的數據庫
         if (paymentStatus.isPaid) {
@@ -99,7 +125,7 @@ const handler = async (req: NextRequest) => {
                     { paymentId: merchantTradeNo },
                     {
                         $set: {
-                            paymentStatus: "completed",
+                            paymentStatus: "paid",
                             updatedAt: new Date(),
                             ecpayResponse: responseData,
                         },
