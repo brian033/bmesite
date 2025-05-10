@@ -6,6 +6,9 @@ import clientPromise from "@/lib/mongodb";
 import { Payment, ECPayFormParams } from "@/types/payment";
 import { middlewareFactory } from "@/lib/middlewareFactory";
 import { v4 } from "uuid";
+import { updateUserPaymentStatus } from "@/lib/updateUserPaymentStatus";
+import { User } from "@/types/user";
+
 // 綠界支付配置 (應放在環境變數中)
 const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID || "3002607";
 const HASH_KEY = process.env.ECPAY_HASH_KEY || "pwFHCqoQZGmho4w6";
@@ -129,6 +132,22 @@ const handler = async (req: NextRequest, session: any) => {
             paymentType: paymentType,
             paymentParams: paymentParams,
         };
+        // 檢查用戶是否已經存在支付記錄
+        // check if user has already paid
+        // 先更新使用者的狀態
+        await updateUserPaymentStatus(userId);
+        const userOnDB: User = (await db.collection("users").findOne({
+            uuid: userId,
+        })) as User;
+
+        const userAlreadyPaid = userOnDB.payment.paid;
+        if (userAlreadyPaid) {
+            return NextResponse.json(
+                { success: false, message: "User has already paid." },
+                { status: 400 }
+            );
+        }
+
         // 將支付記錄插入到 MongoDB
         await db.collection("payments").insertOne(paymentRecord);
         // update  payment: {
