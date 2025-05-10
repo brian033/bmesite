@@ -27,7 +27,8 @@ export default async function AttendeePage({
     }
 
     // 檢查是否有請求更新支付狀態
-    const shouldUpdate = searchParams.update === "true";
+    const { update } = await searchParams;
+    const shouldUpdate = update === "true";
 
     // 更新用戶的支付狀態 (僅當 update=true 時)
     let paymentUpdateResult = null;
