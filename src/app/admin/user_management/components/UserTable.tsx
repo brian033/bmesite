@@ -96,19 +96,31 @@ export default function UserTable({
                                 ) : (
                                     <Badge variant="destructive">未付款</Badge>
                                 )}
-                                <div className="text-xs text-muted-foreground">
-                                    ID:{" "}
-                                    {user.payment.payment_id
-                                        ? user.payment.payment_id.map((id) => (
-                                              <Link
-                                                  key={id}
-                                                  href={`/api/payment/get-order-status?MerchantTradeNo=${id}`}
-                                              >
-                                                  "{id}"
-                                              </Link>
-                                          ))
-                                        : "None"}
-                                </div>
+                                {user.payment?.paid && (
+                                    <div className="mt-1 flex flex-col gap-1 text-xs">
+                                        <span className="text-muted-foreground font-medium">
+                                            付款 ID:
+                                        </span>
+                                        {user.payment.payment_id ? (
+                                            <ul className="list-disc pl-5">
+                                                {user.payment.payment_id.map((id) => (
+                                                    <li key={id}>
+                                                        <a
+                                                            href={`/api/payment/get-order-status?MerchantTradeNo=${id}`}
+                                                            className="text-blue-600 hover:text-blue-800 transition-colors underline underline-offset-2"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            {id}
+                                                        </a>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        ) : (
+                                            <span className="italic text-gray-500">無付款 ID</span>
+                                        )}
+                                    </div>
+                                )}
                             </TableCell>
                             <TableCell className="text-xs">{user.uuid}</TableCell>
                             <TableCell>

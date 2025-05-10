@@ -163,15 +163,6 @@ export default function Navbar() {
                         </Button>
                     </Link>
                 )}
-
-                {user?.role === "admin" && (
-                    <Link href="/admin/user_management">
-                        <Button variant="destructive" size="sm">
-                            管理使用者
-                        </Button>
-                    </Link>
-                )}
-
                 {(user?.role === "reviewer" || user?.role === "admin") && (
                     <>
                         <Link href="/reviewer">
@@ -183,6 +174,22 @@ export default function Navbar() {
                             </Button>
                         </Link>
                     </>
+                )}
+
+                {user?.role === "admin" && (
+                    <Link href="/admin/user_management">
+                        <Button variant="destructive" size="sm">
+                            管理使用者
+                        </Button>
+                    </Link>
+                )}
+
+                {user?.role === "admin" && (
+                    <Link href="/admin/payments">
+                        <Button variant="destructive" size="sm">
+                            金流查詢
+                        </Button>
+                    </Link>
                 )}
             </div>
 
