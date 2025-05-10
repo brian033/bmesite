@@ -23,6 +23,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import UserDetailCard from "./UserDetailCard";
+import { Link } from "lucide-react";
 
 export default function UserTable({
     db_user,
@@ -96,7 +97,17 @@ export default function UserTable({
                                     <Badge variant="destructive">未付款</Badge>
                                 )}
                                 <div className="text-xs text-muted-foreground">
-                                    ID: {user.payment?.payment_id ?? "None"}
+                                    ID:{" "}
+                                    {user.payment.payment_id
+                                        ? user.payment.payment_id.map((id) => (
+                                              <Link
+                                                  key={id}
+                                                  href={`/api/payment/get-order-status?MerchantTradeNo=${id}`}
+                                              >
+                                                  "{id}"
+                                              </Link>
+                                          ))
+                                        : "None"}
                                 </div>
                             </TableCell>
                             <TableCell className="text-xs">{user.uuid}</TableCell>
