@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
-import { middlewareFactory } from "@/lib/middlewareFactory";
-import { updateUserPaymentStatus } from "@/lib/updateUserPaymentStatus";
 import { getCheckMac } from "../create-order/route";
 
 /**
@@ -81,6 +79,7 @@ const handler = async (req: NextRequest) => {
                         paymentStatus: "paid",
                         paymentResponse: data,
                         updatedAt: new Date().toISOString(),
+                        ecpayResponse: dataWithoutId,
                     },
                 }
             );
@@ -101,9 +100,6 @@ const handler = async (req: NextRequest) => {
             );
 
             console.log(`用戶 ${userId} 支付狀態更新結果:`, updateResult.modifiedCount > 0);
-
-            // 調用支付狀態更新函數以進行其他必要處理
-            await updateUserPaymentStatus(userId);
         }
 
         // 根據綠界規範，回覆 "1|OK" 表示成功接收通知
