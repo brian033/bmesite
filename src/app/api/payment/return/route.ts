@@ -126,4 +126,4 @@ const handler = async (req: NextRequest) => {
     }
 };
 
-export const POST = middlewareFactory({ cors: true }, handler);
+export const POST = handler;
