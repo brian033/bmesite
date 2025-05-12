@@ -41,8 +41,9 @@ const handler = async (req: NextRequest) => {
             }
         }
 
-        // 使用 getCheckMac 函數計算應該的 CheckMacValue
-        const calculatedCheckMac = getCheckMac(data);
+        // 使用 getCheckMac 函數計算應該的 CheckMacValue, 要先把_id丟掉
+        const { _id, ...dataWithoutId } = data;
+        const calculatedCheckMac = getCheckMac(dataWithoutId);
 
         // 比較接收到的和計算出的 CheckMacValue
         if (data.CheckMacValue !== calculatedCheckMac) {
