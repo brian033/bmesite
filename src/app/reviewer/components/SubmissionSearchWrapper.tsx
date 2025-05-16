@@ -57,6 +57,11 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
             abstracts: true,
             full_paper: true,
         },
+        payment: {
+            // 新增付款狀態過濾
+            paid: true,
+            unpaid: false,
+        },
     });
     const [isFiltering, setIsFiltering] = useState(false);
 
@@ -80,7 +85,13 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                 // 類型過濾
                 const typeMatch = filters.type[submission.submissionType];
 
-                return searchMatch && statusMatch && typeMatch;
+                // 付款狀態過濾
+                const paymentMatch =
+                    (!filters.payment.paid && !filters.payment.unpaid) || // 如果兩個都未選，則顯示全部
+                    (filters.payment.paid && submission.submissionOwner.payment?.paid) || // 已付款
+                    (filters.payment.unpaid && !submission.submissionOwner.payment?.paid); // 未付款
+
+                return searchMatch && statusMatch && typeMatch && paymentMatch; // 加入 paymentMatch
             });
         };
 
@@ -88,7 +99,9 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
         setIsFiltering(
             searchTerm !== "" ||
                 !Object.values(filters.status).every((v) => v) ||
-                !Object.values(filters.type).every((v) => v)
+                !Object.values(filters.type).every((v) => v) ||
+                filters.payment.paid ||
+                filters.payment.unpaid // 添加付款狀態過濾的判斷
         );
     }, [searchTerm, filters, enhancedSubmissions]);
 
@@ -117,6 +130,10 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
             type: {
                 abstracts: true,
                 full_paper: true,
+            },
+            payment: {
+                paid: false,
+                unpaid: false,
             },
         });
     };
@@ -206,6 +223,21 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                                 >
                                     全文
                                 </DropdownMenuCheckboxItem>
+                                <DropdownMenuSeparator />
+
+                                <DropdownMenuLabel>付款狀態</DropdownMenuLabel>
+                                <DropdownMenuCheckboxItem
+                                    checked={filters.payment.paid}
+                                    onCheckedChange={() => toggleFilter("payment", "paid")}
+                                >
+                                    已付款
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={filters.payment.unpaid}
+                                    onCheckedChange={() => toggleFilter("payment", "unpaid")}
+                                >
+                                    未付款
+                                </DropdownMenuCheckboxItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
 
@@ -247,6 +279,11 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                             {Object.entries(filters.status).some(([_, value]) => !value) && (
                                 <Badge variant="outline" className="flex gap-1 items-center">
                                     已過濾狀態
+                                </Badge>
+                            )}
+                            {(filters.payment.paid || filters.payment.unpaid) && (
+                                <Badge variant="outline" className="flex gap-1 items-center">
+                                    已過濾付款狀態
                                 </Badge>
                             )}
 
