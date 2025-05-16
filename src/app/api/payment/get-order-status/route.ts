@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCheckMac } from "../create-order/route";
 import { middlewareFactory } from "@/lib/middlewareFactory";
 import clientPromise from "@/lib/mongodb";
+import { sendTemplateEmail } from "@/lib/mailTools";
 
 const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID || "3002607";
 const ECPAY_QUERY_API_URL =
@@ -137,12 +138,37 @@ const handler = async (req: NextRequest) => {
                     .collection("payments")
                     .findOne({ paymentId: merchantTradeNo });
                 if (payment && payment.paymentOwner) {
-                    await db.collection("users").updateOne(
+                    const usermodRes = await db.collection("users").updateOne(
                         { uuid: payment.paymentOwner },
                         {
                             $set: { "payment.paid": true },
                         }
                     );
+                    // if modified count == 1, means it's from false to true, so we can inform the user
+                    if (usermodRes.modifiedCount === 1) {
+                        const user = await db
+                            .collection("users")
+                            .findOne({ uuid: payment.paymentOwner });
+                        await sendTemplateEmail(
+                            "payment-confirmation",
+                            {
+                                name: user.name,
+                                paymentId: payment.paymentId,
+                                paymentItem:
+                                    payment.paymentType === "member"
+                                        ? "報名費(學會會員)"
+                                        : "報名費(非學會會員)",
+                                amount: payment.paymentValue,
+                            },
+                            {
+                                to: user.contact_email,
+                                subject: "2025農機與生機學術研討會-繳費成功通知",
+                            }
+                        );
+                        console.log(
+                            `User ${payment.paymentOwner} has been informed about the payment status change.`
+                        );
+                    }
                 }
             } catch (dbError) {
                 console.error("更新數據庫失敗:", dbError);

@@ -52,6 +52,21 @@ const handler = async (req: NextRequest, session: any) => {
                 }
             );
         }
+    } else {
+        // 如果已經註冊過，然後他改的是聯絡信箱，則發送通知信
+        if (data.contact_email) {
+            await sendTemplateEmail(
+                "email-check",
+                {
+                    name: updatedUser.name,
+                    email: data.contact_email,
+                },
+                {
+                    to: data.contact_email,
+                    subject: "您的聯絡信箱已更新",
+                }
+            );
+        }
     }
 
     return NextResponse.json({ success: true, updatedUser });

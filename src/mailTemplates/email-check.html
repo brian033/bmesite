@@ -1,0 +1,61 @@
+<!-- src/templates/welcome.html -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>歡迎參加2025農機與生機學術研討會</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .header {
+                background-color: #4caf50;
+                color: white;
+                padding: 10px;
+                text-align: center;
+            }
+            .footer {
+                font-size: 12px;
+                color: #666;
+                margin-top: 30px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>2025農機與生機學術研討會</h1>
+            </div>
+
+            <p>親愛的 {{name}}，</p>
+
+            <p>感謝您報名參加2025農機與生機學術研討會！</p>
+            <p>
+                會收到此信件是因為您更新了聯絡電子郵件，用來確認您新提供的電子郵件是否可以正常收信。
+            </p>
+            <p>以下是您更新後的會員資訊：</p>
+            <ul>
+                <li>聯絡電子郵件: {{email}}</li>
+            </ul>
+            <!-- 提醒他若要完成註冊，需要繳註冊費 -->
+            <p>
+                請注意，為了完成註冊，您需要繳交註冊費用。請在報名截止日期前完成繳費，以確保您的參加資格。
+            </p>
+            <p>報名截止日期：2025年N月N日</p>
+            <p>如果您有任何問題或需要協助，請隨時與我們聯繫。</p>
+
+            <p>謝謝您的支持！</p>
+            <p>期待在會議上見到您！</p>
+            <p>生機農機學術研討會團隊</p>
+
+            <div class="footer">此郵件為系統自動發送，請勿直接回覆。</div>
+        </div>
+    </body>
+</html>

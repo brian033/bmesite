@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { getCheckMac } from "../create-order/route";
+import { sendTemplateEmail } from "@/lib/mailTools";
 
 /**
  * 處理綠界支付結果通知的API路由
@@ -83,10 +84,6 @@ const handler = async (req: NextRequest) => {
                     },
                 }
             );
-        }
-
-        // 如果支付成功，更新用戶支付狀態
-        if (isPaid) {
             const userId = payment.paymentOwner;
 
             // 更新用戶的支付狀態
@@ -99,7 +96,33 @@ const handler = async (req: NextRequest) => {
                 }
             );
 
-            console.log(`用戶 ${userId} 支付狀態更新結果:`, updateResult.modifiedCount > 0);
+            // 如果用戶的支付狀態從未支付變為已支付，則發送通知郵件
+            if (updateResult.modifiedCount === 1) {
+                const user = await db.collection("users").findOne({ uuid: userId });
+                const payment = await db
+                    .collection("payments")
+                    .findOne({ paymentId: data.MerchantTradeNo });
+
+                await sendTemplateEmail(
+                    "payment-confirmation",
+                    {
+                        name: user.name,
+                        paymentId: payment.paymentId,
+                        paymentItem:
+                            payment.paymentType === "member"
+                                ? "報名費(學會會員)"
+                                : "報名費(非學會會員)",
+                        amount: payment.paymentValue,
+                    },
+                    {
+                        to: user.contact_email,
+                        subject: "2025農機與生機學術研討會-繳費成功通知",
+                    }
+                );
+                console.log(
+                    `User ${payment.paymentOwner} has been informed about the payment status change.`
+                );
+            }
         }
 
         // 根據綠界規範，回覆 "1|OK" 表示成功接收通知
