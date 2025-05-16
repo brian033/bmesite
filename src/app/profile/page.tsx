@@ -37,20 +37,16 @@ export default async function AttendeePage() {
 
     return (
         <div className="mx-auto p-6 space-y-8">
-            <h1 className="text-3xl font-semibold text-gray-800">個人資料設定</h1>
-
             {/* 個人資料區塊 */}
-            <Card>
-                <CardContent className="pt-6">
-                    <ProfileCard />
-                </CardContent>
-            </Card>
+
+            <ProfileCard />
 
             {/* 註冊費用狀態區塊 */}
-            <h1 className="text-3xl font-semibold text-gray-800">支付狀態</h1>
-            <div className="relative">
-                <PaymentStatusCard session={session} paid={session.user.payment?.paid} />
-            </div>
+            {!session.user.payment?.paid && (
+                <div className="relative">
+                    <PaymentStatusCard session={session} />
+                </div>
+            )}
 
             <h1 className="text-3xl font-semibold text-gray-800">文件管理</h1>
             {/* 文件管理區塊 */}

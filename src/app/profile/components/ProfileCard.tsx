@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 export default function ProfileCard() {
     const { data: session, status } = useSession();
@@ -108,6 +109,16 @@ export default function ProfileCard() {
                             : "與會者"}
                         {user.registered ? " (已填寫資料)" : " (請更新聯絡用Email/單位)"}
                     </span>
+                </div>
+                <div className="flex items-center justify-between gap-x-4">
+                    <span className="font-medium whitespace-nowrap">付款狀態:</span>
+                    {user.payment.paid ? (
+                        <Badge className="bg-green-500">已付款</Badge>
+                    ) : (
+                        <Badge variant="outline" className="text-yellow-500 border-yellow-500">
+                            未付款
+                        </Badge>
+                    )}
                 </div>
             </div>
         </Card>

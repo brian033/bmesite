@@ -1,136 +1,3 @@
-// "use client";
-
-// import { useSession, signIn, signOut } from "next-auth/react";
-// import Link from "next/link";
-// import { useRouter } from "next/navigation";
-
-// export default function Navbar() {
-//     const { data: session, status } = useSession();
-//     const user = session?.user as { name?: string; email?: string; image?: string; role?: string };
-//     const router = useRouter();
-//     return (
-//         <nav
-//             style={{
-//                 display: "flex",
-//                 justifyContent: "space-between",
-//                 alignItems: "center",
-//                 backgroundColor: "#46663d",
-//                 color: "white",
-//                 padding: "1rem 2rem",
-//                 fontFamily: "sans-serif",
-//             }}
-//         >
-//             {/* 左側：標題 */}
-//             <div style={{ fontWeight: "bold", fontSize: "1.2rem" }}>2025 農機與生機學術研討會</div>
-
-//             {/* 中間：導覽列 */}
-//             <div
-//                 style={{ display: "flex", gap: "1rem", fontSize: "0.95rem", alignItems: "center" }}
-//             >
-//                 <Link href="/">首頁</Link>
-//                 <Link href="/conference">研討會</Link>
-//                 <Link href="/speakers">專題講者</Link>
-//                 <Link href="/schedule">大會議程</Link>
-//                 <Link href="/travel">住宿與交通</Link>
-//                 <Link href="/downloads">檔案下載</Link>
-//                 {/* 只要有 sign in 就可以看到這個 */}
-//                 {user && (
-//                     <Link
-//                         href="/profile"
-//                         style={{
-//                             backgroundColor: "black",
-//                             color: "white",
-//                             padding: "0.3rem 0.6rem",
-//                             borderRadius: "4px",
-//                             fontWeight: "bold",
-//                         }}
-//                     >
-//                         個人頁面
-//                     </Link>
-//                 )}
-//                 {/* 依 role 顯示額外按鈕 */}
-//                 {user?.role === "admin" && (
-//                     <Link
-//                         href="/admin/user_management"
-//                         style={{
-//                             backgroundColor: "#cc0000",
-//                             color: "white",
-//                             padding: "0.3rem 0.6rem",
-//                             borderRadius: "4px",
-//                             fontWeight: "bold",
-//                         }}
-//                     >
-//                         管理使用者
-//                     </Link>
-//                 )}
-//                 {(user?.role === "reviewer" || user?.role === "admin") && (
-//                     <>
-//                         <Link
-//                             href="/reviewer/pending"
-//                             style={{
-//                                 backgroundColor: "#eab308", // yellow
-//                                 color: "#000",
-//                                 padding: "0.3rem 0.6rem",
-//                                 borderRadius: "4px",
-//                                 fontWeight: "bold",
-//                             }}
-//                         >
-//                             待審稿件
-//                         </Link>
-//                         <Link
-//                             href="/reviewer/reviewed"
-//                             style={{
-//                                 backgroundColor: "#84cc16", // green
-//                                 color: "#000",
-//                                 padding: "0.3rem 0.6rem",
-//                                 borderRadius: "4px",
-//                                 fontWeight: "bold",
-//                             }}
-//                         >
-//                             已審稿件
-//                         </Link>
-//                     </>
-//                 )}
-//             </div>
-
-//             {/* 右側：登入 / 使用者資訊 */}
-//             <div>
-//                 {status === "loading" ? (
-//                     <span>載入中...</span>
-//                 ) : user ? (
-//                     <>
-//                         <span style={{ marginRight: "1rem" }}>Hi, {user.name}</span>
-//                         <button
-//                             onClick={async () => {
-//                                 await signOut();
-//                                 // redirect to home page after sign out
-//                                 router.push("/");
-//                             }}
-//                             style={buttonStyle}
-//                         >
-//                             登出
-//                         </button>
-//                     </>
-//                 ) : (
-//                     <button onClick={() => signIn("google")} style={buttonStyle}>
-//                         Google登入
-//                     </button>
-//                 )}
-//             </div>
-//         </nav>
-//     );
-// }
-
-// const buttonStyle = {
-//     backgroundColor: "white",
-//     color: "#46663d",
-//     padding: "0.4rem 0.8rem",
-//     border: "none",
-//     borderRadius: "4px",
-//     cursor: "pointer",
-//     fontWeight: "bold",
-// };
-
 "use client";
 
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -138,67 +5,217 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
     const { data: session, status } = useSession();
     const user = session?.user as { name?: string; email?: string; image?: string; role?: string };
     const router = useRouter();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
 
+    // 只在客戶端渲染後顯示動態內容
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const handleNavItemClick = () => {
+        setIsMenuOpen(false);
+    };
+
+    // 避免服務端和客戶端渲染不一致，使用一個簡單的渲染模式
+    if (!mounted) {
+        return (
+            <nav className="flex justify-between items-center bg-primary text-white px-4 lg:px-8 py-4 font-sans relative">
+                <div className="font-bold text-sm lg:text-lg">2025 農機與生機學術研討會</div>
+                {/* 靜態菜單（無交互） */}
+                <div className="hidden lg:flex lg:gap-4 lg:items-center">
+                    <Link href="/" className="py-2 lg:py-0">
+                        首頁
+                    </Link>
+                    <Link href="/conference" className="py-2 lg:py-0">
+                        研討會
+                    </Link>
+                    <Link href="/speakers" className="py-2 lg:py-0">
+                        專題講者
+                    </Link>
+                    <Link href="/schedule" className="py-2 lg:py-0">
+                        大會議程
+                    </Link>
+                    <Link href="/travel" className="py-2 lg:py-0">
+                        住宿與交通
+                    </Link>
+                    <Link href="/downloads" className="py-2 lg:py-0">
+                        檔案下載
+                    </Link>
+                </div>
+                {/* 佔位符 */}
+                <div className="hidden lg:block"></div>
+            </nav>
+        );
+    }
+
+    // 客戶端渲染，包含完整功能
     return (
-        <nav className="flex justify-between items-center bg-primary text-white px-8 py-4 font-sans">
-            <div className="font-bold text-lg">2025 農機與生機學術研討會</div>
+        <nav className="flex justify-between items-center bg-primary text-white px-4 lg:px-8 py-4 font-sans relative">
+            {/* Logo/標題 */}
+            <div className="font-bold text-lg text-center lg:text-left flex-1 lg:flex-initial">
+                2025 農機與生機學術研討會
+            </div>
 
-            <div className="flex gap-4 text-sm items-center">
-                <Link href="/">首頁</Link>
-                <Link href="/conference">研討會</Link>
-                <Link href="/speakers">專題講者</Link>
-                <Link href="/schedule">大會議程</Link>
-                <Link href="/travel">住宿與交通</Link>
-                <Link href="/downloads">檔案下載</Link>
+            {/* 漢堡菜單按鈕與登入按鈕並排 - 只在小螢幕顯示 */}
+            <div className="lg:hidden flex items-center gap-2">
+                {!user && (
+                    <Button
+                        onClick={() => signIn("google")}
+                        variant="secondary"
+                        size="sm"
+                        className="text-xs py-1 px-2"
+                    >
+                        登入
+                    </Button>
+                )}
+                <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+                    {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </Button>
+            </div>
 
+            {/* 主菜單 - 在桌面顯示為水平排列，在移動設備上顯示為浮動菜單 */}
+            <div
+                className={cn(
+                    "lg:flex lg:gap-4 lg:items-center lg:static lg:flex-row lg:bg-transparent lg:p-0",
+                    isMenuOpen
+                        ? "absolute top-full left-0 right-0 flex flex-col bg-primary shadow-lg p-4 z-50 gap-4"
+                        : "hidden"
+                )}
+            >
+                <Link
+                    href="/"
+                    onClick={handleNavItemClick}
+                    className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                >
+                    首頁
+                </Link>
+                <Link
+                    href="/conference"
+                    onClick={handleNavItemClick}
+                    className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                >
+                    研討會
+                </Link>
+                <Link
+                    href="/speakers"
+                    onClick={handleNavItemClick}
+                    className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                >
+                    專題講者
+                </Link>
+                <Link
+                    href="/schedule"
+                    onClick={handleNavItemClick}
+                    className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10  "
+                >
+                    大會議程
+                </Link>
+                <Link
+                    href="/travel"
+                    onClick={handleNavItemClick}
+                    className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                >
+                    住宿與交通
+                </Link>
+                <Link
+                    href="/downloads"
+                    onClick={handleNavItemClick}
+                    className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                >
+                    檔案下載
+                </Link>
+                <div className="hidden lg:block border-l border-primary-foreground/20 h-6" />
                 {user && (
-                    <Link href="/profile">
-                        <Button className="bg-lime-400 text-black hover:bg-lime-300" size="sm">
-                            個人頁面
-                        </Button>
+                    <Link
+                        href="/profile"
+                        onClick={handleNavItemClick}
+                        className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                    >
+                        個人頁面
                     </Link>
                 )}
                 {(user?.role === "reviewer" || user?.role === "admin") && (
+                    <Link
+                        href="/reviewer"
+                        onClick={handleNavItemClick}
+                        className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                    >
+                        待審介面
+                    </Link>
+                )}
+                {user?.role === "admin" && (
                     <>
-                        <Link href="/reviewer">
+                        <Link
+                            href="/admin/user_management"
+                            onClick={handleNavItemClick}
+                            className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                        >
                             <Button
-                                className="bg-yellow-400 text-black hover:bg-yellow-300"
+                                variant="destructive"
                                 size="sm"
+                                className="w-30% lg:w-auto flex justify-end "
                             >
-                                待審介面
+                                管理使用者
+                            </Button>
+                        </Link>
+                        <Link
+                            href="/admin/payments"
+                            onClick={handleNavItemClick}
+                            className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                        >
+                            <Button variant="destructive" size="sm" className="w-30% lg:w-auto ">
+                                金流查詢
                             </Button>
                         </Link>
                     </>
                 )}
-
-                {user?.role === "admin" && (
-                    <Link href="/admin/user_management">
-                        <Button variant="destructive" size="sm">
-                            管理使用者
+                <div className="lg:hidden">
+                    {status === "loading" ? (
+                        <span>載入中...</span>
+                    ) : user ? (
+                        <div className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10">
+                            {/* <span className="text-center">Hi, {user.name}</span> */}
+                            <Button
+                                onClick={async () => {
+                                    await signOut();
+                                    router.push("/");
+                                    setIsMenuOpen(false);
+                                }}
+                                variant="secondary"
+                                size="sm"
+                                className="w-30% lg:w-auto"
+                            >
+                                登出
+                            </Button>
+                        </div>
+                    ) : (
+                        <Button
+                            onClick={() => signIn("google")}
+                            variant="secondary"
+                            size="sm"
+                            className="w-full"
+                        >
+                            使用Gmail登入/註冊
                         </Button>
-                    </Link>
-                )}
-
-                {user?.role === "admin" && (
-                    <Link href="/admin/payments">
-                        <Button variant="destructive" size="sm">
-                            金流查詢
-                        </Button>
-                    </Link>
-                )}
+                    )}
+                </div>
             </div>
 
-            <div>
+            {/* 使用者信息/登入按鈕 - 在桌面版顯示 */}
+            <div className="hidden lg:block">
                 {status === "loading" ? (
                     <span>載入中...</span>
                 ) : user ? (
                     <div className="flex items-center gap-4">
-                        <span>Hi, {user.name}</span>
+                        <span className="hidden lg:inline">Hi, {user.name}</span>
                         <Button
                             onClick={async () => {
                                 await signOut();
