@@ -1,0 +1,63 @@
+<!-- src/templates/payment-confirmation.html -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>付款確認通知</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .header {
+                background-color: #4caf50;
+                color: white;
+                padding: 10px;
+                text-align: center;
+            }
+            .payment-info {
+                background-color: #f2f2f2;
+                padding: 15px;
+                margin: 15px 0;
+            }
+            .footer {
+                font-size: 12px;
+                color: #666;
+                margin-top: 30px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>支付確認通知</h1>
+            </div>
+
+            <p>親愛的 {{name}}，</p>
+
+            <p>我們很高興地通知您，我們已經收到您的註冊費用。</p>
+            <p>如果您有任何問題，請隨時聯繫我們。</p>
+
+            <div class="payment-info">
+                <p><strong>付款詳情：</strong></p>
+                <p>訂單編號: {{paymentId}}</p>
+                <p>訂單項目: {{paymentItem}}</p>
+                <p>金額: NT$ {{amount}}</p>
+                <p>付款日期: {{date}}</p>
+                <p>如果您有任何問題，請隨時聯繫我們。</p>
+            </div>
+
+            <p>感謝您的支持！我們期待在會議上見到您。</p>
+
+            <p>農機與生機學術研討會</p>
+
+            <div class="footer">此郵件為系統自動發送，請勿直接回覆。</div>
+        </div>
+    </body>
+</html>
