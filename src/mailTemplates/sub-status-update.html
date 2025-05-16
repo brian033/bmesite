@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>審稿案件更新</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+            }
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .header {
+                background-color: #4caf50;
+                color: white;
+                padding: 10px;
+                text-align: center;
+            }
+            .footer {
+                font-size: 12px;
+                color: #666;
+                margin-top: 30px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>2025農機與生機學術研討會</h1>
+            </div>
+
+            <p>親愛的{{name}}，</p>
+            <p>您的審稿案{{serial}}狀態已更新！</p>
+            <p>以下是您的審稿案更新後的相關資訊:</p>
+            <ul>
+                <li>審稿案類型: {{submissionType}}</li>
+                <li>審稿案狀態: {{submissionStatus}}</li>
+            </ul>
+
+            <p>{{comment}}</p>
+            <p></p>
+
+            <p>審稿案的其他細節請前往網站進行查看。</p>
+            <p>如果您有任何問題或需要協助，請隨時與我們聯繫！</p>
+
+            <div class="footer">此郵件為系統自動發送，請勿直接回覆。</div>
+        </div>
+    </body>
+</html>

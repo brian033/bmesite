@@ -2,6 +2,34 @@ import { middlewareFactory } from "@/lib/middlewareFactory";
 import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { Submission } from "@/types/submission";
+import { sendTemplateEmail } from "@/lib/mailTools";
+
+const submissionSerialRules = {
+    生物產業機械: "A",
+    生物生產工程: "B",
+    畜牧自動化與污染防治: "C",
+    農業設施與環控工程: "D",
+    生物機電控制: "E",
+    生醫工程與微奈米機電: "F",
+    生物資訊與系統: "G",
+    能源與節能技術: "H",
+    AI與大數據分析: "I",
+    精準農業智動化: "J",
+    其他新興科技: "K",
+};
+export const getSerial = (
+    submissionPresentType: "oral" | "poster",
+    submisssionTopic: string,
+    submission_Id: string
+) => {
+    // submission Serial規則: [字母]+submissionId第一個part轉成數字後的前10位數字
+    const present_type = submissionPresentType == "oral" ? "O" : "P";
+    const prefix = submissionSerialRules[submisssionTopic || "其他新興科技"];
+    const submissionIdPart = submission_Id.split("-")[0]; // 取UUID的第一個部分
+    const numericValue = BigInt(`0x${submissionIdPart}`); // 將其轉為數字
+    const serial = numericValue.toString().padStart(10, "0").slice(0, 10); // 取前10位並pad 0
+    return `${present_type}${prefix ? prefix : "X"}${serial}`;
+};
 
 const handler = async (req: NextRequest, session: any) => {
     try {
@@ -50,6 +78,12 @@ const handler = async (req: NextRequest, session: any) => {
         if (!submission) {
             return NextResponse.json({ error: "未找到指定的提交" }, { status: 404 });
         }
+        // calculate serial first
+        const oldSerial = getSerial(
+            submission.submissionPresentType,
+            submission.submissionTopic,
+            submission.submissionId
+        );
         let submissionType = submission.submissionType;
         let submissionTopic = submission.submissionTopic;
         if (updatedPresentType) {
@@ -58,6 +92,7 @@ const handler = async (req: NextRequest, session: any) => {
         if (updatedTopic) {
             submissionTopic = updatedTopic;
         }
+
         // 執行更新
         const updateResult = await submissionDB.updateOne(
             { submissionId },
@@ -69,6 +104,31 @@ const handler = async (req: NextRequest, session: any) => {
                 },
             }
         );
+        if (updateResult.modifiedCount > 0) {
+            // notify user on the update
+            const userRes = await db
+                .collection("users")
+                .findOne({ uuid: submission.submissionOwner });
+            await sendTemplateEmail(
+                "sub-properties-update",
+                {
+                    name: userRes.name,
+                    oldSerial: oldSerial,
+                    newSerial: getSerial(
+                        submissionType as "oral" | "poster",
+                        submissionTopic,
+                        submission.submissionId
+                    ),
+                    presentationType:
+                        (submissionType as "oral" | "poster") === "oral" ? "口頭發表" : "海報發表",
+                    presentationTopic: submissionTopic,
+                },
+                {
+                    to: userRes.contact_email,
+                    subject: "2025農機與生機學術研討會-審稿案更新通知",
+                }
+            );
+        }
 
         return NextResponse.json({
             success: true,
