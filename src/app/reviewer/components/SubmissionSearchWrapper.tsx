@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, Filter, ChevronDown, X } from "lucide-react";
 import SubmissionReviewCard2 from "./SubmissionReviewCard2";
+import SubmissionReviewCard3 from "./SubmissionReviewCard3";
 import { SubmissionWithDetailedInfo } from "../page";
 import {
     DropdownMenu,
@@ -27,18 +28,18 @@ interface EnhancedSubmission extends SubmissionWithDetailedInfo {
 
 const default_filters = {
     status: {
-        pending: true,
+        pending: false,
         accepted: false,
         rejected: false,
         replied: false,
         waiting: false,
     },
     type: {
-        abstracts: true,
-        full_paper: true,
+        abstracts: false,
+        full_paper: false,
     },
     payment: {
-        paid: true,
+        paid: false,
         unpaid: false,
     },
 };
@@ -145,10 +146,13 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                     submission.serialNumber.toLowerCase().includes(searchTerm.toLowerCase()); // 添加序列號搜尋
 
                 // 狀態過濾
-                const statusMatch = filters.status[submission.submissionStatus];
+                const allStatusUnselected = Object.values(filters.status).every((value) => !value);
+                const statusMatch =
+                    allStatusUnselected || filters.status[submission.submissionStatus];
 
                 // 類型過濾
-                const typeMatch = filters.type[submission.submissionType];
+                const allTypeUnselected = Object.values(filters.type).every((value) => !value);
+                const typeMatch = allTypeUnselected || filters.type[submission.submissionType];
 
                 // 付款狀態過濾
                 const paymentMatch =
@@ -327,7 +331,7 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                                 </Badge>
                             )}
 
-                            {Object.entries(filters.status).some(([_, value]) => !value) && (
+                            {Object.entries(filters.status).some(([_, value]) => value) && (
                                 <Badge variant="outline" className="flex gap-1 items-center">
                                     已過濾狀態
                                 </Badge>
@@ -338,7 +342,7 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                                 </Badge>
                             )}
 
-                            {Object.entries(filters.type).some(([_, value]) => !value) && (
+                            {Object.entries(filters.type).some(([_, value]) => value) && (
                                 <Badge variant="outline" className="flex gap-1 items-center">
                                     已過濾類型
                                 </Badge>
@@ -351,12 +355,13 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
             {/* 顯示過濾後的審稿案 */}
             {filteredSubmissions.length > 0 ? (
                 <div className="flex flex-col gap-4">
-                    {filteredSubmissions.map((submission) => (
+                    {/* {filteredSubmissions.map((submission) => (
                         <SubmissionReviewCard2
                             key={submission.submissionId}
                             submission={submission}
                         />
-                    ))}
+                    ))} */}
+                    <SubmissionReviewCard3 submissions={filteredSubmissions} />
                 </div>
             ) : (
                 <div className="text-center py-8 bg-gray-50 rounded-md border">

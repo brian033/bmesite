@@ -124,7 +124,7 @@ export default function DocumentReviewCard2({
                     className="cursor-pointer"
                     size="sm"
                     onClick={() => setExpanded(!expanded)}
-                    variant={isReviewerDocument ? "default" : "outline"}
+                    variant="default"
                 >
                     {expanded ? "折疊內容" : "展開內容"}
                 </Button>
