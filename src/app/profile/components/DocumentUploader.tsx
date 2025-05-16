@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import {
     Select,
@@ -30,7 +29,7 @@ const DocumentUploader = ({ pdfType, add_new_title }) => {
             setError(null);
         } else {
             setFile(null);
-            setError("Please upload a valid PDF file.");
+            setError("請上傳PDF檔案");
         }
     };
 
@@ -42,8 +41,8 @@ const DocumentUploader = ({ pdfType, add_new_title }) => {
             return;
         }
 
-        if (!noteTitle.trim() || !noteDescription.trim()) {
-            setError("Please enter both title and description.");
+        if (!noteTitle.trim()) {
+            setError("標題為必填欄位。");
             return;
         }
         if (!noteTopic.trim()) {

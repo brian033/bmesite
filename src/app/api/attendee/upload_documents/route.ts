@@ -72,8 +72,24 @@ const handler = async (req: NextRequest, session: any) => {
             },
         }
     );
-
-    const doc: Document = {
+    const validTopicList = [
+        "生物產業機械",
+        "生物生產工程",
+        "畜牧自動化與污染防治",
+        "農業設施與環控工程",
+        "生物機電控制",
+        "生醫工程與微奈米機電",
+        "生物資訊與系統",
+        "能源與節能技術",
+        "AI與大數據分析",
+        "精準農業智動化",
+        "其他新興科技",
+    ];
+    // add typeguard for topic, topic needs to be one of the validTopicList else we'll just return error
+    if (topic && !validTopicList.includes(topic)) {
+        return NextResponse.json({ error: `Invalid topic: ${topic}` }, { status: 400 });
+    }
+    const doc: Omit<Document, "_id"> = {
         documentId: pdfId,
         documentLocation: `/${session.user.uuid}${relativePath}`,
         documentOwner: session.user.uuid,
@@ -81,10 +97,20 @@ const handler = async (req: NextRequest, session: any) => {
         title: title!,
         pdfType: pdftype as "abstracts" | "full_paper",
         description: description || "",
-        reviewedBy: [],
         notes: [],
         createdAt: upLoadTime,
-        topic: topic, // <-- 新欄位
+        topic: topic as
+            | "生物產業機械"
+            | "生物生產工程"
+            | "畜牧自動化與污染防治"
+            | "農業設施與環控工程"
+            | "生物機電控制"
+            | "生醫工程與微奈米機電"
+            | "生物資訊與系統"
+            | "能源與節能技術"
+            | "AI與大數據分析"
+            | "精準農業智動化"
+            | "其他新興科技", // <-- 新欄位
         present_type: presentType, // <-- 新增欄位
     };
 

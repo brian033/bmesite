@@ -32,25 +32,6 @@ const getHandler = async (req: NextRequest, session: any, pdfId: string) => {
 
 // ✅ POST handler：送出審稿申請
 const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
-    // 本函式需要處理的東西:
-    // 1. 將文件的status改為"pending"
-    // 2. 檢查這個使用者所submit過的submission中，是否有同title的case
-    // 3. 如果有sumbmit過，看這個sumbission的case是不是approved，有的話就不用sumbit了
-    // 4. 如果有submit過，但還沒approved，則要把這個文件掛在那個case的文件list內
-    // 5. 如果沒有submit過，則要新建一個submission case，並把這個文件掛在這個case的文件list內，並幫使用者的collection掛一個submission
-    // 定義 submssion schema:
-    // {
-    //     submissionId: string,
-    //     submissionTitle: string,
-    //     submissionStatus: string,
-    //     submissionOwner: string,
-    //     submissionFiles: string[],
-    //     submissionCreatedAt: Date,
-    //     submissionUpdatedAt: Date,
-    //     submissionReviewedBy: string[],
-    //     submissionReviewedAt: Date[]
-    //}
-
     try {
         const client = await clientPromise;
         const db = client.db(process.env.MONGODB_DB);
@@ -87,7 +68,7 @@ const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
         // submission status: " pending" | "approved" | "rejected"
         if (!existingSubmission) {
             // 如果沒有同title的submission，則新建一個 submission
-            const newSubmission: Submission = {
+            const newSubmission: Omit<Submission, "_id"> = {
                 submissionId: uuidv4(),
                 submissionTitle: doc.title,
                 submissionType: doc.pdfType,
