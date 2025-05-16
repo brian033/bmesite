@@ -3,112 +3,19 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import DocumentUploader from "./DocumentUploader";
 import DocumentViewer from "@/app/components/DocumentViewer";
 import { useState } from "react";
-import SubmissionCard from "./SubmissionCard";
 import { Document } from "@/types/document";
-import { Submission } from "@/types/submission";
 import { TypedSession } from "@/lib/getTypedSession";
 import { UploadedPdf } from "@/types/user";
 
-// function groupAndSortDocuments(documents: Document[]): Document[] {
-//     const groupedByTitle: Record<string, Document[]> = {};
-
-//     // 1. 分組
-//     for (const doc of documents) {
-//         const title = doc.title || "unknown";
-//         if (!groupedByTitle[title]) groupedByTitle[title] = [];
-//         groupedByTitle[title].push(doc);
-//     }
-
-//     // 2. 排序並加上 colorGroup
-//     let colorGroupCounter = 1;
-//     const result: Document[] = [];
-
-//     for (const title of Object.keys(groupedByTitle)) {
-//         const group = groupedByTitle[title];
-
-//         const uploadedDocs = group
-//             .filter((doc) => doc.detailedInfo?.documentStatus === "uploaded")
-//             .sort((a, b) => new Date(a.uploadedAt).getTime() - new Date(b.uploadedAt).getTime());
-
-//         const otherDocs = group
-//             .filter((doc) => doc.detailedInfo?.documentStatus !== "uploaded")
-//             .sort(
-//                 (a, b) =>
-//                     new Date(a.submissionInfo?.submissionUpdatedAt || 0).getTime() -
-//                     new Date(b.submissionInfo?.submissionUpdatedAt || 0).getTime()
-//             );
-
-//         const fullGroup = [...uploadedDocs, ...otherDocs].map((doc) => ({
-//             ...doc,
-//             colorGroup: colorGroupCounter,
-//         }));
-
-//         result.push(...fullGroup);
-//         colorGroupCounter++;
-//     }
-
-//     return result;
-// }
-// function groupAndSortDocuments2(documents: Document[]): {
-//     uploadedDocuments: Document[];
-//     otherDocuments: Document[];
-// } {
-//     const groupedByTitle: Record<string, Document[]> = {};
-
-//     // 1. 根據 title 分組
-//     for (const doc of documents) {
-//         const title = doc.title || "unknown";
-//         if (!groupedByTitle[title]) groupedByTitle[title] = [];
-//         groupedByTitle[title].push(doc);
-//     }
-
-//     let colorGroupCounter = 1;
-//     const uploadedResults: Document[] = [];
-//     const otherResults: Document[] = [];
-
-//     // 2. 走過每個 title 分組
-//     for (const title of Object.keys(groupedByTitle)) {
-//         const group = groupedByTitle[title];
-
-//         const uploadedDocs = group
-//             .filter((doc) => doc.detailedInfo?.documentStatus === "uploaded")
-//             .sort((a, b) => new Date(a.uploadedAt).getTime() - new Date(b.uploadedAt).getTime());
-
-//         const otherDocs = group
-//             .filter((doc) => doc.detailedInfo?.documentStatus !== "uploaded")
-//             .sort(
-//                 (a, b) =>
-//                     new Date(a.submissionInfo?.submissionUpdatedAt || 0).getTime() -
-//                     new Date(b.submissionInfo?.submissionUpdatedAt || 0).getTime()
-//             );
-
-//         uploadedResults.push(
-//             ...uploadedDocs.map((doc) => ({ ...doc, colorGroup: colorGroupCounter }))
-//         );
-
-//         otherResults.push(...otherDocs.map((doc) => ({ ...doc, colorGroup: colorGroupCounter })));
-
-//         colorGroupCounter++;
-//     }
-
-//     return {
-//         uploadedDocuments: uploadedResults,
-//         otherDocuments: otherResults,
-//     };
-// }
-
 type DocumentCardProps = {
-    pdfType: string;
     documents: Document[];
-    submissions: Submission[];
     session: TypedSession;
 };
-const DocumentCard = ({ pdfType, documents, submissions, session }: DocumentCardProps) => {
-    // documents = groupAndSortDocuments(documents);
-    // filter out documents that are in the
+const pdfType = "abstracts";
+
+const AbstractDraftCard = ({ documents, session }: DocumentCardProps) => {
     const uploadedDocument: UploadedPdf[] = session.user.uploaded_pdfs[pdfType];
     // get all of the "pdfId" from the uploadedDocument
     const uploadedDocumentIds = uploadedDocument.map((doc) => doc.pdfId);
@@ -118,26 +25,24 @@ const DocumentCard = ({ pdfType, documents, submissions, session }: DocumentCard
     });
 
     return (
-        <div>
-            <SubmissionCard submissions={submissions} documents={documents} />
-            {pdfType === "abstracts" && (
-                <Card className="mb-6">
-                    <CardHeader>
-                        <CardTitle>上傳你的 {pdfType}</CardTitle>
-                    </CardHeader>
-
-                    <CardContent className="space-y-4">
-                        <DocumentListViewer documents={uploadedDocumentList} pdfType={pdfType} />
-                        <Separator className="my-4" />
-                        {/* <DocumentListViewer documents={otherDocuments} pdfType={pdfType} /> */}
-                    </CardContent>
-                </Card>
-            )}
-        </div>
+        <Card className="mb-6">
+            <CardHeader>
+                <CardTitle>管理您的摘要草稿</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <AbstractDraftListViewer documents={uploadedDocumentList} pdfType={pdfType} />
+            </CardContent>
+        </Card>
     );
 };
 
-const DocumentListViewer = ({ documents, pdfType }: { documents: Document[]; pdfType: string }) => {
+const AbstractDraftListViewer = ({
+    documents,
+    pdfType,
+}: {
+    documents: Document[];
+    pdfType: string;
+}) => {
     const [uploading, setUploading] = useState(false);
 
     return (
@@ -229,4 +134,4 @@ const DocumentListViewer = ({ documents, pdfType }: { documents: Document[]; pdf
     );
 };
 
-export default DocumentCard;
+export default AbstractDraftCard;

@@ -50,11 +50,7 @@ export default async function AttendeePage() {
 
             <h1 className="text-3xl font-semibold text-gray-800">文件管理</h1>
             {/* 文件管理區塊 */}
-            <Card>
-                <CardContent className="pt-6">
-                    <DocumentManager session={session} />
-                </CardContent>
-            </Card>
+            <DocumentManager session={session} />
         </div>
     );
 }
