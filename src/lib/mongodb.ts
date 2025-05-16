@@ -19,6 +19,7 @@ const options = {
 
 // 全局緩存
 declare global {
+    // eslint-disable-next-line no-var
     var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
