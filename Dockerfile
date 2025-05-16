@@ -5,7 +5,6 @@ COPY . .
 
 # 安裝依賴並 build
 RUN npm install
-COPY .env ./
 RUN npm run build
 
 # --- production stage ---
@@ -15,7 +14,6 @@ WORKDIR /app
 # 安裝 production dependencies
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/package-lock.json ./
-COPY --from=builder /app/.env ./
 RUN npm install --omit=dev
 
 # 複製 .next standalone 輸出
