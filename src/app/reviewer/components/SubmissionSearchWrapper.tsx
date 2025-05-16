@@ -25,6 +25,24 @@ interface EnhancedSubmission extends SubmissionWithDetailedInfo {
     serialNumber: string;
 }
 
+const default_filters = {
+    status: {
+        pending: true,
+        accepted: false,
+        rejected: false,
+        replied: false,
+        waiting: false,
+    },
+    type: {
+        abstracts: true,
+        full_paper: true,
+    },
+    payment: {
+        paid: true,
+        unpaid: false,
+    },
+};
+
 export default function SubmissionSearchWrapper({ submissions }: SubmissionSearchWrapperProps) {
     // 先為所有提交計算序列號
     const enhancedSubmissions = useMemo(() => {
@@ -42,28 +60,75 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
         });
     }, [submissions]);
 
-    const [searchTerm, setSearchTerm] = useState("");
+    // 從 localStorage 讀取過濾條件，如果不存在則設置預設值
+    const getStoredFilters = () => {
+        if (typeof window === "undefined") return null;
+
+        try {
+            // 嘗試從 localStorage 讀取
+            const storedFilters = localStorage.getItem("reviewerSubmissionFilters");
+
+            // 如果已存在，直接解析並返回
+            if (storedFilters) {
+                return JSON.parse(storedFilters);
+            }
+
+            // 將預設值存入 localStorage
+            localStorage.setItem("reviewerSubmissionFilters", JSON.stringify(default_filters));
+
+            // 返回預設值
+            return default_filters;
+        } catch (error) {
+            console.error("Failed to parse stored filters:", error);
+            return null;
+        }
+    };
+
+    // 從 localStorage 中讀取搜索詞
+    const getStoredSearchTerm = () => {
+        if (typeof window === "undefined") return "";
+        try {
+            return localStorage.getItem("reviewerSubmissionSearch") || "";
+        } catch (error) {
+            return "";
+        }
+    };
+
+    // 保存過濾條件和搜索詞到 localStorage
+    const saveToStorage = (newFilters: any, newSearchTerm: string) => {
+        if (typeof window === "undefined") return;
+
+        try {
+            localStorage.setItem("reviewerSubmissionFilters", JSON.stringify(newFilters));
+            localStorage.setItem("reviewerSubmissionSearch", newSearchTerm);
+        } catch (error) {
+            console.error("Failed to save to localStorage:", error);
+        }
+    };
+
+    const [searchTerm, setSearchTerm] = useState(() => getStoredSearchTerm());
     const [filteredSubmissions, setFilteredSubmissions] =
         useState<EnhancedSubmission[]>(enhancedSubmissions);
-    const [filters, setFilters] = useState({
-        status: {
-            pending: true,
-            accepted: false,
-            rejected: false,
-            replied: false,
-            waiting: false,
-        },
-        type: {
-            abstracts: true,
-            full_paper: true,
-        },
-        payment: {
-            // 新增付款狀態過濾
-            paid: true,
-            unpaid: false,
-        },
+
+    // 使用 localStorage 中的過濾條件或默認值
+    const [filters, setFilters] = useState(() => {
+        const storedFilters = getStoredFilters() || default_filters;
+        return storedFilters;
     });
+
     const [isFiltering, setIsFiltering] = useState(false);
+
+    // 更新搜索詞並保存到 localStorage
+    const updateSearchTerm = (newTerm: string) => {
+        setSearchTerm(newTerm);
+        saveToStorage(filters, newTerm);
+    };
+
+    // 更新過濾條件並保存到 localStorage
+    const updateFilters = (newFilters: any) => {
+        setFilters(newFilters);
+        saveToStorage(newFilters, searchTerm);
+    };
 
     // 當搜尋詞或過濾條件改變時更新顯示的提交
     useEffect(() => {
@@ -87,6 +152,7 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
 
                 // 付款狀態過濾
                 const paymentMatch =
+                    (filters.payment.paid && filters.payment.unpaid) || // 如果兩個都選，則顯示全部
                     (!filters.payment.paid && !filters.payment.unpaid) || // 如果兩個都未選，則顯示全部
                     (filters.payment.paid && submission.submissionOwner.payment?.paid) || // 已付款
                     (filters.payment.unpaid && !submission.submissionOwner.payment?.paid); // 未付款
@@ -106,36 +172,21 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
     }, [searchTerm, filters, enhancedSubmissions]);
 
     // 切換過濾條件
-    const toggleFilter = (category: "status" | "type", key: string) => {
-        setFilters((prev) => ({
-            ...prev,
+    const toggleFilter = (category: "status" | "type" | "payment", key: string) => {
+        const newFilters = {
+            ...filters,
             [category]: {
-                ...prev[category],
-                [key]: !prev[category][key],
+                ...filters[category],
+                [key]: !filters[category][key],
             },
-        }));
+        };
+        updateFilters(newFilters);
     };
 
     // 清空過濾條件
     const clearFilters = () => {
-        setSearchTerm("");
-        setFilters({
-            status: {
-                pending: true,
-                accepted: true,
-                rejected: true,
-                replied: true,
-                waiting: true,
-            },
-            type: {
-                abstracts: true,
-                full_paper: true,
-            },
-            payment: {
-                paid: false,
-                unpaid: false,
-            },
-        });
+        updateFilters(default_filters);
+        updateSearchTerm("");
     };
 
     // 計算待審審稿案數量
@@ -152,12 +203,12 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                         <Input
                             placeholder="搜尋標題、投稿者、主題或編號..."
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => updateSearchTerm(e.target.value)}
                             className="pl-9"
                         />
                         {searchTerm && (
                             <button
-                                onClick={() => setSearchTerm("")}
+                                onClick={() => updateSearchTerm("")}
                                 className="absolute right-2.5 top-2.5 text-gray-500 hover:text-gray-700"
                             >
                                 <X className="h-4 w-4" />
@@ -271,7 +322,7 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                                     搜尋: {searchTerm}
                                     <X
                                         className="h-3 w-3 cursor-pointer"
-                                        onClick={() => setSearchTerm("")}
+                                        onClick={() => updateSearchTerm("")}
                                     />
                                 </Badge>
                             )}
