@@ -52,6 +52,19 @@ export function SubmissionStatusChanger({
             color: string;
         }>
     >([]);
+    // 添加一個狀態來追踪警告
+    const [statusWarning, setStatusWarning] = useState<string | null>(null);
+
+    // 在狀態改變時檢查並更新警告
+    useEffect(() => {
+        if (submissionStatus === "waiting" && submissionType === "abstracts") {
+            setStatusWarning(
+                "正常狀態下，只有全文才會有等待全文的狀態，摘要+等待全文不是一個正常的操作"
+            );
+        } else {
+            setStatusWarning(null);
+        }
+    }, [submissionStatus, submissionType]);
 
     // 更新狀態當提交數據變化時
     useEffect(() => {
@@ -236,24 +249,49 @@ export function SubmissionStatusChanger({
                     </Select>
                 </div>
             </div>
-
-            <div className="flex justify-end">
-                <Button
-                    onClick={() => handleUpdate()}
-                    variant="default"
-                    size="sm"
-                    disabled={isUpdating}
+            {statusWarning && (
+                <Alert
+                    variant="destructive"
+                    className="bg-yellow-50 text-yellow-800 border-yellow-500"
                 >
-                    {isUpdating ? (
-                        <>
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            更新中...
-                        </>
-                    ) : (
-                        "更新審稿狀態"
-                    )}
-                </Button>
-            </div>
+                    <AlertDescription className="flex items-center gap-2">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-4 w-4"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                        >
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                        {statusWarning}
+                    </AlertDescription>
+                </Alert>
+            )}
+            {!statusWarning && (
+                <div className="flex justify-end">
+                    <Button
+                        onClick={() => handleUpdate()}
+                        variant="default"
+                        size="sm"
+                        disabled={isUpdating}
+                    >
+                        {isUpdating ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                更新中...
+                            </>
+                        ) : (
+                            "更新審稿狀態"
+                        )}
+                    </Button>
+                </div>
+            )}
         </div>
     );
 
