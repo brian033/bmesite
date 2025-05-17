@@ -177,7 +177,7 @@ export default function UserTable({
         return db_submissions.filter((submission) => submission.submissionOwner === userId);
     };
 
-    // 獲取用戶的支付列表和總金額
+    // 獲取用戶的付款列表和總金額
     const getUserPayments = (userId: string) => {
         const userPayments = db_payments.filter((payment) => payment.paymentOwner === userId);
 
@@ -410,7 +410,7 @@ export default function UserTable({
                                 disabled={filteredUsers.length === 0}
                             >
                                 <DownloadIcon className="h-4 w-4" />
-                                下載CSV
+                                匯出
                             </Button>
                             {/* 重置過濾器 */}
                             <Button

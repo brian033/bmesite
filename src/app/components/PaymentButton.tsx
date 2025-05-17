@@ -72,7 +72,7 @@ export default function PaymentButton({
                 onSuccess(data);
             }
         } catch (err: any) {
-            console.error("支付處理錯誤:", err);
+            console.error("付款處理錯誤:", err);
             setError(err.message || "處理付款時發生錯誤");
 
             // 調用錯誤回調

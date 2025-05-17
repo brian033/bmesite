@@ -9,7 +9,7 @@ import { v4 } from "uuid";
 import { updateUserPaymentStatus } from "@/lib/updateUserPaymentStatus";
 import { User } from "@/types/user";
 
-// 綠界支付配置 (應放在環境變數中)
+// 綠界付款配置 (應放在環境變數中)
 const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID || "3002607";
 const HASH_KEY = process.env.ECPAY_HASH_KEY || "pwFHCqoQZGmho4w6";
 const HASH_IV = process.env.ECPAY_HASH_IV || "EkRm7iFT261dpevs";
@@ -133,7 +133,7 @@ const handler = async (req: NextRequest, session: any) => {
             paymentType: paymentType,
             paymentParams: paymentParams,
         };
-        // 檢查用戶是否已經存在支付記錄
+        // 檢查用戶是否已經存在付款記錄
         // check if user has already paid
         // 先更新使用者的狀態
         await updateUserPaymentStatus(userId);
@@ -149,7 +149,7 @@ const handler = async (req: NextRequest, session: any) => {
             );
         }
 
-        // 將支付記錄插入到 MongoDB
+        // 將付款記錄插入到 MongoDB
         await db.collection("payments").insertOne(paymentRecord);
         // update  payment: {
         //     paid: boolean;

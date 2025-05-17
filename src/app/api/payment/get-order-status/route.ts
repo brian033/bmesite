@@ -96,13 +96,13 @@ const handler = async (req: NextRequest) => {
                 .filter(([key]) => key) // 過濾掉空鍵
         );
 
-        // 判斷支付狀態
+        // 判斷付款狀態
         const paymentStatus = checkPaymentStatus(responseData);
         if (paymentStatus.status === "failed") {
             const client = await clientPromise;
             const db = client.db(process.env.MONGODB_DB);
 
-            // 更新支付記錄
+            // 更新付款記錄
             await db.collection("payments").updateOne(
                 { paymentId: merchantTradeNo },
                 {
@@ -121,7 +121,7 @@ const handler = async (req: NextRequest) => {
                 const client = await clientPromise;
                 const db = client.db(process.env.MONGODB_DB);
 
-                // 更新支付記錄
+                // 更新付款記錄
                 await db.collection("payments").updateOne(
                     { paymentId: merchantTradeNo },
                     {
@@ -176,7 +176,7 @@ const handler = async (req: NextRequest) => {
             }
         }
 
-        // 返回查詢結果（加上支付狀態）
+        // 返回查詢結果（加上付款狀態）
         return NextResponse.json({
             success: true,
             order: {

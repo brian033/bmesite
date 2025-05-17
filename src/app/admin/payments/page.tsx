@@ -7,17 +7,17 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 /**
- * 支付記錄管理頁面
+ * 付款記錄管理頁面
  *
  * 本頁面本身撈取的是後端資料庫資料，使用綠界api查詢的按鈕會向綠界的伺服器發送請求並顯示結果，若沒有需要請不要使用
  *
  * 此頁面受到角色保護，僅允許管理員訪問。
  * 功能包括：
- * - 顯示所有支付記錄，按創建時間倒序排列
+ * - 顯示所有付款記錄，按創建時間倒序排列
  * - 關聯顯示用戶信息（姓名、郵箱、部門等）
  * - 通過PaymentsTable元件展示數據
  *
- * @returns {JSX.Element} 支付記錄管理頁面的元件
+ * @returns {JSX.Element} 付款記錄管理頁面的元件
  */
 export default async function PaymentsPage() {
     await withRoleProtection(["admin"]); // 👈 只讓 admin 進來
@@ -25,14 +25,14 @@ export default async function PaymentsPage() {
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DB);
 
-    // 獲取所有支付記錄
+    // 獲取所有付款記錄
     const payments: Payment[] = (await db
         .collection("payments")
         .find({})
         .sort({ _id: -1 }) // 最新的記錄優先
         .toArray()) as Payment[];
 
-    // 獲取所有支付記錄涉及的用戶 ID
+    // 獲取所有付款記錄涉及的用戶 ID
     const userIds = [...new Set(payments.map((p) => p.paymentOwner))];
 
     // 獲取這些用戶的信息
@@ -72,8 +72,8 @@ export default async function PaymentsPage() {
     });
 
     return (
-        <div className="p-8">
-            <h1 className="text-3xl font-bold mb-6">支付記錄管理</h1>
+        <div className="p-3">
+            <h1 className="text-3xl font-bold mb-6">付款記錄管理</h1>
 
             {/* 警語 Banner */}
             <Alert className="mb-6 bg-amber-50 border-amber-200">

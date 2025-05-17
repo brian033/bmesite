@@ -4,10 +4,10 @@ import { getCheckMac } from "../create-order/route";
 import { sendTemplateEmail } from "@/lib/mailTools";
 
 /**
- * 處理綠界支付結果通知的API路由
+ * 處理綠界付款結果通知的API路由
  *
- * 這個API接收來自綠界的支付結果通知，並更新訂單狀態
- * 綠界會在用戶完成支付後，向這個API發送POST請求
+ * 這個API接收來自綠界的付款結果通知，並更新訂單狀態
+ * 綠界會在用戶完成付款後，向這個API發送POST請求
  */
 const handler = async (req: NextRequest) => {
     try {
@@ -26,7 +26,7 @@ const handler = async (req: NextRequest) => {
         const db = client.db(process.env.MONGODB_DB);
         await db.collection("payment_notifications").insertOne(data);
 
-        console.log("接收到綠界支付通知:", data);
+        console.log("接收到綠界付款通知:", data);
 
         // 驗證必要的參數是否存在
         const requiredFields = ["MerchantID", "MerchantTradeNo", "RtnCode", "CheckMacValue"];
@@ -57,7 +57,7 @@ const handler = async (req: NextRequest) => {
 
         console.log("CheckMacValue 驗證成功");
 
-        // 查找對應的支付記錄
+        // 查找對應的付款記錄
         const payment = await db.collection("payments").findOne({
             paymentId: data.MerchantTradeNo,
         });
@@ -70,9 +70,9 @@ const handler = async (req: NextRequest) => {
             );
         }
 
-        const isPaid = data.RtnCode === "1"; // RtnCode為1表示支付成功
+        const isPaid = data.RtnCode === "1"; // RtnCode為1表示付款成功
         if (isPaid) {
-            // 更新支付記錄狀態
+            // 更新付款記錄狀態
             await db.collection("payments").updateOne(
                 { paymentId: data.MerchantTradeNo },
                 {
@@ -86,7 +86,7 @@ const handler = async (req: NextRequest) => {
             );
             const userId = payment.paymentOwner;
 
-            // 更新用戶的支付狀態
+            // 更新用戶的付款狀態
             const updateResult = await db.collection("users").updateOne(
                 { uuid: userId },
                 {
@@ -96,7 +96,7 @@ const handler = async (req: NextRequest) => {
                 }
             );
 
-            // 如果用戶的支付狀態從未支付變為已支付，則發送通知郵件
+            // 如果用戶的付款狀態從未付款變為已付款，則發送通知郵件
             if (updateResult.modifiedCount === 1) {
                 const user = await db.collection("users").findOne({ uuid: userId });
                 const payment = await db
@@ -133,7 +133,7 @@ const handler = async (req: NextRequest) => {
             },
         });
     } catch (error) {
-        console.error("處理綠界支付通知時出錯:", error);
+        console.error("處理綠界付款通知時出錯:", error);
 
         // 即使出錯，也返回成功以避免綠界重複發送通知
         // 但在日誌中記錄錯誤以便後續排查

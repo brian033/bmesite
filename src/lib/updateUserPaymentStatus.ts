@@ -70,7 +70,7 @@ async function queryECPayOrderStatus(merchantTradeNo: string): Promise<Record<st
 }
 
 /**
- * 更新用戶的支付狀態
+ * 更新用戶的付款狀態
  * @param uuid 用戶UUID
  * @returns 更新結果的概要
  */
@@ -101,7 +101,7 @@ export async function updateUserPaymentStatus(uuid: string): Promise<{
             };
         }
 
-        // 檢查用戶是否有支付資料
+        // 檢查用戶是否有付款資料
         if (
             !user.payment ||
             !Array.isArray(user.payment.payment_id) ||
@@ -109,15 +109,15 @@ export async function updateUserPaymentStatus(uuid: string): Promise<{
         ) {
             return {
                 success: true,
-                message: `用戶 ${uuid} 沒有任何支付記錄`,
+                message: `用戶 ${uuid} 沒有任何付款記錄`,
                 updatedPayments: [],
             };
         }
-        // 檢查用戶的支付狀態
+        // 檢查用戶的付款狀態
         if (user.payment.paid) {
             return {
                 success: true,
-                message: `用戶 ${uuid} 的支付狀態已經是paid`,
+                message: `用戶 ${uuid} 的付款狀態已經是paid`,
                 updatedPayments: [],
             };
         }
@@ -130,18 +130,18 @@ export async function updateUserPaymentStatus(uuid: string): Promise<{
             isPaid: boolean;
         }> = [];
 
-        // 處理用戶的每個支付ID
+        // 處理用戶的每個付款ID
         for (const paymentId of user.payment.payment_id) {
-            // 查找支付記錄
+            // 查找付款記錄
             const payment = (await paymentsCollection.findOne({ paymentId })) as Payment | null;
 
-            // 如果找不到支付記錄，跳過
+            // 如果找不到付款記錄，跳過
             if (!payment) {
-                console.warn(`找不到ID為 ${paymentId} 的支付記錄`);
+                console.warn(`找不到ID為 ${paymentId} 的付款記錄`);
                 continue;
             }
 
-            // 如果支付狀態已經是paid或failed，則跳過
+            // 如果付款狀態已經是paid或failed，則跳過
             if (payment.paymentStatus !== "created") {
                 continue;
             }
@@ -154,7 +154,7 @@ export async function updateUserPaymentStatus(uuid: string): Promise<{
                 let newStatus: "created" | "paid" | "failed" = payment.paymentStatus;
                 let isPaid = false;
 
-                // 根據tradeStatus更新支付狀態
+                // 根據tradeStatus更新付款狀態
                 if (tradeStatus === "1") {
                     // 已付款
                     newStatus = "paid";
@@ -169,7 +169,7 @@ export async function updateUserPaymentStatus(uuid: string): Promise<{
 
                 // 只有狀態有變化時才更新
                 if (newStatus !== payment.paymentStatus) {
-                    // 更新支付記錄
+                    // 更新付款記錄
                     await paymentsCollection.updateOne(
                         { paymentId },
                         {
@@ -198,17 +198,17 @@ export async function updateUserPaymentStatus(uuid: string): Promise<{
                     }
                 }
             } catch (error) {
-                console.error(`查詢支付ID ${paymentId} 狀態時出錯:`, error);
+                console.error(`查詢付款ID ${paymentId} 狀態時出錯:`, error);
             }
         }
 
         return {
             success: true,
-            message: `用戶 ${uuid} 的支付狀態已更新，有 ${updatedPayments.length} 筆記錄變更`,
+            message: `用戶 ${uuid} 的付款狀態已更新，有 ${updatedPayments.length} 筆記錄變更`,
             updatedPayments,
         };
     } catch (error) {
-        console.error(`更新用戶 ${uuid} 的支付狀態時出錯:`, error);
+        console.error(`更新用戶 ${uuid} 的付款狀態時出錯:`, error);
         return {
             success: false,
             message: `處理時發生錯誤: ${error.message}`,
@@ -218,7 +218,7 @@ export async function updateUserPaymentStatus(uuid: string): Promise<{
 }
 
 /**
- * 批量更新所有用戶的支付狀態
+ * 批量更新所有用戶的付款狀態
  * @returns 更新結果的概要
  */
 export async function updateAllUsersPaymentStatus(): Promise<{
@@ -241,7 +241,7 @@ export async function updateAllUsersPaymentStatus(): Promise<{
         let totalUpdated = 0;
         let processedUsers = 0;
 
-        // 依序更新每個用戶的支付狀態
+        // 依序更新每個用戶的付款狀態
         for (const user of users) {
             processedUsers++;
             try {
@@ -254,12 +254,12 @@ export async function updateAllUsersPaymentStatus(): Promise<{
 
         return {
             success: true,
-            message: `已處理 ${processedUsers} 個用戶，更新了 ${totalUpdated} 筆支付記錄`,
+            message: `已處理 ${processedUsers} 個用戶，更新了 ${totalUpdated} 筆付款記錄`,
             processedUsers,
             updatedPayments: totalUpdated,
         };
     } catch (error) {
-        console.error(`批量更新用戶支付狀態時出錯:`, error);
+        console.error(`批量更新用戶付款狀態時出錯:`, error);
         return {
             success: false,
             message: `處理時發生錯誤: ${error.message}`,
