@@ -66,6 +66,7 @@ export default async function PaymentsPage() {
             userId: payment.paymentOwner,
             userName: user?.name || "未知用戶",
             userEmail: user?.email || "無郵箱",
+            userContactEmail: user?.contact_email || "無聯絡郵箱",
             userDepartment: user?.department || "未填寫",
             user: user || null,
         };

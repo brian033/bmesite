@@ -27,6 +27,7 @@ interface PaymentTableItem {
     userId: string;
     userName: string;
     userEmail: string;
+    userContactEmail: string;
     userDepartment: string;
     user: User | null;
 }
@@ -81,7 +82,7 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
         return (
             payment.paymentId.toLowerCase().includes(searchLower) ||
             payment.userName.toLowerCase().includes(searchLower) ||
-            payment.userEmail.toLowerCase().includes(searchLower) ||
+            payment.userContactEmail.toLowerCase().includes(searchLower) ||
             payment.userDepartment.toLowerCase().includes(searchLower) ||
             payment.paymentStatus.toLowerCase().includes(searchLower)
         );
@@ -108,7 +109,7 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
             "金額",
             "付款類型",
             "用戶名",
-            "Email",
+            "聯絡Email",
             "部門",
             "用戶ID",
         ];
@@ -141,7 +142,7 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
             formatCSVField(payment.paymentValue),
             formatCSVField(payment.paymentType),
             formatCSVField(payment.userName),
-            formatCSVField(payment.userEmail),
+            formatCSVField(payment.userContactEmail),
             formatCSVField(payment.userDepartment),
             formatCSVField(payment.userId),
         ]);
@@ -231,7 +232,7 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
                                     <TableCell>
                                         <div>{payment.userName}</div>
                                         <div className="text-xs text-gray-500">
-                                            {payment.userEmail}
+                                            {payment.userContactEmail}
                                         </div>
                                     </TableCell>
                                     <TableCell>{payment.userDepartment}</TableCell>
