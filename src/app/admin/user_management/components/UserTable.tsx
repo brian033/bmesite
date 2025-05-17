@@ -71,7 +71,7 @@ export default function UserTable({
         // 定義 CSV 標頭行
         const headers = [
             "姓名",
-            "Email",
+            "聯絡Email",
             "電話",
             "單位",
             "付款狀態",
