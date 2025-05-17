@@ -4,7 +4,7 @@ import { getCheckMac } from "../create-order/route";
 import { sendTemplateEmail } from "@/lib/mailTools";
 
 /**
- * 處理綠界付款結果通知的API路由
+ * 處理綠界支付結果通知的API路由
  *
  * 這個API接收來自綠界的付款結果通知，並更新訂單狀態
  * 綠界會在用戶完成付款後，向這個API發送POST請求
@@ -26,7 +26,7 @@ const handler = async (req: NextRequest) => {
         const db = client.db(process.env.MONGODB_DB);
         await db.collection("payment_notifications").insertOne(data);
 
-        console.log("接收到綠界付款通知:", data);
+        console.log("接收到綠界支付通知:", data);
 
         // 驗證必要的參數是否存在
         const requiredFields = ["MerchantID", "MerchantTradeNo", "RtnCode", "CheckMacValue"];
@@ -133,7 +133,7 @@ const handler = async (req: NextRequest) => {
             },
         });
     } catch (error) {
-        console.error("處理綠界付款通知時出錯:", error);
+        console.error("處理綠界支付通知時出錯:", error);
 
         // 即使出錯，也返回成功以避免綠界重複發送通知
         // 但在日誌中記錄錯誤以便後續排查

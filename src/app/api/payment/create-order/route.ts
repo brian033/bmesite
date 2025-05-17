@@ -9,7 +9,7 @@ import { v4 } from "uuid";
 import { updateUserPaymentStatus } from "@/lib/updateUserPaymentStatus";
 import { User } from "@/types/user";
 
-// 綠界付款配置 (應放在環境變數中)
+// 綠界支付配置 (應放在環境變數中)
 const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID || "3002607";
 const HASH_KEY = process.env.ECPAY_HASH_KEY || "pwFHCqoQZGmho4w6";
 const HASH_IV = process.env.ECPAY_HASH_IV || "EkRm7iFT261dpevs";
