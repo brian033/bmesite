@@ -102,6 +102,7 @@ const postHandler = async (req: NextRequest, session: any, pdfId: string) => {
                     success: true,
                     newStatus: "pending",
                     message: `成功新建審稿案，標題為\"${doc.title}\"。`,
+                    submission: newSubmission,
                 },
                 { status: 200 }
             );

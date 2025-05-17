@@ -116,7 +116,7 @@ const handler = async (req: NextRequest, session: any) => {
 
     await db.collection("documents").insertOne(doc);
 
-    return NextResponse.json({ success: true, filePath: relativePath });
+    return NextResponse.json({ success: true, message: "文件上傳成功", document: doc });
 };
 
 export const POST = middlewareFactory({ cors: true, auth: true }, handler);

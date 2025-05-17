@@ -45,7 +45,7 @@ const DocumentViewer = ({ fileUrl }: { fileUrl: string }) => {
 
     // 顯示佔位符或 PDF 檢視器
     return (
-        <div style={{ maxWidth: "800px", margin: "0 auto", padding: "20px" }} id="pdf-container">
+        <div style={{ margin: "3" }} id="pdf-container">
             <div style={{ border: "1px solid #ddd", padding: "10px" }}>
                 {!isClient ? (
                     // 服務端渲染時顯示靜態佔位符
@@ -63,13 +63,13 @@ const DocumentViewer = ({ fileUrl }: { fileUrl: string }) => {
                     </div>
                 ) : hasIntersected || isVisible ? (
                     // 元素可見時加載 PDF
-                    <embed src={fileUrl} width="100%" height="500px" type="application/pdf" />
+                    <embed src={fileUrl} width="100%" height="600px" type="application/pdf" />
                 ) : (
                     // 尚未進入視口時顯示佔位符
                     <div
                         style={{
                             width: "100%",
-                            height: "500px",
+                            height: "600px",
                             backgroundColor: "#f0f0f0",
                             display: "flex",
                             alignItems: "center",

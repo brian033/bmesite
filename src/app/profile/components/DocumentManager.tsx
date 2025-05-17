@@ -6,24 +6,73 @@ import DocumentUploader from "./DocumentUploader";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, X } from "lucide-react";
 import SubmissionCard from "./SubmissionCard";
+import { UploadedPdf } from "@/types/user";
+import { Document } from "@/types/document";
+import { Submission } from "@/types/submission";
+
 const DocumentManager = ({ session }) => {
     const [userDocumentIndex, setUserDocumentIndex] = useState<UserDocumentIndexResponse | null>(
         null
     );
-    // 添加狀態控制上傳元件的顯示
     const [showUploader, setShowUploader] = useState(false);
 
+    // 拆分狀態以便單獨更新
+    const [documents, setDocuments] = useState<Document[]>([]);
+    const [submissions, setSubmissions] = useState<Submission[]>([]);
+    const [uploadedDocumentList, setUploadedDocumentList] = useState<Document[]>([]);
+
+    // 初始載入數據
     useEffect(() => {
         async function fetchDocuments() {
             const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
             const res = await fetch(`${baseUrl}/api/attendee/user_document_index`);
             const data = (await res.json()) as UserDocumentIndexResponse;
-            setUserDocumentIndex(data);
+
+            if (!("error" in data)) {
+                setUserDocumentIndex(data);
+                setDocuments(data.documents);
+                setSubmissions(data.submissions);
+
+                // 計算已上傳但未提交的文件
+                const uploadedDocument: UploadedPdf[] = session.user.uploaded_pdfs["abstracts"];
+                const uploadedDocumentIds = uploadedDocument.map((doc) => doc.pdfId);
+                const draftDocs = data.documents.filter((doc) => {
+                    return (
+                        uploadedDocumentIds.includes(doc.documentId) &&
+                        doc.documentStatus === "uploaded"
+                    );
+                });
+                setUploadedDocumentList(draftDocs);
+            }
         }
         fetchDocuments();
-    }, []);
+    }, [session]);
 
-    // 切換上傳元件的顯示狀態
+    // 處理新上傳的文件
+    const handleNewDocumentUploaded = (newDocument: Document) => {
+        // 更新文件列表
+        setDocuments((prev) => [...prev, newDocument]);
+        // 更新草稿文件列表
+        setUploadedDocumentList((prev) => [...prev, newDocument]);
+        // 上傳成功後關閉上傳表單
+        setShowUploader(false);
+    };
+
+    // 處理文件刪除
+    const handleDocumentRemoved = (documentId: string) => {
+        // 從文件列表和草稿列表中移除
+        setDocuments((prev) => prev.filter((doc) => doc.documentId !== documentId));
+        setUploadedDocumentList((prev) => prev.filter((doc) => doc.documentId !== documentId));
+    };
+
+    // 處理文件提交審核
+    const handleDocumentSubmitted = (documentId: string, newSubmission: Submission) => {
+        // 從草稿列表移除
+        setUploadedDocumentList((prev) => prev.filter((doc) => doc.documentId !== documentId));
+        // 添加到提交列表
+        setSubmissions((prev) => [...prev, newSubmission]);
+    };
+
     const toggleUploader = () => {
         setShowUploader(!showUploader);
     };
@@ -37,30 +86,26 @@ const DocumentManager = ({ session }) => {
         );
     }
 
-    const full_paper_submissions = userDocumentIndex.submissions.filter(
-        (submission) => submission.submissionType === "full_paper"
-    );
-    const abstract_submissions = userDocumentIndex.submissions.filter(
-        (submission) => submission.submissionType === "abstracts"
-    );
-    const submissions = {
-        abstracts: abstract_submissions,
-        full_paper: full_paper_submissions,
-    };
+    const hasUploadedDocuments = uploadedDocumentList.length > 0;
 
     return (
         <div className="flex gap-6 overflow-x-auto pb-4">
-            <div className="min-w-[50%]">
-                <SubmissionCard
-                    submissions={userDocumentIndex.submissions}
-                    documents={userDocumentIndex.documents}
-                />
-                <AbstractDraftCard
-                    key="abstracts"
-                    documents={userDocumentIndex.documents}
-                    session={session}
-                />
-                {/* 替換為按鈕和條件渲染上傳元件 */}
+            <div className="w-full">
+                <h1 className="text-3xl font-semibold text-gray-800">文件管理</h1>
+
+                {/* 顯示提交列表 */}
+                {submissions && <SubmissionCard submissions={submissions} documents={documents} />}
+
+                {/* 顯示草稿列表 */}
+                {hasUploadedDocuments && (
+                    <AbstractDraftCard
+                        documents={uploadedDocumentList}
+                        onDocumentRemoved={handleDocumentRemoved}
+                        onDocumentSubmitted={handleDocumentSubmitted}
+                    />
+                )}
+
+                {/* 文件上傳區塊 */}
                 <div className="mt-4">
                     {showUploader ? (
                         <div className="border p-4 rounded-md bg-gray-50">
@@ -75,7 +120,10 @@ const DocumentManager = ({ session }) => {
                                     <X className="h-4 w-4" />
                                 </Button>
                             </div>
-                            <DocumentUploader pdfType={"abstracts"} add_new_title={true} />
+                            <DocumentUploader
+                                pdfType="abstracts"
+                                onDocumentUploaded={handleNewDocumentUploaded}
+                            />
                         </div>
                     ) : (
                         <Button onClick={toggleUploader} variant="outline" className="w-full">

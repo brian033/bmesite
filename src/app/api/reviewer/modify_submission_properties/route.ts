@@ -113,6 +113,7 @@ const handler = async (req: NextRequest, session: any) => {
                 "sub-properties-update",
                 {
                     name: userRes.name,
+                    title: submission.submissionTitle,
                     oldSerial: oldSerial,
                     newSerial: getSerial(
                         submissionType as "oral" | "poster",

@@ -82,7 +82,7 @@ function DocxPreview({ fileUrl, height = "600px", className = "" }: DocxPreviewP
     }, [fileUrl, shouldLoad]);
 
     return (
-        <div className={`w-full ${className}`} ref={containerRef}>
+        <div className={`w-full m-3 ${className}`} ref={containerRef}>
             {!shouldLoad ? (
                 <div
                     className="border border-gray-200 bg-gray-50 flex justify-center items-center"

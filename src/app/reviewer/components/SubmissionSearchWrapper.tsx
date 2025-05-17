@@ -146,20 +146,24 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                     submission.serialNumber.toLowerCase().includes(searchTerm.toLowerCase()); // 添加序列號搜尋
 
                 // 狀態過濾
-                const allStatusUnselected = Object.values(filters.status).every((value) => !value);
+                // 狀態過濾 - 只有勾選的狀態才會顯示
+                const statusValuesSelected = Object.values(filters.status).some((value) => value);
                 const statusMatch =
-                    allStatusUnselected || filters.status[submission.submissionStatus];
+                    !statusValuesSelected || // 如果沒有選擇任何狀態，顯示全部
+                    filters.status[submission.submissionStatus]; // 否則只顯示被勾選的狀態
 
-                // 類型過濾
-                const allTypeUnselected = Object.values(filters.type).every((value) => !value);
-                const typeMatch = allTypeUnselected || filters.type[submission.submissionType];
+                // 類型過濾 - 只有勾選的類型才會顯示
+                const typeValuesSelected = Object.values(filters.type).some((value) => value);
+                const typeMatch =
+                    !typeValuesSelected || // 如果沒有選擇任何類型，顯示全部
+                    filters.type[submission.submissionType]; // 否則只顯示被勾選的類型
 
-                // 付款狀態過濾
+                // 付款狀態過濾 - 只有勾選的付款狀態才會顯示
+                const paymentSelected = filters.payment.paid || filters.payment.unpaid;
                 const paymentMatch =
-                    (filters.payment.paid && filters.payment.unpaid) || // 如果兩個都選，則顯示全部
-                    (!filters.payment.paid && !filters.payment.unpaid) || // 如果兩個都未選，則顯示全部
-                    (filters.payment.paid && submission.submissionOwner.payment?.paid) || // 已付款
-                    (filters.payment.unpaid && !submission.submissionOwner.payment?.paid); // 未付款
+                    !paymentSelected || // 如果沒有選擇任何付款狀態，顯示全部
+                    (filters.payment.paid && submission.submissionOwner.payment?.paid) || // 已付款且勾選了已付款
+                    (filters.payment.unpaid && !submission.submissionOwner.payment?.paid); // 未付款且勾選了未付款
 
                 return searchMatch && statusMatch && typeMatch && paymentMatch; // 加入 paymentMatch
             });
@@ -221,7 +225,7 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                     </div>
 
                     {/* 過濾菜單 */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 justify-center">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="flex gap-1 items-center">
@@ -309,7 +313,7 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                 </div>
 
                 {/* 過濾狀態顯示 */}
-                <div className="flex flex-wrap gap-2 items-center">
+                <div className="flex flex-wrap gap-2 items-center justify-center">
                     <span className="text-sm text-muted-foreground">
                         顯示 {filteredSubmissions.length} 個審稿案{" "}
                         {enhancedSubmissions.length > 0 && `(共 ${enhancedSubmissions.length} 個)`}
@@ -354,7 +358,7 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
 
             {/* 顯示過濾後的審稿案 */}
             {filteredSubmissions.length > 0 ? (
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-4 mx-1">
                     {/* {filteredSubmissions.map((submission) => (
                         <SubmissionReviewCard2
                             key={submission.submissionId}
@@ -364,8 +368,8 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                     <SubmissionReviewCard3 submissions={filteredSubmissions} />
                 </div>
             ) : (
-                <div className="text-center py-8 bg-gray-50 rounded-md border">
-                    <div className="text-gray-500">未找到匹配的審稿案</div>
+                <div className="text-center py-8 bg-gray-50 rounded-md border mx-1">
+                    <div className="text-gray-500">未找到審稿案</div>
                     <Button variant="link" onClick={clearFilters} className="mt-2">
                         清除所有過濾條件
                     </Button>

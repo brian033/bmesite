@@ -12,11 +12,20 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { CheckCircle, XCircle } from "lucide-react";
+import { Document } from "@/types/document";
 
-const DocumentUploader = ({ pdfType, add_new_title }) => {
+interface DocumentUploaderProps {
+    pdfType: string;
+    onDocumentUploaded: (document: Document) => void;
+}
+
+const DocumentUploader = ({ pdfType, onDocumentUploaded }: DocumentUploaderProps) => {
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [presentType, setPresentType] = useState("");
     const [noteTitle, setNoteTitle] = useState("");
     const [noteDescription, setNoteDescription] = useState("");
@@ -33,11 +42,22 @@ const DocumentUploader = ({ pdfType, add_new_title }) => {
         }
     };
 
+    const resetForm = () => {
+        setFile(null);
+        setNoteTitle("");
+        setNoteDescription("");
+        setNoteTopic("");
+        setPresentType("");
+        // 重置文件選擇器
+        const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+        if (fileInput) fileInput.value = "";
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!file) {
-            setError("No file selected");
+            setError("尚未選擇檔案");
             return;
         }
 
@@ -64,6 +84,7 @@ const DocumentUploader = ({ pdfType, add_new_title }) => {
 
         setUploading(true);
         setError(null);
+        setSuccessMessage(null);
 
         try {
             const response = await fetch("/api/attendee/upload_documents", {
@@ -74,17 +95,31 @@ const DocumentUploader = ({ pdfType, add_new_title }) => {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.error || "Upload failed");
+                throw new Error(data.error || "上傳失敗");
             }
 
-            // refresh window
-            window.location.reload();
+            // 設定成功訊息
+            setSuccessMessage("文件上傳成功！");
+
+            // 重置表單
+            resetForm();
+
+            // 通知父組件新增了文件
+            if (data.document) {
+                onDocumentUploaded(data.document);
+            }
+
+            // 5秒後清除成功訊息
+            setTimeout(() => {
+                setSuccessMessage(null);
+            }, 5000);
         } catch (err) {
-            setError(err.message || "Error uploading file");
+            setError(err.message || "上傳文件時發生錯誤");
         } finally {
             setUploading(false);
         }
     };
+
     return (
         <Card className="max-w-full mx-auto">
             <CardHeader>
@@ -97,6 +132,24 @@ const DocumentUploader = ({ pdfType, add_new_title }) => {
                 </p>
             </CardHeader>
             <CardContent>
+                {successMessage && (
+                    <Alert className="mb-4 bg-green-50 border-green-200">
+                        <AlertDescription className="flex items-center gap-2">
+                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            {successMessage}
+                        </AlertDescription>
+                    </Alert>
+                )}
+
+                {error && (
+                    <Alert className="mb-4 bg-red-50 border-red-200">
+                        <AlertDescription className="flex items-center gap-2">
+                            <XCircle className="h-4 w-4 text-red-500" />
+                            {error}
+                        </AlertDescription>
+                    </Alert>
+                )}
+
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1">
                         <Label>PDF檔案</Label>
@@ -114,7 +167,7 @@ const DocumentUploader = ({ pdfType, add_new_title }) => {
                     </div>
                     <div className="space-y-1">
                         <Label>投稿主題</Label>
-                        <Select onValueChange={(value) => setNoteTopic(value)}>
+                        <Select value={noteTopic} onValueChange={(value) => setNoteTopic(value)}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="請選擇投稿主題" />
                             </SelectTrigger>
@@ -141,7 +194,10 @@ const DocumentUploader = ({ pdfType, add_new_title }) => {
                     </div>
                     <div className="space-y-1">
                         <Label>發表形式</Label>
-                        <Select onValueChange={(value) => setPresentType(value)}>
+                        <Select
+                            value={presentType}
+                            onValueChange={(value) => setPresentType(value)}
+                        >
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="請選擇發表形式" />
                             </SelectTrigger>
@@ -161,10 +217,8 @@ const DocumentUploader = ({ pdfType, add_new_title }) => {
                         />
                     </div>
 
-                    {error && <p className="text-red-500 text-sm">{error}</p>}
-
                     <Button type="submit" disabled={uploading} className="w-full">
-                        {uploading ? "Uploading..." : "Upload PDF"}
+                        {uploading ? "上傳中..." : "上傳 PDF"}
                     </Button>
                 </form>
             </CardContent>

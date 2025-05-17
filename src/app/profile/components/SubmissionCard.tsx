@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -73,6 +73,9 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
 
     return (
         <Card className="mt-4">
+            <CardHeader>
+                <CardTitle>管理您的審稿案</CardTitle>
+            </CardHeader>
             <CardContent className="p-4">
                 <div className="flex justify-between items-center mb-4">
                     <Button
@@ -169,7 +172,6 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                                 </Badge>
                                             </div>
                                         </div>
-
                                         {/* 如果需要上傳，顯示醒目的提示和上傳按鈕 */}
                                         {canUpload && (
                                             <div className="bg-orange-100 border border-orange-200 rounded-md p-3 mb-4">
@@ -193,7 +195,6 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                                 </div>
                                             </div>
                                         )}
-
                                         {/* 審稿案信息區塊 */}
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-4">
                                             <div className="flex items-center gap-2">
@@ -245,23 +246,40 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                                 </span>
                                             </div>
                                         </div>
-
                                         <Separator className="my-4" />
-
                                         {/* 文件列表 */}
                                         <div className="space-y-1 mt-2">
-                                            <h4 className="font-medium mb-3 flex items-center gap-2">
-                                                <ExternalLink className="h-4 w-4" />
-                                                相關文件 ({submissionDocs.length})
-                                            </h4>
+                                            <details className="group">
+                                                <summary className="font-medium mb-3 flex items-center gap-2 cursor-pointer list-none">
+                                                    <div className="flex items-center gap-2 flex-1">
+                                                        <ExternalLink className="h-4 w-4" />
+                                                        相關文件 ({submissionDocs.length})
+                                                        <svg
+                                                            className="h-4 w-4 transition-transform group-open:rotate-180"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 24 24"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            strokeWidth="2"
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                        >
+                                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                                        </svg>
+                                                    </div>
+                                                </summary>
 
-                                            {submissionDocs.map((doc, j) => (
-                                                <DocumentDetail
-                                                    document={doc}
-                                                    key={doc.documentId}
-                                                    version={j}
-                                                />
-                                            ))}
+                                                <div className="pt-2">
+                                                    <p>點開以查看文件細節</p>
+                                                    {submissionDocs.map((doc, j) => (
+                                                        <DocumentDetail
+                                                            document={doc}
+                                                            key={doc.documentId}
+                                                            version={j}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </details>
                                         </div>
                                     </div>
                                 );
@@ -294,12 +312,17 @@ function DocumentDetail({
             <summary className="cursor-pointer font-medium text-gray-800 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <span>
-                        📄 版本 {version + 1}: {document.pdfType === "full_paper" ? "全文" : "摘要"}
+                        📄 文件{version + 1}: {document.pdfType === "full_paper" ? "全文" : "摘要"}
                     </span>
                     {isReviewerDocument ? (
                         <Badge className="bg-blue-500 hover:bg-blue-600">審稿者上傳</Badge>
                     ) : (
                         <Badge className="bg-green-500 hover:bg-green-600">投稿者上傳</Badge>
+                    )}
+                    {document.notes && document.notes.length > 0 && (
+                        <Badge className="bg-red-500 hover:bg-red-600">
+                            {document.notes.length} 個審稿評論
+                        </Badge>
                     )}
                 </div>
                 <span className="text-xs text-gray-500">
