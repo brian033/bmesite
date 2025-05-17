@@ -31,7 +31,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-
+import { formatToUTC8 } from "@/lib/formatToUTC8";
 // 狀態顯示名稱對應
 const STATUS_DISPLAY = {
     pending: "待審核",
@@ -396,7 +396,7 @@ function SubmissionItem({ submission }: { submission: SubmissionWithDetailedInfo
                     <span className="text-muted-foreground w-24">建立時間:</span>
                     <span className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
-                        {new Date(submissionData.submissionCreatedAt).toLocaleDateString()}
+                        {formatToUTC8(submissionData.submissionCreatedAt)}
                     </span>
                 </div>
 

@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Document } from "@/types/document";
 import { useSession } from "next-auth/react";
 import DocxPreview from "@/app/components/DocxPreview";
-
+import { formatToUTC8 } from "@/lib/formatToUTC8";
 export default function DocumentReviewCard2({
     document,
     latest,
@@ -172,7 +172,7 @@ export default function DocumentReviewCard2({
                                         </span>
                                         <span className="whitespace-pre-line">{note.note}</span>
                                         <div className="text-xs text-muted-foreground mt-1">
-                                            {new Date(note.createdAt).toLocaleString()}
+                                            {formatToUTC8(note.createdAt)}
                                         </div>
                                     </div>
                                 ))

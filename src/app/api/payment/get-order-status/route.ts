@@ -108,7 +108,7 @@ const handler = async (req: NextRequest) => {
                 {
                     $set: {
                         paymentStatus: "failed",
-                        updatedAt: new Date(),
+                        updatedAt: new Date().toISOString(),
                         ecpayResponse: responseData,
                     },
                 }
@@ -127,7 +127,7 @@ const handler = async (req: NextRequest) => {
                     {
                         $set: {
                             paymentStatus: "paid",
-                            updatedAt: new Date(),
+                            updatedAt: new Date().toISOString(),
                             ecpayResponse: responseData,
                         },
                     }

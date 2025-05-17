@@ -8,6 +8,9 @@ export type Payment = {
     paymentValue: number;
     paymentType: "member" | "non-member";
     paymentParams: ECPayFormParams;
+    paymentResponse?: any;
+    updatedAt?: string;
+    ecpayResponse?: any;
 };
 
 export interface ECPayFormParams {

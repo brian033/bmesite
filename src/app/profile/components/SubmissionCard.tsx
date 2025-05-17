@@ -11,7 +11,7 @@ import DocxPreview from "@/app/components/DocxPreview";
 import SubmissionUploadButton from "./SubmissionUploadButton";
 import { Document } from "@/types/document";
 import { FileText, Clock, Calendar, Info, ExternalLink } from "lucide-react";
-
+import { formatToUTC8 } from "@/lib/formatToUTC8";
 interface SubmissionCardProps {
     submissions: Submission[];
     documents: Document[];
@@ -228,9 +228,7 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                                 </span>
                                                 <span className="flex items-center gap-1">
                                                     <Calendar className="h-4 w-4" />
-                                                    {new Date(
-                                                        s.submissionCreatedAt
-                                                    ).toLocaleDateString()}
+                                                    {formatToUTC8(s.submissionCreatedAt)}
                                                 </span>
                                             </div>
 
@@ -240,9 +238,7 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                                 </span>
                                                 <span className="flex items-center gap-1">
                                                     <Clock className="h-4 w-4" />
-                                                    {new Date(
-                                                        s.submissionUpdatedAt
-                                                    ).toLocaleDateString()}
+                                                    {formatToUTC8(s.submissionUpdatedAt)}
                                                 </span>
                                             </div>
                                         </div>
@@ -325,9 +321,7 @@ function DocumentDetail({
                         </Badge>
                     )}
                 </div>
-                <span className="text-xs text-gray-500">
-                    {new Date(document.createdAt).toLocaleDateString()}
-                </span>
+                <span className="text-xs text-gray-500">{formatToUTC8(document.createdAt)}</span>
             </summary>
 
             <div className="ml-4 mt-3 space-y-2 text-sm">
@@ -341,7 +335,7 @@ function DocumentDetail({
                     )}
                 </p>
 
-                <p>上傳時間：{new Date(document.createdAt).toLocaleString()}</p>
+                <p>上傳時間：{formatToUTC8(document.createdAt)}</p>
 
                 {document.description && (
                     <div
@@ -438,7 +432,7 @@ function DocumentDetail({
                                 </p>
                                 <p className="whitespace-pre-line">{note.note}</p>
                                 <p className="text-xs text-gray-500 mt-1">
-                                    {new Date(note.createdAt).toLocaleString()}
+                                    {formatToUTC8(note.createdAt)}
                                 </p>
                             </div>
                         ))}

@@ -98,40 +98,41 @@ const DocumentManager = ({ session }) => {
 
                 {/* 顯示草稿列表 */}
                 {hasUploadedDocuments && (
-                    <AbstractDraftCard
-                        documents={uploadedDocumentList}
-                        onDocumentRemoved={handleDocumentRemoved}
-                        onDocumentSubmitted={handleDocumentSubmitted}
-                    />
+                    <div className="my-4">
+                        <AbstractDraftCard
+                            documents={uploadedDocumentList}
+                            onDocumentRemoved={handleDocumentRemoved}
+                            onDocumentSubmitted={handleDocumentSubmitted}
+                        />
+                    </div>
                 )}
 
                 {/* 文件上傳區塊 */}
-                <div className="mt-4">
-                    {showUploader ? (
-                        <div className="border p-4 rounded-md bg-gray-50">
-                            <div className="flex justify-between items-center mb-4">
-                                <h3 className="font-medium">上傳新文件</h3>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={toggleUploader}
-                                    className="h-8 w-8 p-0"
-                                >
-                                    <X className="h-4 w-4" />
-                                </Button>
-                            </div>
-                            <DocumentUploader
-                                pdfType="abstracts"
-                                onDocumentUploaded={handleNewDocumentUploaded}
-                            />
+
+                {showUploader ? (
+                    <div className="border p-4 rounded-md bg-gray-50">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="font-medium">上傳新文件</h3>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={toggleUploader}
+                                className="h-8 w-8 p-0"
+                            >
+                                <X className="h-4 w-4" />
+                            </Button>
                         </div>
-                    ) : (
-                        <Button onClick={toggleUploader} variant="outline" className="w-full">
-                            <PlusCircle className="h-4 w-4 mr-2" />
-                            上傳新摘要草稿
-                        </Button>
-                    )}
-                </div>
+                        <DocumentUploader
+                            pdfType="abstracts"
+                            onDocumentUploaded={handleNewDocumentUploaded}
+                        />
+                    </div>
+                ) : (
+                    <Button onClick={toggleUploader} variant="outline" className="w-full">
+                        <PlusCircle className="h-4 w-4 mr-2" />
+                        上傳新摘要草稿
+                    </Button>
+                )}
             </div>
         </div>
     );

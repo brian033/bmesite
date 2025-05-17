@@ -16,6 +16,7 @@ import { Search, RefreshCw } from "lucide-react";
 import { User } from "@/types/user";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { formatToUTC8 } from "@/lib/formatToUTC8";
 
 interface PaymentTableItem {
     paymentId: string;
@@ -100,17 +101,6 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
         }
     };
 
-    // 格式化日期
-    const formatDate = (date: Date) => {
-        return date.toLocaleDateString("zh-TW", {
-            year: "numeric",
-            month: "2-digit",
-            day: "2-digit",
-            hour: "2-digit",
-            minute: "2-digit",
-        });
-    };
-
     return (
         <div>
             <div className="p-4 border-b">
@@ -153,7 +143,7 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
                                     <TableCell className="font-mono text-xs">
                                         {payment.paymentId}
                                     </TableCell>
-                                    <TableCell>{formatDate(payment.createdAt)}</TableCell>
+                                    <TableCell>{formatToUTC8(payment.createdAt)}</TableCell>
                                     <TableCell>
                                         {renderStatusBadge(payment.paymentStatus)}
                                     </TableCell>

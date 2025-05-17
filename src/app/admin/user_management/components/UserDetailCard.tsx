@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { User } from "@/types/user";
 import { Document } from "@/types/document";
 import { Submission } from "@/types/submission";
+import { formatToUTC8 } from "@/lib/formatToUTC8";
 
 export default function UserDetailCard({
     user,
@@ -41,7 +42,7 @@ export default function UserDetailCard({
                                     <span className="font-medium">{doc.title}</span> -{" "}
                                     <Badge variant="outline">{doc.documentStatus}</Badge>
                                     <div className="text-xs text-muted-foreground">
-                                        上傳於 {new Date(doc.createdAt).toLocaleString()}
+                                        上傳於 {formatToUTC8(doc.createdAt)}
                                     </div>
                                     <Separator className="my-2" />
                                 </div>
@@ -59,8 +60,7 @@ export default function UserDetailCard({
                                     <span className="font-medium">{sub.submissionTitle}</span> -{" "}
                                     <Badge>{sub.submissionStatus}</Badge>
                                     <div className="text-xs text-muted-foreground">
-                                        最後更新時間{" "}
-                                        {new Date(sub.submissionUpdatedAt).toLocaleString()}
+                                        最後更新時間 {formatToUTC8(sub.submissionUpdatedAt)}
                                     </div>
                                     <Separator className="my-2" />
                                 </div>
