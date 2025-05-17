@@ -440,7 +440,7 @@ export default function UserTable({
                         <TableRow>
                             <TableHead>姓名</TableHead>
                             <TableHead>頭貼</TableHead>
-                            <TableHead>Email</TableHead>
+                            <TableHead>聯絡Email</TableHead>
                             <TableHead>電話</TableHead>
                             <TableHead>單位</TableHead>
                             <TableHead className="min-w-[200px]">付款狀態</TableHead>
