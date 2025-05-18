@@ -583,10 +583,7 @@ function SubmissionItem({ submission }: { submission: SubmissionWithDetailedInfo
                                             hasReviewed={doc.notes.some(
                                                 (n) => n.noteCreatorId === session?.user?.uuid
                                             )}
-                                            version={(showAllFiles
-                                                ? index
-                                                : documentFiles.length - 3 + index
-                                            ).toString()}
+                                            version={(index + 1).toString()}
                                         />
                                     </div>
                                 )

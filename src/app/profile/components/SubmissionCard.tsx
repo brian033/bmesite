@@ -379,46 +379,21 @@ function DocumentDetail({
                     </Button>
 
                     {document.pdfType === "abstracts" ? (
-                        <details className="w-full mt-2">
-                            <summary
-                                className={`cursor-pointer text-sm font-medium px-3 py-1.5 rounded-md ${
-                                    isReviewerDocument
-                                        ? "bg-blue-100 hover:bg-blue-200"
-                                        : "bg-green-100 hover:bg-green-200"
-                                }`}
-                            >
-                                預覽PDF
-                            </summary>
-                            <div className="mt-2">
-                                <DocumentViewer
-                                    fileUrl={`/api/user_uploads${document.documentLocation.replace(
-                                        /^\/[^/]+/,
-                                        ""
-                                    )}`}
-                                />
-                            </div>
-                        </details>
+                        <LazyLoadingPDF
+                            isReviewerDocument={isReviewerDocument}
+                            fileUrl={`/api/user_uploads${document.documentLocation.replace(
+                                /^\/[^/]+/,
+                                ""
+                            )}`}
+                        />
                     ) : (
-                        <details className="w-full mt-2">
-                            <summary
-                                className={`cursor-pointer text-sm font-medium px-3 py-1.5 rounded-md ${
-                                    isReviewerDocument
-                                        ? "bg-blue-100 hover:bg-blue-200"
-                                        : "bg-green-100 hover:bg-green-200"
-                                }`}
-                            >
-                                預覽Word檔(建議下載後使用)
-                            </summary>
-                            <div className="mt-2">
-                                <DocxPreview
-                                    fileUrl={`/api/user_uploads${document.documentLocation.replace(
-                                        /^\/[^/]+/,
-                                        ""
-                                    )}`}
-                                    height="600px"
-                                />
-                            </div>
-                        </details>
+                        <LazyLoadingWord
+                            isReviewerDocument={isReviewerDocument}
+                            fileUrl={`/api/user_uploads${document.documentLocation.replace(
+                                /^\/[^/]+/,
+                                ""
+                            )}`}
+                        />
                     )}
                 </div>
 
@@ -438,6 +413,64 @@ function DocumentDetail({
                         ))}
                     </div>
                 )}
+            </div>
+        </details>
+    );
+}
+
+function LazyLoadingPDF({
+    isReviewerDocument,
+    fileUrl,
+}: {
+    isReviewerDocument: boolean;
+    fileUrl: string;
+}) {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <details
+            className="w-full mt-2"
+            onToggle={(e) => setIsOpen((e.target as HTMLDetailsElement).open)}
+        >
+            <summary
+                className={`cursor-pointer text-sm font-medium px-3 py-1.5 rounded-md ${
+                    isReviewerDocument
+                        ? "bg-blue-100 hover:bg-blue-200"
+                        : "bg-green-100 hover:bg-green-200"
+                }`}
+            >
+                預覽PDF
+            </summary>
+            <div className="mt-2">
+                <DocumentViewer fileUrl={fileUrl} isOpen={isOpen} />
+            </div>
+        </details>
+    );
+}
+
+function LazyLoadingWord({
+    isReviewerDocument,
+    fileUrl,
+}: {
+    isReviewerDocument: boolean;
+    fileUrl: string;
+}) {
+    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <details
+            className="w-full mt-2"
+            onToggle={(e) => setIsOpen((e.target as HTMLDetailsElement).open)}
+        >
+            <summary
+                className={`cursor-pointer text-sm font-medium px-3 py-1.5 rounded-md ${
+                    isReviewerDocument
+                        ? "bg-blue-100 hover:bg-blue-200"
+                        : "bg-green-100 hover:bg-green-200"
+                }`}
+            >
+                預覽PDF
+            </summary>
+            <div className="mt-2">
+                <DocxPreview fileUrl={fileUrl} isOpen={isOpen} />
             </div>
         </details>
     );

@@ -10,76 +10,44 @@ import { Document } from "@/types/document";
 import { Submission } from "@/types/submission";
 import { CheckCircle, XCircle } from "lucide-react";
 
-type DocumentCardProps = {
-    documents: Document[];
-    onDocumentRemoved: (documentId: string) => void;
-    onDocumentSubmitted: (documentId: string, submission: Submission) => void;
-};
-const pdfType = "abstracts";
-
-const AbstractDraftCard = ({
-    documents,
-    onDocumentRemoved,
-    onDocumentSubmitted,
-}: DocumentCardProps) => {
-    return (
-        <Card className="mb-6">
-            <CardHeader>
-                <CardTitle>管理您的摘要草稿</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <AbstractDraftListViewer
-                    documents={documents}
-                    pdfType={pdfType}
-                    onDocumentRemoved={onDocumentRemoved}
-                    onDocumentSubmitted={onDocumentSubmitted}
-                />
-            </CardContent>
-        </Card>
-    );
-};
-
-const AbstractDraftListViewer = ({
-    documents,
-    pdfType,
-    onDocumentRemoved,
-    onDocumentSubmitted,
-}: {
-    documents: Document[];
+interface DocumentCardProps {
+    document: Document;
     pdfType: string;
     onDocumentRemoved: (documentId: string) => void;
     onDocumentSubmitted: (documentId: string, submission: Submission) => void;
-}) => {
-    const [uploading, setUploading] = useState(false);
-    const [processingIds, setProcessingIds] = useState<string[]>([]);
+}
+
+// 單個文件卡片組件
+function DocumentCard({
+    document: doc,
+    pdfType,
+    onDocumentRemoved,
+    onDocumentSubmitted,
+}: DocumentCardProps) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
     const [message, setMessage] = useState<{
         type: "success" | "error";
         text: string;
-        visible: boolean;
     } | null>(null);
 
     // 顯示訊息的輔助函數
     const showMessage = (type: "success" | "error", text: string) => {
-        setMessage({ type, text, visible: true });
+        setMessage({ type, text });
         setTimeout(() => setMessage(null), 5000);
     };
 
     // 處理送出審稿
-    const handleSubmitForReview = async (doc: Document) => {
-        setProcessingIds((prev) => [...prev, doc.documentId]);
-        setUploading(true);
-
+    const handleSubmitForReview = async () => {
+        setIsProcessing(true);
         try {
             const res = await fetch(`/api/documents/${doc.documentId}`, {
                 method: "POST",
             });
-
             const data = await res.json();
 
             if (res.ok) {
                 showMessage("success", data.message || "文件已成功送出審稿");
-
-                // 如果返回了新建的 submission，通知父組件
                 if (data.submission) {
                     onDocumentSubmitted(doc.documentId, data.submission);
                 }
@@ -89,33 +57,23 @@ const AbstractDraftListViewer = ({
         } catch (error) {
             showMessage("error", "送出過程中發生錯誤");
         } finally {
-            setUploading(false);
-            setProcessingIds((prev) => prev.filter((id) => id !== doc.documentId));
+            setIsProcessing(false);
         }
     };
 
     // 處理移除文件
-    const handleRemoveDocument = async (doc: Document) => {
-        setProcessingIds((prev) => [...prev, doc.documentId]);
-
+    const handleRemoveDocument = async () => {
+        setIsProcessing(true);
         try {
             const res = await fetch("/api/attendee/remove_document", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    pdfId: doc.documentId,
-                    pdftype: pdfType,
-                }),
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ pdfId: doc.documentId, pdftype: pdfType }),
             });
-
             const data = await res.json();
 
             if (res.ok) {
                 showMessage("success", "文件已成功刪除");
-
-                // 通知父組件文件已經被刪除
                 onDocumentRemoved(doc.documentId);
             } else {
                 showMessage("error", data.error || "刪除失敗");
@@ -123,13 +81,12 @@ const AbstractDraftListViewer = ({
         } catch (error) {
             showMessage("error", "刪除過程中發生錯誤");
         } finally {
-            setProcessingIds((prev) => prev.filter((id) => id !== doc.documentId));
+            setIsProcessing(false);
         }
     };
 
     return (
-        <div>
-            {/* 顯示操作訊息 */}
+        <div className="space-y-2">
             {message && (
                 <Alert
                     className={`mb-4 ${
@@ -149,62 +106,76 @@ const AbstractDraftListViewer = ({
                 </Alert>
             )}
 
-            {!documents || documents.length === 0 ? (
-                <p className="text-muted-foreground">尚未上傳任何檔案。</p>
-            ) : (
-                documents.map((doc, i) => (
-                    <div key={doc.documentId || i} className="space-y-2">
-                        <details>
-                            <summary className="cursor-pointer font-semibold text-lg text-gray-700">
-                                📄 文件標題：
-                                <span>{doc.title}</span> （未送審）
-                            </summary>
-                            <div className="space-y-2">
-                                <p className="text-sm text-muted-foreground">
-                                    上傳時間: {doc.createdAt}
-                                </p>
-                                <p className="text-sm text-muted-foreground">主題: {doc.topic}</p>
-                                <p className="text-sm text-muted-foreground">
-                                    發表形式:{" "}
-                                    {doc.present_type == "oral" ? "oral presentation" : "poster"}
-                                </p>
-                                <DocumentViewer
-                                    fileUrl={`/api/user_uploads${doc.documentLocation.replace(
-                                        /^\/[^/]+/,
-                                        ""
-                                    )}`}
-                                />
-                                <div className="flex gap-2">
-                                    <Button
-                                        variant="default"
-                                        onClick={() => handleSubmitForReview(doc)}
-                                        disabled={
-                                            processingIds.includes(doc.documentId) || uploading
-                                        }
-                                    >
-                                        {processingIds.includes(doc.documentId)
-                                            ? "送出中..."
-                                            : "📤 送出審稿"}
-                                    </Button>
-                                    <Button
-                                        variant="destructive"
-                                        onClick={() => handleRemoveDocument(doc)}
-                                        disabled={processingIds.includes(doc.documentId)}
-                                    >
-                                        {processingIds.includes(doc.documentId)
-                                            ? "處理中..."
-                                            : "🗑️ 移除檔案"}
-                                    </Button>
-                                </div>
-
-                                <Separator className="my-4" />
-                            </div>
-                        </details>
+            <details onToggle={(e) => setIsOpen((e.target as HTMLDetailsElement).open)}>
+                <summary className="cursor-pointer font-semibold text-lg text-gray-700">
+                    📄 文件標題：
+                    <span>{doc.title}</span> （未送審）
+                </summary>
+                <div className="space-y-2">
+                    <p className="text-sm text-muted-foreground">上傳時間: {doc.createdAt}</p>
+                    <p className="text-sm text-muted-foreground">主題: {doc.topic}</p>
+                    <p className="text-sm text-muted-foreground">
+                        發表形式: {doc.present_type === "oral" ? "oral presentation" : "poster"}
+                    </p>
+                    <DocumentViewer
+                        fileUrl={`/api/user_uploads${doc.documentLocation.replace(/^\/[^/]+/, "")}`}
+                        isOpen={isOpen}
+                    />
+                    <div className="flex gap-2">
+                        <Button
+                            variant="default"
+                            onClick={handleSubmitForReview}
+                            disabled={isProcessing}
+                        >
+                            {isProcessing ? "送出中..." : "📤 送出審稿"}
+                        </Button>
+                        <Button
+                            variant="destructive"
+                            onClick={handleRemoveDocument}
+                            disabled={isProcessing}
+                        >
+                            {isProcessing ? "處理中..." : "🗑️ 移除檔案"}
+                        </Button>
                     </div>
-                ))
-            )}
+                    <Separator className="my-4" />
+                </div>
+            </details>
         </div>
     );
-};
+}
 
-export default AbstractDraftCard;
+// 主要組件
+export default function AbstractDraftCard({
+    documents,
+    onDocumentRemoved,
+    onDocumentSubmitted,
+}: {
+    documents: Document[];
+    onDocumentRemoved: (documentId: string) => void;
+    onDocumentSubmitted: (documentId: string, submission: Submission) => void;
+}) {
+    const pdfType = "abstracts";
+
+    return (
+        <Card className="mb-6">
+            <CardHeader>
+                <CardTitle>管理您的摘要草稿</CardTitle>
+            </CardHeader>
+            <CardContent>
+                {!documents || documents.length === 0 ? (
+                    <p className="text-muted-foreground">尚未上傳任何檔案。</p>
+                ) : (
+                    documents.map((doc) => (
+                        <DocumentCard
+                            key={doc.documentId}
+                            document={doc}
+                            pdfType={pdfType}
+                            onDocumentRemoved={onDocumentRemoved}
+                            onDocumentSubmitted={onDocumentSubmitted}
+                        />
+                    ))
+                )}
+            </CardContent>
+        </Card>
+    );
+}

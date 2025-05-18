@@ -10,6 +10,7 @@ import { Document } from "@/types/document";
 import { useSession } from "next-auth/react";
 import DocxPreview from "@/app/components/DocxPreview";
 import { formatToUTC8 } from "@/lib/formatToUTC8";
+import DocumentViewer from "@/app/components/DocumentViewer";
 export default function DocumentReviewCard2({
     document,
     latest,
@@ -24,6 +25,7 @@ export default function DocumentReviewCard2({
     const [expanded, setExpanded] = useState(false);
     const [noteText, setNoteText] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     // 添加本地狀態來存儲評論
     const [localNotes, setLocalNotes] = useState(document.notes || []);
@@ -199,7 +201,10 @@ export default function DocumentReviewCard2({
                             </a>
                         </Button>
                         {document.pdfType === "abstracts" ? (
-                            <details className="w-full">
+                            <details
+                                className="w-full"
+                                onToggle={(e) => setIsOpen((e.target as HTMLDetailsElement).open)}
+                            >
                                 <summary
                                     className={`cursor-pointer text-sm font-medium px-3 py-1.5 rounded-md ${
                                         isReviewerDocument
@@ -209,15 +214,17 @@ export default function DocumentReviewCard2({
                                 >
                                     預覽PDF
                                 </summary>
-                                <embed
-                                    src={`/api/admin/user_uploads${document.documentLocation}`}
-                                    width="100%"
-                                    height="900px"
-                                    type="application/pdf"
+
+                                <DocumentViewer
+                                    fileUrl={`/api/admin/user_uploads${document.documentLocation} `}
+                                    isOpen={isOpen}
                                 />
                             </details>
                         ) : (
-                            <details className="w-full">
+                            <details
+                                className="w-full"
+                                onToggle={(e) => setIsOpen((e.target as HTMLDetailsElement).open)}
+                            >
                                 <summary
                                     className={`cursor-pointer text-sm font-medium px-3 py-1.5 rounded-md ${
                                         isReviewerDocument
@@ -230,6 +237,7 @@ export default function DocumentReviewCard2({
                                 <DocxPreview
                                     fileUrl={`/api/admin/user_uploads${document.documentLocation}`}
                                     height="900px"
+                                    isOpen={isOpen}
                                 />
                             </details>
                         )}

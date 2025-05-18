@@ -1,7 +1,6 @@
 "use client";
 import { fetchWithAuth } from "@/lib/fetchWithAuth";
 import { useEffect, useState } from "react";
-import DocumentViewer from "@/app/components/DocumentViewer";
 
 export default function DocumentTable({ status }) {
     const [docs, setDocs] = useState([]);
@@ -21,9 +20,6 @@ export default function DocumentTable({ status }) {
         <div>
             {docs.map((doc) => (
                 <div key={doc.documentId} style={{ marginBottom: "2rem" }}>
-                    {/* <DocumentViewer
-                        fileUrl={`/api/admin/user_uploads/${doc.documentOwner}${doc.documentLocation}`}
-                    /> */}
                     <p>{JSON.stringify(doc)}</p>
                 </div>
             ))}
