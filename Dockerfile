@@ -32,39 +32,31 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# 提高 Alpine Linux 的文件描述符限制
-RUN ulimit -n 65536
+# 啟用 corepack 並啟用 pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# 安裝依賴前先復制 package.json 和 package-lock.json
-COPY package*.json ./
-RUN npm ci
-
-# 然後再複製其餘檔案
+# 複製檔案並安裝依賴、build
 COPY . .
-
-# 構建應用
-# 增加 Node.js 的記憶體限制並設置最大舊空間大小
-ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN npm run build
+RUN pnpm install --frozen-lockfile
+RUN pnpm run build
 
 # --- production stage ---
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# 安裝 production dependencies
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/package-lock.json ./
-RUN npm ci --omit=dev
+# 再次啟用 pnpm（有些 base image 不會繼承）
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# 複製 .next standalone 輸出
+# 複製必要檔案與 production 安裝
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/pnpm-lock.yaml ./
+RUN pnpm install --prod --frozen-lockfile
+
+# 複製 standalone Next.js 產出（包含 server.js）
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/uploads ./uploads
-
-# 靜態資源
 COPY --from=builder /app/.next/static ./.next/static
 
 ENV PORT=3000
-ENV NODE_ENV=production
-
 CMD ["node", "server.js"]

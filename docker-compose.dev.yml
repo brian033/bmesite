@@ -1,3 +1,61 @@
+# version: "3.8"
+
+# services:
+#     mongo:
+#         image: mongo
+#         container_name: my-mongo
+#         restart: always
+#         environment:
+#             MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME} #
+#             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+#         volumes:
+#             - ./db:/data/db
+#         ports:
+#             - "27017:27017" # 你也可以拔掉這行讓它只在網路內被看到
+#         networks:
+#             - dev-net
+
+#     nextjs:
+#         image: node:20-alpine
+#         container_name: next-dev
+#         working_dir: /app
+#         command: sh -c "npm install && npm run dev"
+#         environment:
+#             - MONGODB_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/confDb?authSource=admin
+#             - MONGODB_DB=confDb
+#             - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+#             - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+#             - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+#             - NEXTAUTH_URL=http://localhost:3000
+#             - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+#             - EMAIL_USER=${EMAIL_USER}
+#             - EMAIL_APP_PASSWORD=${EMAIL_APP_PASSWORD}
+#             - EMAIL_SENDER_NAME=${EMAIL_SENDER_NAME}
+#             - ADMIN_EMAIL=${ADMIN_EMAIL}
+#         volumes:
+#             - ./src:/app/src
+#             - ./public:/app/public
+#             - ./uploads:/app/uploads
+#             - ./next.config.ts:/app/next.config.ts
+#             - ./next-env.d.ts:/app/next-env.d.ts
+#             - ./tsconfig.json:/app/tsconfig.json
+#             - ./package.json:/app/package.json
+#             - ./package-lock.json:/app/package-lock.json
+#             - ./postcss.config.mjs:/app/postcss.config.mjs
+#             - ./eslint.config.mjs:/app/eslint.config.mjs
+#             - ./README.md:/app/README.md
+#             - ./API_Structure.md:/app/API_Structure.md
+#             - ./db:/app/db
+#         ports:
+#             - "3000:3000"
+#         depends_on:
+#             - mongo
+#         networks:
+#             - dev-net
+
+# networks:
+#     dev-net:
+#         driver: bridge
 version: "3.8"
 
 services:
@@ -6,12 +64,12 @@ services:
         container_name: my-mongo
         restart: always
         environment:
-            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME} #
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
             MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
         volumes:
             - ./db:/data/db
         ports:
-            - "27017:27017" # 你也可以拔掉這行讓它只在網路內被看到
+            - "27017:27017"
         networks:
             - dev-net
 
@@ -19,7 +77,14 @@ services:
         image: node:20-alpine
         container_name: next-dev
         working_dir: /app
-        command: sh -c "npm install && npm run dev"
+        # 安裝 pnpm 並用 pnpm 安裝相依與啟動
+        command: >
+            sh -c "
+              corepack enable &&
+              corepack prepare pnpm@latest --activate &&
+              pnpm install &&
+              pnpm run dev
+            "
         environment:
             - MONGODB_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/confDb?authSource=admin
             - MONGODB_DB=confDb
@@ -40,7 +105,7 @@ services:
             - ./next-env.d.ts:/app/next-env.d.ts
             - ./tsconfig.json:/app/tsconfig.json
             - ./package.json:/app/package.json
-            - ./package-lock.json:/app/package-lock.json
+            - ./pnpm-lock.yaml:/app/pnpm-lock.yaml
             - ./postcss.config.mjs:/app/postcss.config.mjs
             - ./eslint.config.mjs:/app/eslint.config.mjs
             - ./README.md:/app/README.md
