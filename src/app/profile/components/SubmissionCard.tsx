@@ -50,12 +50,12 @@ const submissionSerialRules = {
 };
 
 export const getSerial = (
-    submissionPresentType: "oral" | "poster",
+    submissionPresentType: "oral" | "poster" | "undecided",
     submisssionTopic: string,
     submission_Id: string
 ) => {
     // submission Serial規則: [字母]+submissionId第一個part轉成數字後的前10位數字
-    const present_type = submissionPresentType == "oral" ? "O" : "P";
+    const present_type = submissionPresentType.charAt(0).toUpperCase();
     const prefix = submissionSerialRules[submisssionTopic || "其他新興科技"];
     const submissionIdPart = submission_Id.split("-")[0]; // 取UUID的第一個部分
     const numericValue = BigInt(`0x${submissionIdPart}`); // 將其轉為數字

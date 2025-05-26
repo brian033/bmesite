@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import AbstractDraftCard from "./AbstractDraftCard";
 import { UserDocumentIndexResponse } from "@/app/api/attendee/user_document_index/route";
 import DocumentUploader from "./DocumentUploader";
+import DocumentUploader2 from "./DocumentUploader2";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, X } from "lucide-react";
 import SubmissionCard from "./SubmissionCard";
@@ -73,6 +74,14 @@ const DocumentManager = ({ session }) => {
         setSubmissions((prev) => [...prev, newSubmission]);
     };
 
+    const handleSubmissionCreated = (newSubmission: Submission) => {
+        // 添加到提交列表
+        setSubmissions((prev) => [...prev, newSubmission]);
+
+        // 注意：不需要更新 uploadedDocumentList，因為這個文件直接變成了 submission，
+        // 而且在直接提交的情况下文件状态已经是 "pending" 而不是 "uploaded"
+    };
+
     const toggleUploader = () => {
         setShowUploader(!showUploader);
     };
@@ -92,12 +101,12 @@ const DocumentManager = ({ session }) => {
         <div className="flex gap-6 overflow-x-auto pb-4">
             <div className="w-full">
                 <h1 className="text-3xl font-semibold text-gray-800">文件管理</h1>
-
                 {/* 顯示提交列表 */}
                 {submissions && <SubmissionCard submissions={submissions} documents={documents} />}
 
+                {/* 20250526暫時移除，老師說不要這塊。 */}
                 {/* 顯示草稿列表 */}
-                {hasUploadedDocuments && (
+                {/* {hasUploadedDocuments && (
                     <div className="my-4">
                         <AbstractDraftCard
                             documents={uploadedDocumentList}
@@ -105,11 +114,11 @@ const DocumentManager = ({ session }) => {
                             onDocumentSubmitted={handleDocumentSubmitted}
                         />
                     </div>
-                )}
+                )} */}
 
                 {/* 文件上傳區塊 */}
-
-                {showUploader ? (
+                {/* 舊版workflow, 先暫時拿掉 */}
+                {/* {showUploader ? (
                     <div className="border p-4 rounded-md bg-gray-50">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="font-medium">上傳新文件</h3>
@@ -125,6 +134,31 @@ const DocumentManager = ({ session }) => {
                         <DocumentUploader
                             pdfType="abstracts"
                             onDocumentUploaded={handleNewDocumentUploaded}
+                        />
+                    </div>
+                ) : (
+                    <Button onClick={toggleUploader} variant="outline" className="w-full">
+                        <PlusCircle className="h-4 w-4 mr-2" />
+                        上傳新摘要草稿
+                    </Button>
+                )} */}
+                {showUploader ? (
+                    <div className="border p-4 rounded-md bg-gray-50">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="font-medium">上傳新文件</h3>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={toggleUploader}
+                                className="h-8 w-8 p-0"
+                            >
+                                <X className="h-4 w-4" />
+                            </Button>
+                        </div>
+                        <DocumentUploader2
+                            pdfType="abstracts"
+                            onDocumentUploaded={handleNewDocumentUploaded}
+                            onSubmissionCreated={handleSubmissionCreated}
                         />
                     </div>
                 ) : (

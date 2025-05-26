@@ -20,7 +20,7 @@ export type Document = {
         | "AI與大數據分析"
         | "精準農業智動化"
         | "其他新興科技";
-    present_type: "oral" | "poster";
+    present_type: "oral" | "poster" | "undecided";
     description: string;
     notes: note[];
     createdAt: string;
