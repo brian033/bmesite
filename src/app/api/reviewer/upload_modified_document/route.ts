@@ -41,20 +41,12 @@ const handler = async (req: NextRequest, session: any) => {
 
     // 檢查檔案類型 - 維持與原始規則相同
     const fileExt = path.extname(file.name).toLowerCase();
-    if (submission.submissionType === "abstracts") {
-        if (fileExt !== ".pdf") {
-            return NextResponse.json(
-                { error: "Only PDF files are allowed on abstracts submission" },
-                { status: 400 }
-            );
-        }
-    } else {
-        if (fileExt !== ".docx" && fileExt !== ".doc") {
-            return NextResponse.json(
-                { error: "Only Word files are allowed on full paper submission" },
-                { status: 400 }
-            );
-        }
+
+    if (fileExt !== ".docx" && fileExt !== ".doc" && fileExt !== ".pdf") {
+        return NextResponse.json(
+            { error: "Only Word files and pdf files are allowed" },
+            { status: 400 }
+        );
     }
 
     // 用審稿案持有者的目錄存檔案

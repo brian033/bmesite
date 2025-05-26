@@ -220,18 +220,11 @@ function SubmissionItem({ submission }: { submission: SubmissionWithDetailedInfo
 
         // 检查文件类型
         const fileExt = file.name.split(".").pop()?.toLowerCase();
-        if (submissionData.submissionType === "abstracts") {
-            if (fileExt !== "pdf") {
-                setUploadError("摘要審稿案只允許上傳 PDF 格式文件");
-                return;
-            }
-        } else {
-            if (fileExt !== "docx" && fileExt !== "doc") {
-                setUploadError("論文審稿案只允許上傳 Word 文件");
-                return;
-            }
-        }
 
+        if (fileExt !== "docx" && fileExt !== "doc" && fileExt !== "pdf") {
+            setUploadError("只允許上傳 PDF, .doc, .docx 文件");
+            return;
+        }
         setUploading(true);
 
         try {
@@ -420,9 +413,9 @@ function SubmissionItem({ submission }: { submission: SubmissionWithDetailedInfo
                             <Label htmlFor="topic">主題</Label>
                             <Select
                                 value={currentTopic}
-                                // onValueChange={(value) =>
-                                //     setCurrentTopic(value as typeof currentTopic)
-                                // }
+                                onValueChange={(value) =>
+                                    setCurrentTopic(value as typeof currentTopic)
+                                }
                                 disabled={isUpdatingProps}
                             >
                                 <SelectTrigger className="w-full">

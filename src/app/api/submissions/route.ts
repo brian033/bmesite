@@ -65,20 +65,26 @@ const handler = async (req: NextRequest, session: any) => {
 
     // 檢查檔案是否是 PDF 檔案  when it's abstracts, 其他時候只允許word
     const fileExt = path.extname(file.name).toLowerCase();
-    if (submission.submissionType === "abstracts") {
-        if (fileExt !== ".pdf") {
-            return NextResponse.json(
-                { error: "Only PDF files are allowed on absstracts submission" },
-                { status: 400 }
-            );
-        }
-    } else {
-        if (fileExt !== ".docx" && fileExt !== ".doc") {
-            return NextResponse.json(
-                { error: "Only Word files are allowed on full paper submission" },
-                { status: 400 }
-            );
-        }
+    // if (submission.submissionType === "abstracts") {
+    //     if (fileExt !== ".pdf") {
+    //         return NextResponse.json(
+    //             { error: "Only PDF files are allowed on absstracts submission" },
+    //             { status: 400 }
+    //         );
+    //     }
+    // } else {
+    //     if (fileExt !== ".docx" && fileExt !== ".doc") {
+    //         return NextResponse.json(
+    //             { error: "Only Word files are allowed on full paper submission" },
+    //             { status: 400 }
+    //         );
+    //     }
+    // }
+    if (fileExt !== ".docx" && fileExt !== ".doc" && fileExt !== ".pdf") {
+        return NextResponse.json(
+            { error: "Only Word files and pdf files are allowed on submissions " },
+            { status: 400 }
+        );
     }
 
     const timestamp = Date.now();
