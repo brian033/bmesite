@@ -109,7 +109,7 @@ export function SubmissionStatusChanger({
                 {
                     label: "接受全文",
                     type: "full_paper",
-                    status: "approved",
+                    status: "accepted",
                     color: "bg-green-600 hover:bg-green-700 text-white",
                 },
                 {

@@ -37,7 +37,7 @@ const handler = async (req: NextRequest, session: any) => {
                 { status: 400 }
             );
         }
-
+        // "pending", "accepted", "rejected", "replied", "waiting"
         // 驗證 submissionStatus 的值
         if (!["pending", "accepted", "rejected", "replied", "waiting"].includes(submissionStatus)) {
             return NextResponse.json(

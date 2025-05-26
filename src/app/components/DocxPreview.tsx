@@ -21,6 +21,7 @@ function DocxPreview({ fileUrl, isOpen, height = "600px", className = "" }: Docx
         if (isOpen && !shouldRender) {
             setShouldRender(true);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen]);
 
     // 只在需要渲染時加載文件
