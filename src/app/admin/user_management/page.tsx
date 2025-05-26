@@ -5,6 +5,7 @@ import UserTable from "./components/UserTable";
 import { User } from "@/types/user";
 import { Payment } from "@/types/payment";
 import { Submission } from "@/types/submission";
+import AnnouncementForm from "../components/AnnouncementForm";
 
 export default async function AdminPage() {
     await withRoleProtection(["admin"]); // 👈 只讓 admin 進來
@@ -30,6 +31,7 @@ export default async function AdminPage() {
 
     return (
         <div className="mx-2">
+            <AnnouncementForm />
             <UserTable db_user={users} db_submissions={submissions} db_payments={payments} />
         </div>
     );

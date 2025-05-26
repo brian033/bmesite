@@ -27,7 +27,7 @@ export default function Navbar() {
     // 避免服務端和客戶端渲染不一致，使用一個簡單的渲染模式
     if (!mounted) {
         return (
-            <nav className="flex justify-between items-center bg-primary text-white px-4 lg:px-8 py-4 font-sans relative">
+            <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center bg-primary text-white px-4 lg:px-8 py-4 font-sans shadow-md">
                 <div className="font-bold text-sm lg:text-lg">2025 農機與生機學術研討會</div>
                 {/* 靜態菜單（無交互） */}
                 <div className="hidden lg:flex lg:gap-4 lg:items-center">
@@ -49,6 +49,9 @@ export default function Navbar() {
                     <Link href="/downloads" className="py-2 lg:py-0">
                         檔案下載
                     </Link>
+                    <Link href="/robot_competition" className="py-2 lg:py-0">
+                        田間機器人競賽
+                    </Link>
                 </div>
                 {/* 佔位符 */}
                 <div className="hidden lg:block"></div>
@@ -58,7 +61,7 @@ export default function Navbar() {
 
     // 客戶端渲染，包含完整功能
     return (
-        <nav className="flex justify-between items-center bg-primary text-white px-4 lg:px-8 py-4 font-sans relative">
+        <nav className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center bg-primary text-white px-4 lg:px-8 py-4 font-sans shadow-md">
             {/* Logo/標題 */}
             <div className="font-bold text-lg text-center lg:text-left flex-1 lg:flex-initial">
                 2025 農機與生機學術研討會
@@ -114,7 +117,7 @@ export default function Navbar() {
                 <Link
                     href="/schedule"
                     onClick={handleNavItemClick}
-                    className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10  "
+                    className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
                 >
                     大會議程
                 </Link>
@@ -131,6 +134,13 @@ export default function Navbar() {
                     className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
                 >
                     檔案下載
+                </Link>
+                <Link
+                    href="/robot_competition"
+                    onClick={handleNavItemClick}
+                    className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                >
+                    田間機器人競賽
                 </Link>
                 <div className="hidden lg:block border-l border-primary-foreground/20 h-6" />
                 {user && (
@@ -161,7 +171,7 @@ export default function Navbar() {
                             <Button
                                 variant="destructive"
                                 size="sm"
-                                className="w-30% lg:w-auto flex justify-end "
+                                className="w-30% lg:w-auto flex justify-end"
                             >
                                 管理使用者
                             </Button>
@@ -171,7 +181,7 @@ export default function Navbar() {
                             onClick={handleNavItemClick}
                             className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
                         >
-                            <Button variant="destructive" size="sm" className="w-30% lg:w-auto ">
+                            <Button variant="destructive" size="sm" className="w-30% lg:w-auto">
                                 金流查詢
                             </Button>
                         </Link>
@@ -182,7 +192,6 @@ export default function Navbar() {
                         <span>載入中...</span>
                     ) : user ? (
                         <div className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10">
-                            {/* <span className="text-center">Hi, {user.name}</span> */}
                             <Button
                                 onClick={async () => {
                                     await signOut();

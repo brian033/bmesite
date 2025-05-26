@@ -665,7 +665,9 @@ export default function UserTable({
                                             Array.isArray(user.reviewing_whitelist) &&
                                             user.reviewing_whitelist.length > 0 && (
                                                 <div className="text-xs text-gray-500 flex flex-wrap gap-1">
-                                                    {user.reviewing_whitelist.includes("oral") && (
+                                                    {(
+                                                        user.reviewing_whitelist as string[]
+                                                    ).includes("oral") && (
                                                         <Badge
                                                             variant="outline"
                                                             className="text-[10px] py-0 h-4"
@@ -673,9 +675,9 @@ export default function UserTable({
                                                             口頭
                                                         </Badge>
                                                     )}
-                                                    {user.reviewing_whitelist.includes(
-                                                        "poster"
-                                                    ) && (
+                                                    {(
+                                                        user.reviewing_whitelist as string[]
+                                                    ).includes("poster") && (
                                                         <Badge
                                                             variant="outline"
                                                             className="text-[10px] py-0 h-4"
@@ -683,9 +685,9 @@ export default function UserTable({
                                                             海報
                                                         </Badge>
                                                     )}
-                                                    {user.reviewing_whitelist.includes(
-                                                        "undecided"
-                                                    ) && (
+                                                    {(
+                                                        user.reviewing_whitelist as string[]
+                                                    ).includes("undecided") && (
                                                         <Badge
                                                             variant="outline"
                                                             className="text-[10px] py-0 h-4"
