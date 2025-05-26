@@ -29,30 +29,39 @@
 # CMD ["node", "server.js"]
 
 # --- build stage ---
-FROM node:20-alpine AS builder
+FROM node:20 AS builder
+WORKDIR /app
+
+# 啟用 corepack 並啟用 pnpm（Node 20 預裝 corepack）
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# 複製必要檔案
+COPY . .
+
+# 將 cache 資料夾設定為可掛載（選用）
+VOLUME ["/app/.next/cache", "/app/node_modules/.cache"]
+
+# 安裝依賴
+RUN pnpm install --frozen-lockfile
+
+# Build Next.js (會輸出 .next/standalone)
+RUN pnpm run build
+
+# --- production stage ---
+FROM node:20 AS runner
 WORKDIR /app
 
 # 啟用 corepack 並啟用 pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-# 複製檔案並安裝依賴、build
-COPY . .
-RUN pnpm install --frozen-lockfile
-RUN pnpm run build
-
-# --- production stage ---
-FROM node:20-alpine AS runner
-WORKDIR /app
-
-# 再次啟用 pnpm（有些 base image 不會繼承）
-RUN corepack enable && corepack prepare pnpm@latest --activate
-
-# 複製必要檔案與 production 安裝
+# 複製必要檔案
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml ./
+
+# 安裝 production-only dependencies
 RUN pnpm install --prod --frozen-lockfile
 
-# 複製 standalone Next.js 產出（包含 server.js）
+# 複製 build 輸出與靜態檔案
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/uploads ./uploads
