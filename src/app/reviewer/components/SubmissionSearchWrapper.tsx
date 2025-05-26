@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { getSerial } from "@/app/profile/components/SubmissionCard";
+import SubmissionStats from "./SubmissionStats";
 
 interface SubmissionSearchWrapperProps {
     submissions: SubmissionWithDetailedInfo[];
@@ -41,6 +42,12 @@ const default_filters = {
     payment: {
         paid: false,
         unpaid: false,
+    },
+    // 添加新類別
+    presentType: {
+        poster: false,
+        oral: false,
+        undecided: false,
     },
 };
 
@@ -164,8 +171,15 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                     !paymentSelected || // 如果沒有選擇任何付款狀態，顯示全部
                     (filters.payment.paid && submission.submissionOwner.payment?.paid) || // 已付款且勾選了已付款
                     (filters.payment.unpaid && !submission.submissionOwner.payment?.paid); // 未付款且勾選了未付款
+                // 發表形式過濾
+                const presentTypeSelected = Object.values(filters.presentType).some(
+                    (value) => value
+                );
+                const presentTypeMatch =
+                    !presentTypeSelected || // 如果沒有選擇任何發表形式，顯示全部
+                    filters.presentType[submission.submissionPresentType]; // 否則只顯示被勾選的發表形式
 
-                return searchMatch && statusMatch && typeMatch && paymentMatch; // 加入 paymentMatch
+                return searchMatch && statusMatch && typeMatch && paymentMatch && presentTypeMatch;
             });
         };
 
@@ -175,12 +189,13 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                 !Object.values(filters.status).every((v) => v) ||
                 !Object.values(filters.type).every((v) => v) ||
                 filters.payment.paid ||
-                filters.payment.unpaid // 添加付款狀態過濾的判斷
+                filters.payment.unpaid ||
+                Object.values(filters.presentType).some((v) => v) // 添加發表形式過濾的判斷
         );
     }, [searchTerm, filters, enhancedSubmissions]);
 
     // 切換過濾條件
-    const toggleFilter = (category: "status" | "type" | "payment", key: string) => {
+    const toggleFilter = (category: "status" | "type" | "payment" | "presentType", key: string) => {
         const newFilters = {
             ...filters,
             [category]: {
@@ -200,8 +215,24 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
     // 計算待審審稿案數量
     const pendingCount = enhancedSubmissions.filter((s) => s.submissionStatus === "pending").length;
 
+    const [showStats, setShowStats] = useState(false);
     return (
         <div className="space-y-4">
+            {/* Stats 摺疊區塊 */}
+            <div className="border rounded-lg overflow-hidden">
+                <Button
+                    variant="ghost"
+                    className="w-full flex justify-between items-center p-4 hover:bg-gray-50"
+                    onClick={() => setShowStats(!showStats)}
+                >
+                    <span className="font-medium">統計數據</span>
+                    {showStats ? "Open" : "Closed"}
+                </Button>
+
+                {/* 使用條件渲染，而非 details */}
+                {showStats && <SubmissionStats />}
+            </div>
+
             <div className="flex flex-col gap-2">
                 {/* 搜尋和過濾頭部 */}
                 <div className="flex flex-col md:flex-row gap-2">
@@ -284,6 +315,27 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                                 </DropdownMenuCheckboxItem>
                                 <DropdownMenuSeparator />
 
+                                <DropdownMenuLabel>發表形式</DropdownMenuLabel>
+                                <DropdownMenuCheckboxItem
+                                    checked={filters.presentType.oral}
+                                    onCheckedChange={() => toggleFilter("presentType", "oral")}
+                                >
+                                    口頭報告 (Oral)
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={filters.presentType.poster}
+                                    onCheckedChange={() => toggleFilter("presentType", "poster")}
+                                >
+                                    海報展示 (Poster)
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuCheckboxItem
+                                    checked={filters.presentType.undecided}
+                                    onCheckedChange={() => toggleFilter("presentType", "undecided")}
+                                >
+                                    未決定
+                                </DropdownMenuCheckboxItem>
+                                <DropdownMenuSeparator />
+
                                 <DropdownMenuLabel>付款狀態</DropdownMenuLabel>
                                 <DropdownMenuCheckboxItem
                                     checked={filters.payment.paid}
@@ -349,6 +401,11 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                             {Object.entries(filters.type).some(([_, value]) => value) && (
                                 <Badge variant="outline" className="flex gap-1 items-center">
                                     已過濾類型
+                                </Badge>
+                            )}
+                            {Object.entries(filters.presentType).some(([_, value]) => value) && (
+                                <Badge variant="outline" className="flex gap-1 items-center">
+                                    已過濾發表形式
                                 </Badge>
                             )}
                         </div>

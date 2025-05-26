@@ -32,8 +32,11 @@ const handler = async (req: NextRequest, session: any) => {
 
     // 檢查檔案是否是 PDF 檔案
     const fileExt = path.extname(file.name).toLowerCase();
-    if (fileExt !== ".pdf") {
-        return NextResponse.json({ error: "Only PDF files are allowed" }, { status: 400 });
+    if (fileExt !== ".pdf" && fileExt !== ".doc" && fileExt !== ".docx") {
+        return NextResponse.json(
+            { error: "Only PDF, .doc, and .docx files are allowed" },
+            { status: 400 }
+        );
     }
 
     const timestamp = Date.now();

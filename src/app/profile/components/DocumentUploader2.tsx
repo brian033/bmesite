@@ -40,12 +40,18 @@ const DocumentUploader2 = ({
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
-        if (selectedFile && selectedFile.type === "application/pdf") {
+        if (
+            selectedFile &&
+            (selectedFile.type === "application/pdf" ||
+                selectedFile.type === "application/msword" || // .doc
+                selectedFile.type ===
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document") // .docx
+        ) {
             setFile(selectedFile);
             setError(null);
         } else {
             setFile(null);
-            setError("請上傳PDF檔案");
+            setError("請上傳PDF或Word文件");
         }
     };
 
@@ -164,8 +170,15 @@ const DocumentUploader2 = ({
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1">
-                        <Label>PDF檔案</Label>
-                        <Input type="file" accept="application/pdf" onChange={handleFileChange} />
+                        <Label>上傳檔案</Label>
+                        <Input
+                            type="file"
+                            accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            onChange={handleFileChange}
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                            支援的格式：PDF、Word (.doc, .docx)
+                        </p>
                     </div>
 
                     <div className="space-y-1">

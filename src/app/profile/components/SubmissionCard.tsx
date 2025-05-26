@@ -372,13 +372,11 @@ function DocumentDetail({
                             rel="noopener noreferrer"
                             download={document.pdfType === "full_paper"}
                         >
-                            {document.pdfType === "abstracts"
-                                ? "新分頁打開PDF檔案"
-                                : "下載Word檔案"}
+                            下載檔案
                         </a>
                     </Button>
 
-                    {document.pdfType === "abstracts" ? (
+                    {/* {document.pdfType === "abstracts" ? (
                         <LazyLoadingPDF
                             isReviewerDocument={isReviewerDocument}
                             fileUrl={`/api/user_uploads${document.documentLocation.replace(
@@ -394,7 +392,25 @@ function DocumentDetail({
                                 ""
                             )}`}
                         />
-                    )}
+                    )} */}
+                    {document.documentLocation.toLowerCase().endsWith(".pdf") ? (
+                        <LazyLoadingPDF
+                            isReviewerDocument={isReviewerDocument}
+                            fileUrl={`/api/user_uploads${document.documentLocation.replace(
+                                /^\/[^/]+/,
+                                ""
+                            )}`}
+                        />
+                    ) : document.documentLocation.toLowerCase().endsWith(".docx") ||
+                      document.documentLocation.toLowerCase().endsWith(".doc") ? (
+                        <LazyLoadingWord
+                            isReviewerDocument={isReviewerDocument}
+                            fileUrl={`/api/user_uploads${document.documentLocation.replace(
+                                /^\/[^/]+/,
+                                ""
+                            )}`}
+                        />
+                    ) : null}
                 </div>
 
                 {document.notes && document.notes.length > 0 && (
@@ -467,7 +483,7 @@ function LazyLoadingWord({
                         : "bg-green-100 hover:bg-green-200"
                 }`}
             >
-                預覽PDF
+                預覽Word
             </summary>
             <div className="mt-2">
                 <DocxPreview fileUrl={fileUrl} isOpen={isOpen} />
