@@ -17,7 +17,7 @@ export type Submission = {
         | "AI與大數據分析"
         | "精準農業智動化"
         | "其他新興科技";
-    submissionPresentType: "oral" | "poster"; // new
+    submissionPresentType: "oral" | "poster" | "undecided"; // new
     submissionOwner: string;
     submissionFiles: string[];
     submissionCreatedAt: string;

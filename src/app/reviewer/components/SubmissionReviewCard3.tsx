@@ -365,7 +365,11 @@ function SubmissionItem({ submission }: { submission: SubmissionWithDetailedInfo
                 <div className="flex items-center gap-2">
                     <span className="text-muted-foreground w-24">發表形式:</span>
                     <span>
-                        {currentPresentType === "oral" ? "口頭發表(oral)" : "海報發表(poster)"}
+                        {currentPresentType == "undecided"
+                            ? "都可以"
+                            : currentPresentType === "oral"
+                            ? "口頭發表(oral)"
+                            : "海報發表(poster)"}
                     </span>
                     {!editingProps && (
                         <Button
