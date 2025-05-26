@@ -24,6 +24,8 @@ export type User = {
         abstracts: string[];
         full_paper: string[];
     };
+    reviewing_whitelist?: [];
+    presentation_type?: string[];
 };
 
 export type UploadedPdf = {

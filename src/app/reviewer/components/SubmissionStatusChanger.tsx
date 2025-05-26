@@ -171,7 +171,7 @@ export function SubmissionStatusChanger({
             // 更新本地狀態
             setSubmissionType(updateType as "abstracts" | "full_paper");
             setSubmissionStatus(
-                updateStatus as "pending" | "approved" | "rejected" | "replied" | "waiting"
+                updateStatus as "pending" | "accepted" | "rejected" | "replied" | "waiting"
             );
 
             // 從 API 響應獲取更新後的提交數據
@@ -231,7 +231,7 @@ export function SubmissionStatusChanger({
                         value={submissionStatus}
                         onValueChange={(value) =>
                             setSubmissionStatus(
-                                value as "pending" | "rejected" | "replied" | "waiting" | "approved"
+                                value as "pending" | "rejected" | "replied" | "waiting" | "accepted"
                             )
                         }
                         disabled={isUpdating}

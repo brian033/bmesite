@@ -49,10 +49,10 @@ const handler = async (req: NextRequest, session: any) => {
         // 如果他是full paper的話，那full paper的appoved的話，不給更新文件。
         if (
             submission.submissionType == "full_paper" &&
-            submission.submissionStatus === "approved"
+            submission.submissionStatus === "accepted"
         ) {
             return NextResponse.json(
-                { error: "Cannot update file for approved full paper" },
+                { error: "Cannot update file for accepted full paper" },
                 { status: 403 }
             );
         }

@@ -4,7 +4,7 @@ export type Submission = {
     submissionId: string;
     submissionTitle: string;
     submissionType: "abstracts" | "full_paper";
-    submissionStatus: "pending" | "replied" | "rejected" | "approved" | "waiting"; //new
+    submissionStatus: "pending" | "replied" | "rejected" | "accepted" | "waiting"; //new
     submissionTopic:
         | "生物產業機械"
         | "生物生產工程"

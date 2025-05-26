@@ -29,14 +29,6 @@ const handler = async (req: NextRequest, session: any) => {
     const submissions = (await db.collection("submissions").find().toArray()) as Submission[];
 
     const submissionCount = submissions.length;
-    const entries = submissions.map((sub) => {
-        return {
-            topic: sub.submissionTopic,
-            present_type: sub.submissionPresentType,
-            type: sub.submissionType,
-            status: sub.submissionStatus,
-        };
-    });
 
     // 初始化數據結構以包含所有主題
     const topicAnalytics = {} as Record<
@@ -44,6 +36,7 @@ const handler = async (req: NextRequest, session: any) => {
         {
             total: number;
             full_paper_invitation: Record<string, number>;
+            full_paper_accepted: Record<string, number>; // 新增: 已接受的全文投稿
             still_in_abstract: Record<string, number>;
         }
     >;
@@ -53,6 +46,12 @@ const handler = async (req: NextRequest, session: any) => {
         topicAnalytics[topic] = {
             total: 0,
             full_paper_invitation: {
+                oral: 0,
+                poster: 0,
+                undecided: 0,
+            },
+            full_paper_accepted: {
+                // 新增: 已接受的全文投稿
                 oral: 0,
                 poster: 0,
                 undecided: 0,
@@ -69,6 +68,12 @@ const handler = async (req: NextRequest, session: any) => {
     topicAnalytics["ALL"] = {
         total: 0,
         full_paper_invitation: {
+            oral: 0,
+            poster: 0,
+            undecided: 0,
+        },
+        full_paper_accepted: {
+            // 新增: 已接受的全文投稿
             oral: 0,
             poster: 0,
             undecided: 0,
@@ -95,11 +100,18 @@ const handler = async (req: NextRequest, session: any) => {
 
         // 根據提交類型和發表形式分類統計
         const presentType = sub.submissionPresentType || "undecided";
+        const isAccepted = sub.submissionStatus === "accepted";
 
         if (sub.submissionType === "full_paper") {
             // 全文投稿
             topicAnalytics[validTopic].full_paper_invitation[presentType] += 1;
             topicAnalytics["ALL"].full_paper_invitation[presentType] += 1;
+
+            // 如果是已接受的全文投稿，也計入 full_paper_accepted
+            if (isAccepted) {
+                topicAnalytics[validTopic].full_paper_accepted[presentType] += 1;
+                topicAnalytics["ALL"].full_paper_accepted[presentType] += 1;
+            }
         } else {
             // 還在摘要階段
             topicAnalytics[validTopic].still_in_abstract[presentType] += 1;

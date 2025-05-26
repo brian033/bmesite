@@ -24,6 +24,12 @@ interface AnalyticItem {
         poster: number;
         undecided: number;
     };
+    full_paper_accepted: {
+        // 新增: 已接受的全文投稿
+        oral: number;
+        poster: number;
+        undecided: number;
+    };
     still_in_abstract: {
         oral: number;
         poster: number;
@@ -91,9 +97,14 @@ export default function SubmissionStats() {
     if (error) {
         return (
             <Card className="border-red-200">
-                <CardHeader>
-                    <CardTitle className="text-red-500">載入失敗</CardTitle>
-                    <CardDescription>{error}</CardDescription>
+                <CardHeader className="flex flex-row items-center justify-between">
+                    <div>
+                        <CardTitle className="text-red-500">載入失敗</CardTitle>
+                        <CardDescription>{error}</CardDescription>
+                    </div>
+                    <Button variant="outline" size="sm" onClick={handleRefresh}>
+                        <RefreshCw className="h-4 w-4 mr-2" /> 重試
+                    </Button>
                 </CardHeader>
             </Card>
         );
@@ -108,7 +119,7 @@ export default function SubmissionStats() {
                     <CardTitle className="flex items-center gap-2">
                         審稿統計
                         <Badge variant="outline" className="ml-2 bg-blue-50">
-                            總提交數: {statsData.submissionCount}
+                            總審稿案數: {statsData.submissionCount}
                         </Badge>
                     </CardTitle>
                     <CardDescription>依主題和發表形式分類的審稿統計</CardDescription>
@@ -125,142 +136,208 @@ export default function SubmissionStats() {
                 </Button>
             </CardHeader>
             <CardContent>
-                <Tabs defaultValue="overview">
-                    <TabsList className="mb-4">
-                        <TabsTrigger value="overview">總覽</TabsTrigger>
-                        <TabsTrigger value="full_paper">全文投稿</TabsTrigger>
-                        <TabsTrigger value="abstracts">摘要階段</TabsTrigger>
-                    </TabsList>
+                {/* 如果正在刷新但有之前的數據，顯示半透明覆蓋層 */}
+                <div className="relative">
+                    {refreshing && (
+                        <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-10">
+                            <div className="flex flex-col items-center gap-2">
+                                <div className="w-8 h-8 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
+                                <span className="text-sm text-gray-600">更新數據中...</span>
+                            </div>
+                        </div>
+                    )}
 
-                    <TabsContent value="overview">
-                        <Table>
-                            <TableCaption>審稿案按主題分類統計</TableCaption>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-[180px]">主題</TableHead>
-                                    <TableHead className="text-center">總數</TableHead>
-                                    <TableHead className="text-center">口頭報告</TableHead>
-                                    <TableHead className="text-center">海報展示</TableHead>
-                                    <TableHead className="text-center">未決定</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {statsData.analytics.map((item) => (
-                                    <TableRow key={item.topic}>
-                                        <TableCell className="font-medium">
-                                            {item.topic === "ALL" ? "總計" : item.topic}
-                                        </TableCell>
-                                        <TableCell className="text-center">
-                                            <Badge variant="outline">{item.total}</Badge>
-                                        </TableCell>
-                                        <TableCell className="text-center">
-                                            {item.still_in_abstract.oral +
-                                                item.full_paper_invitation.oral}
-                                        </TableCell>
-                                        <TableCell className="text-center">
-                                            {item.still_in_abstract.poster +
-                                                item.full_paper_invitation.poster}
-                                        </TableCell>
-                                        <TableCell className="text-center">
-                                            {item.still_in_abstract.undecided +
-                                                item.full_paper_invitation.undecided}
-                                        </TableCell>
+                    <Tabs defaultValue="overview">
+                        <TabsList className="mb-4">
+                            <TabsTrigger value="overview">總覽</TabsTrigger>
+                            <TabsTrigger value="full_paper">全文階段</TabsTrigger>
+                            <TabsTrigger value="accepted">已接受的全文投稿</TabsTrigger>
+                            <TabsTrigger value="abstracts">摘要階段</TabsTrigger>
+                        </TabsList>
+
+                        <TabsContent value="overview">
+                            <Table>
+                                <TableCaption>審稿案按主題分類統計</TableCaption>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[180px]">主題</TableHead>
+                                        <TableHead className="text-center">總數</TableHead>
+                                        <TableHead className="text-center">口頭報告</TableHead>
+                                        <TableHead className="text-center">海報展示</TableHead>
+                                        <TableHead className="text-center">未決定</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TabsContent>
-
-                    <TabsContent value="full_paper">
-                        <Table>
-                            <TableCaption>全文投稿統計</TableCaption>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-[180px]">主題</TableHead>
-                                    <TableHead className="text-center">口頭報告</TableHead>
-                                    <TableHead className="text-center">海報展示</TableHead>
-                                    <TableHead className="text-center">未決定</TableHead>
-                                    <TableHead className="text-center">小計</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {statsData.analytics.map((item) => {
-                                    const total =
-                                        item.full_paper_invitation.oral +
-                                        item.full_paper_invitation.poster +
-                                        item.full_paper_invitation.undecided;
-
-                                    return (
+                                </TableHeader>
+                                <TableBody>
+                                    {statsData.analytics.map((item) => (
                                         <TableRow key={item.topic}>
                                             <TableCell className="font-medium">
                                                 {item.topic === "ALL" ? "總計" : item.topic}
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                {item.full_paper_invitation.oral}
+                                                <Badge variant="outline">{item.total}</Badge>
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                {item.full_paper_invitation.poster}
+                                                {item.still_in_abstract.oral +
+                                                    item.full_paper_invitation.oral}
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                {item.full_paper_invitation.undecided}
+                                                {item.still_in_abstract.poster +
+                                                    item.full_paper_invitation.poster}
                                             </TableCell>
                                             <TableCell className="text-center">
-                                                <Badge variant={total > 0 ? "default" : "outline"}>
-                                                    {total}
-                                                </Badge>
+                                                {item.still_in_abstract.undecided +
+                                                    item.full_paper_invitation.undecided}
                                             </TableCell>
                                         </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TabsContent>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TabsContent>
 
-                    <TabsContent value="abstracts">
-                        <Table>
-                            <TableCaption>摘要階段統計</TableCaption>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead className="w-[180px]">主題</TableHead>
-                                    <TableHead className="text-center">口頭報告</TableHead>
-                                    <TableHead className="text-center">海報展示</TableHead>
-                                    <TableHead className="text-center">未決定</TableHead>
-                                    <TableHead className="text-center">小計</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {statsData.analytics.map((item) => {
-                                    const total =
-                                        item.still_in_abstract.oral +
-                                        item.still_in_abstract.poster +
-                                        item.still_in_abstract.undecided;
+                        <TabsContent value="full_paper">
+                            <Table>
+                                <TableCaption>全文投稿統計</TableCaption>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[180px]">主題</TableHead>
+                                        <TableHead className="text-center">口頭報告</TableHead>
+                                        <TableHead className="text-center">海報展示</TableHead>
+                                        <TableHead className="text-center">未決定</TableHead>
+                                        <TableHead className="text-center">小計</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {statsData.analytics.map((item) => {
+                                        const total =
+                                            item.full_paper_invitation.oral +
+                                            item.full_paper_invitation.poster +
+                                            item.full_paper_invitation.undecided;
 
-                                    return (
-                                        <TableRow key={item.topic}>
-                                            <TableCell className="font-medium">
-                                                {item.topic === "ALL" ? "總計" : item.topic}
-                                            </TableCell>
-                                            <TableCell className="text-center">
-                                                {item.still_in_abstract.oral}
-                                            </TableCell>
-                                            <TableCell className="text-center">
-                                                {item.still_in_abstract.poster}
-                                            </TableCell>
-                                            <TableCell className="text-center">
-                                                {item.still_in_abstract.undecided}
-                                            </TableCell>
-                                            <TableCell className="text-center">
-                                                <Badge variant={total > 0 ? "default" : "outline"}>
-                                                    {total}
-                                                </Badge>
-                                            </TableCell>
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TabsContent>
-                </Tabs>
+                                        return (
+                                            <TableRow key={item.topic}>
+                                                <TableCell className="font-medium">
+                                                    {item.topic === "ALL" ? "總計" : item.topic}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    {item.full_paper_invitation.oral}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    {item.full_paper_invitation.poster}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    {item.full_paper_invitation.undecided}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    <Badge
+                                                        variant={total > 0 ? "default" : "outline"}
+                                                    >
+                                                        {total}
+                                                    </Badge>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TabsContent>
+
+                        {/* 新增：已接受投稿的標籤頁 */}
+                        <TabsContent value="accepted">
+                            <Table>
+                                <TableCaption>已接受全文投稿統計</TableCaption>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[180px]">主題</TableHead>
+                                        <TableHead className="text-center">口頭報告</TableHead>
+                                        <TableHead className="text-center">海報展示</TableHead>
+                                        <TableHead className="text-center">未決定</TableHead>
+                                        <TableHead className="text-center">小計</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {statsData.analytics.map((item) => {
+                                        const total =
+                                            item.full_paper_accepted.oral +
+                                            item.full_paper_accepted.poster +
+                                            item.full_paper_accepted.undecided;
+
+                                        return (
+                                            <TableRow key={item.topic}>
+                                                <TableCell className="font-medium">
+                                                    {item.topic === "ALL" ? "總計" : item.topic}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    {item.full_paper_accepted.oral}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    {item.full_paper_accepted.poster}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    {item.full_paper_accepted.undecided}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    <Badge
+                                                        variant={total > 0 ? "default" : "outline"}
+                                                        className={total > 0 ? "bg-green-600" : ""}
+                                                    >
+                                                        {total}
+                                                    </Badge>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TabsContent>
+
+                        <TabsContent value="abstracts">
+                            <Table>
+                                <TableCaption>摘要階段統計</TableCaption>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[180px]">主題</TableHead>
+                                        <TableHead className="text-center">口頭報告</TableHead>
+                                        <TableHead className="text-center">海報展示</TableHead>
+                                        <TableHead className="text-center">未決定</TableHead>
+                                        <TableHead className="text-center">小計</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {statsData.analytics.map((item) => {
+                                        const total =
+                                            item.still_in_abstract.oral +
+                                            item.still_in_abstract.poster +
+                                            item.still_in_abstract.undecided;
+
+                                        return (
+                                            <TableRow key={item.topic}>
+                                                <TableCell className="font-medium">
+                                                    {item.topic === "ALL" ? "總計" : item.topic}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    {item.still_in_abstract.oral}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    {item.still_in_abstract.poster}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    {item.still_in_abstract.undecided}
+                                                </TableCell>
+                                                <TableCell className="text-center">
+                                                    <Badge
+                                                        variant={total > 0 ? "default" : "outline"}
+                                                    >
+                                                        {total}
+                                                    </Badge>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TabsContent>
+                    </Tabs>
+                </div>
             </CardContent>
         </Card>
     );
