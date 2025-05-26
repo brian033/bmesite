@@ -225,7 +225,7 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
                     className="w-full flex justify-between items-center p-4 hover:bg-gray-50"
                     onClick={() => setShowStats(!showStats)}
                 >
-                    <span className="font-medium">統計數據</span>
+                    <span className="font-medium">資料庫內所有審稿案統計數據</span>
                     {showStats ? "Open" : "Closed"}
                 </Button>
 

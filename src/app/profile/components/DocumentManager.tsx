@@ -164,7 +164,7 @@ const DocumentManager = ({ session }) => {
                 ) : (
                     <Button onClick={toggleUploader} variant="outline" className="w-full">
                         <PlusCircle className="h-4 w-4 mr-2" />
-                        上傳新摘要草稿
+                        新摘要送審
                     </Button>
                 )}
             </div>

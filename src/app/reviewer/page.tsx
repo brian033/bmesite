@@ -6,6 +6,7 @@ import { Collection } from "mongodb";
 import { Document } from "@/types/document";
 import { User } from "@/types/user";
 import SubmissionSearchWrapper from "./components/SubmissionSearchWrapper";
+import { getTypedSession } from "@/lib/getTypedSession";
 function processParam(param: string | undefined): string[] | null {
     if (!param) {
         return null; // 如果 param 是 undefined，直接返回 null
@@ -42,12 +43,16 @@ export default async function ReviewerPendingPage({
     const submissionDB = db.collection("submissions");
     const searchParamsAwaited = await searchParams;
     const params = processParam(searchParamsAwaited.submissions as string);
-
+    const session = await getTypedSession();
     let submissions: Submission[];
     if (!params) {
         // then search all
         submissions = (await submissionDB
-            .find({})
+            .find({
+                ...(session.user.reviewing_whitelist
+                    ? { submissionPresentType: { $in: session.user.reviewing_whitelist } }
+                    : {}),
+            })
             .toArray()
             .then((s) => {
                 return s.map((submission) => ({
