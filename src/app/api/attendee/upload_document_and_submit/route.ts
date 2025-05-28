@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid"; // 引入 uuid 用來生成唯一的 pdfId
 import { Document } from "@/types/document";
 import { Submission } from "@/types/submission";
 // 可接受的 pdftype 類型
-const validPdfTypes = ["abstracts", "full_paper"];
+const validPdfTypes = ["abstracts"];
 
 const handler = async (req: NextRequest, session: any) => {
     // 從表單數據中提取文件和 pdf 類型
