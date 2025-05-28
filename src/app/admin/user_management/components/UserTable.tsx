@@ -584,38 +584,50 @@ export default function UserTable({
                                     <TableCell>{user.phone || "未設定"}</TableCell>
                                     <TableCell>{user.department || "未設定"}</TableCell>
                                     <TableCell>{formatPaymentData(user)}</TableCell>
+                                    {/* // 修改審稿案列表部分 */}
                                     <TableCell>
                                         {userSubmissions.length > 0 ? (
                                             <div className="space-y-2">
-                                                <Badge className="bg-blue-500">
-                                                    {userSubmissions.length} 個審稿案
-                                                </Badge>
-                                                <div className="space-y-1">
-                                                    {userSubmissions.map((submission) => (
-                                                        <Button
-                                                            key={submission.submissionId}
-                                                            onClick={() => {
-                                                                const submissionParam =
-                                                                    JSON.stringify([
-                                                                        submission.submissionId,
-                                                                    ]);
-                                                                const url = `/reviewer?submissions=${encodeURIComponent(
-                                                                    submissionParam
-                                                                )}`;
-                                                                window.open(url, "_blank");
-                                                            }}
-                                                            variant="outline"
-                                                            size="sm"
-                                                            className="flex gap-1 w-full justify-start text-xs h-7"
-                                                        >
-                                                            <Link2 className="h-3 w-3" />
-                                                            <span className="truncate max-w-[150px]">
-                                                                {submission.submissionTitle ||
-                                                                    submission.submissionId}
-                                                            </span>
-                                                        </Button>
-                                                    ))}
-                                                </div>
+                                                <details className="group">
+                                                    <summary className="cursor-pointer flex items-center gap-2">
+                                                        <Badge className="bg-blue-500">
+                                                            {userSubmissions.length} 個審稿案
+                                                        </Badge>
+                                                        <span className="text-xs text-blue-600 group-open:hidden">
+                                                            點擊展開
+                                                        </span>
+                                                        <span className="text-xs text-blue-600 hidden group-open:inline">
+                                                            收起
+                                                        </span>
+                                                    </summary>
+
+                                                    <div className="mt-2 space-y-1 pl-1 border-l-2 border-blue-100">
+                                                        {userSubmissions.map((submission) => (
+                                                            <Button
+                                                                key={submission.submissionId}
+                                                                onClick={() => {
+                                                                    const submissionParam =
+                                                                        JSON.stringify([
+                                                                            submission.submissionId,
+                                                                        ]);
+                                                                    const url = `/reviewer?submissions=${encodeURIComponent(
+                                                                        submissionParam
+                                                                    )}`;
+                                                                    window.open(url, "_blank");
+                                                                }}
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="flex gap-1 w-full justify-start text-xs h-7"
+                                                            >
+                                                                <Link2 className="h-3 w-3" />
+                                                                <span className="truncate max-w-[150px]">
+                                                                    {submission.submissionTitle ||
+                                                                        submission.submissionId}
+                                                                </span>
+                                                            </Button>
+                                                        ))}
+                                                    </div>
+                                                </details>
                                             </div>
                                         ) : (
                                             <span className="text-gray-500 text-sm">無審稿案</span>

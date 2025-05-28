@@ -54,7 +54,7 @@ const DocumentManager = ({ session }) => {
         // 更新文件列表
         setDocuments((prev) => [...prev, newDocument]);
         // 更新草稿文件列表
-        setUploadedDocumentList((prev) => [...prev, newDocument]);
+        // setUploadedDocumentList((prev) => [...prev, newDocument]);
         // 上傳成功後關閉上傳表單
         setShowUploader(false);
     };
