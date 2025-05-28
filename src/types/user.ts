@@ -24,7 +24,7 @@ export type User = {
         abstracts: string[];
         full_paper: string[];
     };
-    reviewing_whitelist?: [];
+    reviewing_whitelist?: Array<"oral" | "poster" | "undecided">;
     presentation_type?: string[];
 };
 

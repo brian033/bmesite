@@ -1,6 +1,7 @@
 # --- build stage ---
-FROM node:20-alpine AS builder
+FROM node:20 AS builder
 WORKDIR /app
+
 COPY . .
 
 # 安裝依賴並 build
