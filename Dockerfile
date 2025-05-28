@@ -1,6 +1,15 @@
 # --- build stage ---
-FROM node:20-alpine AS builder
+FROM node:20 AS builder
 WORKDIR /app
+
+# 接收從 build args 傳進來的參數
+ARG MONGODB_URI
+ARG MONGODB_DB
+
+# 設定成環境變數，讓 node.js 可以讀到 process.env.*
+ENV MONGODB_URI=$MONGODB_URI
+ENV MONGODB_DB=$MONGODB_DB
+
 COPY . .
 
 # 安裝依賴並 build
