@@ -9,7 +9,7 @@ export default function HomePage() {
     return (
         <div className="flex flex-col min-h-screen">
             {/* 頂部橫幅 - 全寬度圖片 */}
-            {/* <div className="relative w-full h-[40vh] md:h-[50vh] lg:h-[60vh] overflow-hidden">
+            <div className="relative w-full h-[40vh] md:h-[50vh] lg:h-[60vh] overflow-hidden">
                 <Image
                     src="/webpage/banner.jpg"
                     fill
@@ -17,13 +17,13 @@ export default function HomePage() {
                     className="object-cover"
                     priority
                 />
-            </div> */}
+            </div>
 
             {/* 主要內容 */}
             <div className="container mx-auto px-4 py-12">
                 {/* 重要時程區塊 */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-                    {/* <div className="relative">
+                    <div className="relative">
                         <Image
                             src="/webpage/poster.JPG"
                             width={600}
@@ -31,10 +31,11 @@ export default function HomePage() {
                             alt="BIME 2025"
                             className="object-contain"
                         />
-                    </div> */}
+                    </div>
 
                     {/* 使用獨立的重要時程組件 */}
                     {/* <ImportantDates /> */}
+                    <div>TBD 重要時間！</div>
                 </div>
 
                 {/* 會議資訊 */}
