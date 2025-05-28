@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { Announcement } from "@/types/announcement";
 
-const handler = async (req: NextRequest, session: any) => {
+const getHandler = async (req: NextRequest, session: any) => {
     try {
         const data = await req.json();
         // 基本驗證
@@ -25,7 +25,6 @@ const handler = async (req: NextRequest, session: any) => {
         return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 };
-
-export const POST = middlewareFactory({ cors: true, auth: true, role: ["admin"] }, handler);
+export const POST = middlewareFactory({ cors: true, auth: true, role: ["admin"] }, getHandler);
 
 export const OPTIONS = middlewareFactory({ cors: true }, async () => new Response(null));

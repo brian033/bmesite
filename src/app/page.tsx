@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { CalendarDays, MapPin, Download, Users } from "lucide-react";
 // import ImportantDates from "./components/ImportantDates";
 import AnnouncementCard from "./components/AnnouncementCard";
+import ImportantDatesCard from "./components/ImportantDatesCard";
 
 export default function HomePage() {
     return (
@@ -11,7 +12,7 @@ export default function HomePage() {
             {/* 頂部橫幅 - 全寬度圖片 */}
             <div className="relative w-full h-[40vh] md:h-[50vh] lg:h-[60vh] overflow-hidden">
                 <Image
-                    src="/webpage/banner.jpg"
+                    src="/webpage/banner.JPG"
                     fill
                     alt="2025 農機與生機學術研討會"
                     className="object-cover"
@@ -34,8 +35,7 @@ export default function HomePage() {
                     </div>
 
                     {/* 使用獨立的重要時程組件 */}
-                    {/* <ImportantDates /> */}
-                    <div>TBD 重要時間！</div>
+                    <ImportantDatesCard />
                 </div>
 
                 {/* 會議資訊 */}
