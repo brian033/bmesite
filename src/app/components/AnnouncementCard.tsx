@@ -1,18 +1,16 @@
-import clientPromise from "@/lib/mongodb";
-import { ObjectId } from "mongodb";
+"use client";
+
+import { useEffect, useState } from "react";
 import { BellRing } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 
-// 設定重新驗證間隔，每10分鐘重新獲取一次數據
-export const revalidate = 600;
-
 interface AnnouncementData {
-    _id: ObjectId | string;
+    _id: string;
     title: string;
     lines: string[];
-    createdAt?: Date;
-    updatedAt?: Date;
+    createdAt?: string;
+    updatedAt?: string;
     createdBy?: string;
 }
 
@@ -64,9 +62,72 @@ function processLinks(text: string) {
     return <>{parts}</>;
 }
 
-export default async function AnnouncementCard() {
-    // 從資料庫中獲取公告數據
-    const announcements = await fetchAnnouncements();
+export default function AnnouncementCard() {
+    const [announcements, setAnnouncements] = useState<AnnouncementData[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchAnnouncements = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch("/api/info/announcement");
+
+                if (!response.ok) {
+                    throw new Error(`獲取公告失敗: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                setAnnouncements(data);
+                setError(null);
+            } catch (err) {
+                console.error("獲取公告時發生錯誤:", err);
+                setError("無法獲取最新公告，請稍後再試。");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAnnouncements();
+
+        // 設置定時器，每10分鐘重新獲取一次數據
+        const intervalId = setInterval(fetchAnnouncements, 10 * 60 * 1000);
+
+        // 清理函數
+        return () => clearInterval(intervalId);
+    }, []);
+
+    // 處理加載狀態
+    if (loading) {
+        return (
+            <Card className="w-full mb-6">
+                <CardHeader className="pb-3">
+                    <CardTitle className="text-2xl flex items-center">
+                        <BellRing className="mr-2 h-6 w-6" />
+                        最新公告
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 text-center py-8 text-gray-500">
+                    正在獲取公告...
+                </CardContent>
+            </Card>
+        );
+    }
+
+    // 處理錯誤狀態
+    if (error) {
+        return (
+            <Card className="w-full mb-6">
+                <CardHeader className="pb-3">
+                    <CardTitle className="text-2xl flex items-center">
+                        <BellRing className="mr-2 h-6 w-6" />
+                        最新公告
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 text-center py-8 text-red-500">{error}</CardContent>
+            </Card>
+        );
+    }
 
     // 如果沒有公告，顯示提示訊息
     if (announcements.length === 0) {
@@ -124,34 +185,9 @@ export default async function AnnouncementCard() {
     );
 }
 
-// 從資料庫獲取公告的函數
-async function fetchAnnouncements() {
-    try {
-        const client = await clientPromise;
-        const db = client.db(process.env.MONGODB_DB);
-
-        // 獲取所有公告，並依照創建時間降序排序（最新的在前面）
-        const announcements = await db
-            .collection("announcements")
-            .find({})
-            .sort({ createdAt: -1 })
-            .toArray();
-
-        return announcements as AnnouncementData[];
-    } catch (error) {
-        console.error("從資料庫獲取公告時發生錯誤:", error);
-        // 發生錯誤時返回空陣列
-        return [];
-    }
-}
-
 // 格式化日期的輔助函數
-function formatDate(date: Date | string): string {
-    if (typeof date === "string") {
-        date = new Date(date);
-    }
-
-    return date.toLocaleDateString("zh-TW", {
+function formatDate(date: string): string {
+    return new Date(date).toLocaleDateString("zh-TW", {
         year: "numeric",
         month: "long",
         day: "numeric",
