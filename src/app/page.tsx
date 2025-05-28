@@ -9,8 +9,8 @@ import ImportantDatesCard from "./components/ImportantDatesCard";
 export default function HomePage() {
     return (
         <div className="flex flex-col min-h-screen">
-            {/* 頂部橫幅 - 全寬度圖片 */}
-            <div className="relative w-full h-[40vh] md:h-[50vh] lg:h-[60vh] overflow-hidden">
+            {/* 頂部橫幅 - 移除可能的上邊距 */}
+            <div className="relative w-full h-[40vh] md:h-[50vh] lg:h-[60vh]">
                 <Image
                     src="/webpage/banner.JPG"
                     fill
