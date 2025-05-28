@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { BellRing } from "lucide-react";
+import { BellRing, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 interface AnnouncementData {
     _id: string;
@@ -16,6 +18,9 @@ interface AnnouncementData {
 
 // 簡單的連結處理函數，尋找格式為 [文字](連結) 的部分
 function processLinks(text: string) {
+    // 現有處理連結的代碼保持不變
+    // ...
+
     // 尋找形如 [文字](連結) 的模式
     const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
 
@@ -66,28 +71,39 @@ export default function AnnouncementCard() {
     const [announcements, setAnnouncements] = useState<AnnouncementData[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { data: session } = useSession();
+
+    // 檢查用戶是否為管理員
+    const isAdmin =
+        !!session?.user &&
+        ((Array.isArray((session.user as any).role) &&
+            (session.user as any).role.includes("admin")) ||
+            (session.user as any).role === "admin");
+
+    const fetchAnnouncements = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch("/api/info/announcement");
+
+            if (!response.ok) {
+                throw new Error(`獲取公告失敗: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            // 排序公告 - 按照創建日期降序排序 (最新的在前面)
+            const sortedAnnouncements = [...data].reverse();
+
+            setAnnouncements(sortedAnnouncements);
+            setError(null);
+        } catch (err) {
+            console.error("獲取公告時發生錯誤:", err);
+            setError("無法獲取最新公告，請稍後再試。");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchAnnouncements = async () => {
-            try {
-                setLoading(true);
-                const response = await fetch("/api/info/announcement");
-
-                if (!response.ok) {
-                    throw new Error(`獲取公告失敗: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                setAnnouncements(data);
-                setError(null);
-            } catch (err) {
-                console.error("獲取公告時發生錯誤:", err);
-                setError("無法獲取最新公告，請稍後再試。");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchAnnouncements();
 
         // 設置定時器，每10分鐘重新獲取一次數據
@@ -97,7 +113,34 @@ export default function AnnouncementCard() {
         return () => clearInterval(intervalId);
     }, []);
 
-    // 處理加載狀態
+    // 處理刪除公告
+    const handleDelete = async (title: string) => {
+        if (confirm(`確定要刪除「${title}」這則公告嗎？此操作無法復原。`)) {
+            try {
+                const response = await fetch("/api/admin/announcements", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ title }),
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // 刪除成功後重新載入頁面
+                    window.location.reload();
+                } else {
+                    // 顯示錯誤訊息
+                    alert(`刪除失敗: ${result.error || "未知錯誤"}`);
+                }
+            } catch (err) {
+                alert(`刪除操作發生錯誤: ${(err as Error).message}`);
+            }
+        }
+    };
+
+    // 處理加載狀態 (保持不變)
     if (loading) {
         return (
             <Card className="w-full mb-6">
@@ -114,7 +157,7 @@ export default function AnnouncementCard() {
         );
     }
 
-    // 處理錯誤狀態
+    // 處理錯誤狀態 (保持不變)
     if (error) {
         return (
             <Card className="w-full mb-6">
@@ -129,7 +172,7 @@ export default function AnnouncementCard() {
         );
     }
 
-    // 如果沒有公告，顯示提示訊息
+    // 如果沒有公告，顯示提示訊息 (保持不變)
     if (announcements.length === 0) {
         return (
             <Card className="w-full mb-6">
@@ -146,7 +189,7 @@ export default function AnnouncementCard() {
         );
     }
 
-    // 有公告時，顯示所有公告內容
+    // 有公告時，顯示所有公告內容 (添加刪除按鈕)
     return (
         <Card className="w-full mb-6">
             <CardHeader className="pb-3">
@@ -160,9 +203,22 @@ export default function AnnouncementCard() {
                     {announcements.map((announcement) => (
                         <div
                             key={announcement._id.toString()}
-                            className="border-l-4 border-green-600 pl-4 py-1"
+                            className="border-l-4 border-green-600 pl-4 py-1 relative"
                         >
-                            <h3 className="font-semibold text-xl text-gray-800 mb-3">
+                            {/* 管理員刪除按鈕 */}
+                            {isAdmin && (
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => handleDelete(announcement.title)}
+                                    className="absolute top-2 right-2 h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    title="刪除公告"
+                                >
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            )}
+
+                            <h3 className="font-semibold text-xl text-gray-800 mb-3 pr-10">
                                 {announcement.title}
                             </h3>
                             <ul className="list-disc pl-5 space-y-2">
