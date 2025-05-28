@@ -19,9 +19,6 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-            args:
-                MONGODB_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongo:27017/confDb?authSource=admin
-                MONGODB_DB=confDb
         ulimits:
             nofile:
                 soft: 65536
