@@ -20,7 +20,7 @@ const DocumentManager = ({ session }) => {
     // 拆分狀態以便單獨更新
     const [documents, setDocuments] = useState<Document[]>([]);
     const [submissions, setSubmissions] = useState<Submission[]>([]);
-    const [uploadedDocumentList, setUploadedDocumentList] = useState<Document[]>([]);
+    // const [uploadedDocumentList, setUploadedDocumentList] = useState<Document[]>([]);
 
     // 初始載入數據
     useEffect(() => {
@@ -34,16 +34,16 @@ const DocumentManager = ({ session }) => {
                 setDocuments(data.documents);
                 setSubmissions(data.submissions);
 
-                // 計算已上傳但未提交的文件
-                const uploadedDocument: UploadedPdf[] = session.user.uploaded_pdfs["abstracts"];
-                const uploadedDocumentIds = uploadedDocument.map((doc) => doc.pdfId);
-                const draftDocs = data.documents.filter((doc) => {
-                    return (
-                        uploadedDocumentIds.includes(doc.documentId) &&
-                        doc.documentStatus === "uploaded"
-                    );
-                });
-                setUploadedDocumentList(draftDocs);
+                // // 計算已上傳但未提交的文件
+                // const uploadedDocument: UploadedPdf[] = session.user.uploaded_pdfs["abstracts"];
+                // const uploadedDocumentIds = uploadedDocument.map((doc) => doc.pdfId);
+                // const draftDocs = data.documents.filter((doc) => {
+                //     return (
+                //         uploadedDocumentIds.includes(doc.documentId) &&
+                //         doc.documentStatus === "uploaded"
+                //     );
+                // });
+                // setUploadedDocumentList(draftDocs);
             }
         }
         fetchDocuments();
@@ -59,20 +59,20 @@ const DocumentManager = ({ session }) => {
         setShowUploader(false);
     };
 
-    // 處理文件刪除
-    const handleDocumentRemoved = (documentId: string) => {
-        // 從文件列表和草稿列表中移除
-        setDocuments((prev) => prev.filter((doc) => doc.documentId !== documentId));
-        setUploadedDocumentList((prev) => prev.filter((doc) => doc.documentId !== documentId));
-    };
+    // // 處理文件刪除
+    // const handleDocumentRemoved = (documentId: string) => {
+    //     // 從文件列表和草稿列表中移除
+    //     setDocuments((prev) => prev.filter((doc) => doc.documentId !== documentId));
+    //     setUploadedDocumentList((prev) => prev.filter((doc) => doc.documentId !== documentId));
+    // };
 
-    // 處理文件提交審核
-    const handleDocumentSubmitted = (documentId: string, newSubmission: Submission) => {
-        // 從草稿列表移除
-        setUploadedDocumentList((prev) => prev.filter((doc) => doc.documentId !== documentId));
-        // 添加到提交列表
-        setSubmissions((prev) => [...prev, newSubmission]);
-    };
+    // // 處理文件提交審核
+    // const handleDocumentSubmitted = (documentId: string, newSubmission: Submission) => {
+    //     // 從草稿列表移除
+    //     setUploadedDocumentList((prev) => prev.filter((doc) => doc.documentId !== documentId));
+    //     // 添加到提交列表
+    //     setSubmissions((prev) => [...prev, newSubmission]);
+    // };
 
     const handleSubmissionCreated = (newSubmission: Submission) => {
         // 添加到提交列表
@@ -95,7 +95,7 @@ const DocumentManager = ({ session }) => {
         );
     }
 
-    const hasUploadedDocuments = uploadedDocumentList.length > 0;
+    // const hasUploadedDocuments = uploadedDocumentList.length > 0;
 
     return (
         <div className="flex gap-6 overflow-x-auto pb-4">

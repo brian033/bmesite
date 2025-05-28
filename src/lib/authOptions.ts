@@ -58,20 +58,43 @@ export const authOptions = {
             return true;
         },
 
+        // async jwt({ token, user }) {
+        //     const client = await clientPromise;
+        //     const db = client.db(process.env.MONGODB_DB);
+        //     const collection = db.collection("users");
+
+        //     // const dbUser = await collection.findOne({
+        //     //     email: token.email ?? user?.email,
+        //     // });
+        //     const dbUser = (await collection.findOne({
+        //         email: token.email ?? user?.email,
+        //     })) as DBUser;
+
+        //     if (dbUser) {
+        //         Object.assign(token as typeof token & Partial<DBUser>, dbUser);
+        //     }
+        //     return token;
+        // },
+        // JWT patch, downsizing jwt
         async jwt({ token, user }) {
             const client = await clientPromise;
             const db = client.db(process.env.MONGODB_DB);
             const collection = db.collection("users");
 
-            // const dbUser = await collection.findOne({
-            //     email: token.email ?? user?.email,
-            // });
             const dbUser = (await collection.findOne({
                 email: token.email ?? user?.email,
             })) as DBUser;
 
             if (dbUser) {
-                Object.assign(token as typeof token & Partial<DBUser>, dbUser);
+                // 創建一個移除大型數據結構的用戶對象副本
+                const tokenUser = { ...dbUser };
+
+                // 從 JWT 中排除這些大型數據結構
+                delete tokenUser.uploaded_pdfs;
+                delete tokenUser.submission;
+
+                // 將精簡後的用戶數據複製到 token
+                Object.assign(token as typeof token & Partial<DBUser>, tokenUser);
             }
             return token;
         },
