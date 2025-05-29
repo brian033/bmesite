@@ -76,9 +76,27 @@ export default function SubmissionSearchWrapper({ submissions }: SubmissionSearc
             // 嘗試從 localStorage 讀取
             const storedFilters = localStorage.getItem("reviewerSubmissionFilters");
 
-            // 如果已存在，直接解析並返回
+            // patch: 確保presentType有在
             if (storedFilters) {
-                return JSON.parse(storedFilters);
+                const parsedFilters = JSON.parse(storedFilters);
+
+                // Monkey patch: 檢查是否缺少 presentType，如果沒有就補上
+                if (!parsedFilters.presentType) {
+                    parsedFilters.presentType = {
+                        poster: false,
+                        oral: false,
+                        undecided: false,
+                    };
+
+                    // 保存修補後的過濾器回 localStorage
+                    localStorage.setItem(
+                        "reviewerSubmissionFilters",
+                        JSON.stringify(parsedFilters)
+                    );
+                    console.log("Added missing presentType filter to stored filters");
+                }
+
+                return parsedFilters;
             }
 
             // 將預設值存入 localStorage
