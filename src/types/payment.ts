@@ -6,7 +6,7 @@ export type Payment = {
     paymentOwner: string;
     paymentStatus: "created" | "paid" | "failed";
     paymentValue: number;
-    paymentType: "member" | "non-member";
+    paymentType: string;
     paymentParams: ECPayFormParams;
     paymentResponse?: any;
     updatedAt?: string;
@@ -20,9 +20,7 @@ export interface ECPayFormParams {
     PaymentType: "aio"; // 付款方式
     TotalAmount: number; // 總金額, int
     TradeDesc: string;
-    ItemName:
-        | "生機農機人學會年會2025 - 一般參加者註冊費用"
-        | "生機農機人學會年會2025 - 學會參加者註冊費用";
+    ItemName: string;
     ReturnURL: string;
     ChoosePayment: "ALL";
     CheckMacValue: string;
