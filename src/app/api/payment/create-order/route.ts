@@ -148,7 +148,7 @@ const handler = async (req: NextRequest, session: any) => {
 
         // 接下來constructpayment parameters
         const formattedDate = formatDate(now);
-        let paymentParams: ECPayFormParams = {
+        const paymentParams: ECPayFormParams = {
             MerchantID: MERCHANT_ID,
             MerchantTradeNo: formattedPaymentId,
             MerchantTradeDate: formattedDate,
