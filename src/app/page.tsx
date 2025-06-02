@@ -6,6 +6,47 @@ import { CalendarDays, MapPin, Download, Users } from "lucide-react";
 import AnnouncementCard from "./components/AnnouncementCard";
 import ImportantDatesCard from "./components/ImportantDatesCard";
 
+function PaymentInfo() {
+    return (
+        <div className="bg-white p-6 rounded-lg shadow-md border border-green-100">
+            <h3 className="text-xl font-semibold mb-4 text-center">報名費用</h3>
+            <div className="overflow-x-auto">
+                <table className="w-full">
+                    <thead>
+                        <tr className="bg-green-50">
+                            <th className="p-2 border border-green-200">報名期間</th>
+                            <th className="p-2 border border-green-200">會員</th>
+                            <th className="p-2 border border-green-200">非會員</th>
+                            <th className="p-2 border border-green-200">學生</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="p-2 border border-green-200">早鳥價</td>
+                            <td className="p-2 border border-green-200">800</td>
+                            <td className="p-2 border border-green-200">900</td>
+                            <td className="p-2 border border-green-200">600</td>
+                        </tr>
+                        <tr>
+                            <td className="p-2 border border-green-200">一般價</td>
+                            <td className="p-2 border border-green-200">900</td>
+                            <td className="p-2 border border-green-200">1000</td>
+                            <td className="p-2 border border-green-200">700</td>
+                        </tr>
+                        <tr>
+                            <td className="p-2 border border-green-200">現場報名</td>
+                            <td className="p-2 border border-green-200">1000</td>
+                            <td className="p-2 border border-green-200">1100</td>
+                            <td className="p-2 border border-green-200">800</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p className="text-sm text-gray-500 mt-4">註：所有費用單位為新台幣</p>
+        </div>
+    );
+}
+
 export default function HomePage() {
     return (
         <div className="flex flex-col min-h-screen">
@@ -35,7 +76,10 @@ export default function HomePage() {
                     </div>
 
                     {/* 使用獨立的重要時程組件 */}
-                    <ImportantDatesCard />
+                    <div className="h-600px">
+                        <ImportantDatesCard />
+                        <PaymentInfo />
+                    </div>
                 </div>
 
                 {/* 會議資訊 */}
@@ -43,7 +87,7 @@ export default function HomePage() {
                     <div className="bg-green-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center border border-green-100">
                         <CalendarDays className="h-12 w-12 text-green-700 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">會議日期</h3>
-                        <p>2025年10月24日(四) - 10月25日(五) (GPT瞎猜的）</p>
+                        <p>2025年9月25日(四) - 9月26日(五)</p>
                     </div>
 
                     <div className="bg-green-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center border border-green-100">
