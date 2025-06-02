@@ -93,13 +93,13 @@ export default function HomePage() {
                     <div className="bg-green-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center border border-green-100">
                         <MapPin className="h-12 w-12 text-green-700 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">會議地點</h3>
-                        <p>國立台灣大學生物產業機電工程學系</p>
+                        <p>國立台灣大學生物機電工程學系</p>
                     </div>
 
                     <div className="bg-green-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center border border-green-100">
                         <Users className="h-12 w-12 text-green-700 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">主辦單位</h3>
-                        <p>國立台灣大學生物產業機電工程學系</p>
+                        <p>台灣生物機電學會</p>
                     </div>
                 </div>
                 <AnnouncementCard />
