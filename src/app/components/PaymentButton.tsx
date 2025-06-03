@@ -7,7 +7,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 interface PaymentButtonProps {
-    paymentType: "member" | "non-member";
+    paymentOptionId: string; // 改為接收任意 paymentOptionId
+    buttonText?: string; // 可選的按鈕文字
     className?: string;
     variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
     size?: "default" | "sm" | "lg" | "icon";
@@ -17,7 +18,8 @@ interface PaymentButtonProps {
 }
 
 export default function PaymentButton({
-    paymentType,
+    paymentOptionId,
+    buttonText, // 可由外部傳入
     className = "",
     variant = "default",
     size = "default",
@@ -33,19 +35,19 @@ export default function PaymentButton({
             setIsLoading(true);
             setError(null);
 
-            // 呼叫後端API建立訂單
+            // 呼叫後端API建立訂單，傳遞 paymentOptionId
             const response = await fetch("/api/payment/create-order", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ paymentType }),
+                body: JSON.stringify({ paymentOptionId }), // 更新為使用 paymentOptionId
             });
 
             const data = await response.json();
 
             if (!data.success) {
-                throw new Error(data.error || "創建訂單失敗");
+                throw new Error(data.message || data.error || "創建訂單失敗");
             }
 
             // 建立表單並提交到綠界
@@ -84,7 +86,8 @@ export default function PaymentButton({
         }
     };
 
-    const buttonText = paymentType === "member" ? "會員價格: NT$5,000" : "一般價格: NT$10,000";
+    // 使用傳入的按鈕文字或提供一個通用文字
+    const defaultButtonText = "前往付款";
 
     return (
         <div className="space-y-2">
@@ -110,7 +113,7 @@ export default function PaymentButton({
                 ) : (
                     <>
                         <CreditCard className="mr-2 h-4 w-4" />
-                        {buttonText}
+                        {buttonText || defaultButtonText}
                     </>
                 )}
             </Button>

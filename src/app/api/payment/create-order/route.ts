@@ -8,6 +8,7 @@ import { middlewareFactory } from "@/lib/middlewareFactory";
 import { v4 } from "uuid";
 import { updateUserPaymentStatus } from "@/lib/updateUserPaymentStatus";
 import { User } from "@/types/user";
+import { PaymentOption } from "@/types/paymentOption";
 
 // 綠界支付配置 (應放在環境變數中)
 const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID || "3002607";
@@ -79,9 +80,9 @@ const handler = async (req: NextRequest, session: any) => {
     try {
         // 解析請求體
         const body = await req.json();
-        const { paymentType }: { paymentType: "member" | "non-member" } = body;
-        const userId = session.user.uuid; // 從session獲取用戶ID
+        const { paymentOptionId }: { paymentOptionId: string } = body;
 
+        const userId = session.user.uuid; // 從session獲取用戶ID
         // create a unique paymentId
         const paymentId = v4(); // 生成一個標準 UUID，例如 "123e4567-e89b-12d3-a456-426614174000"
         const formattedPaymentId = paymentId.replace(/-/g, "").substring(0, 20);
@@ -89,58 +90,54 @@ const handler = async (req: NextRequest, session: any) => {
         // 格式化當前時間為綠界要求的格式
         const now = new Date();
 
-        let paymentParams: ECPayFormParams | null = null;
-        const formattedDate = formatDate(now);
-        if (paymentType === "member") {
-            paymentParams = {
-                MerchantID: MERCHANT_ID,
-                MerchantTradeNo: formattedPaymentId,
-                MerchantTradeDate: formattedDate,
-                PaymentType: "aio",
-                TotalAmount: 5000,
-                TradeDesc: "生機農機人學會年會2025 - 學會參加者註冊費用",
-                ItemName: "生機農機人學會年會2025 - 學會參加者註冊費用",
-                ReturnURL: RETURN_URL,
-                ChoosePayment: "ALL",
-                CheckMacValue: "TBA",
-                EncryptType: 1,
-            };
-        } else {
-            paymentParams = {
-                MerchantID: MERCHANT_ID,
-                MerchantTradeNo: formattedPaymentId,
-                MerchantTradeDate: formattedDate,
-                PaymentType: "aio",
-                TotalAmount: 10000,
-                TradeDesc: "生機農機人學會年會2025 - 一般參加者註冊費用",
-                ItemName: "生機農機人學會年會2025 - 一般參加者註冊費用",
-                ReturnURL: RETURN_URL,
-                ChoosePayment: "ALL",
-                CheckMacValue: "TBA",
-                EncryptType: 1,
-            };
-        }
-        paymentParams.CheckMacValue = getCheckMac(paymentParams);
-        console.log("paymentParams", paymentParams);
-        // 連接到 MongoDB
         const client = await clientPromise;
         const db = client.db(process.env.MONGODB_DB);
-        const paymentRecord: Payment = {
-            paymentId: formattedPaymentId,
-            paymentOwner: userId,
-            paymentStatus: "created",
-            paymentValue: paymentParams.TotalAmount,
-            paymentType: paymentType,
-            paymentParams: paymentParams,
-        };
-        // 檢查用戶是否已經存在付款記錄
-        // check if user has already paid
+
+        // 1. 先檢查DB的payment選項
+        const paymentOption = (await db.collection("paymentOptions").findOne({
+            paymentOptionId: paymentOptionId,
+        })) as PaymentOption | null;
+
+        if (!paymentOption) {
+            return NextResponse.json(
+                { success: false, message: "Invalid payment option or expired" },
+                { status: 400 }
+            );
+        } else {
+            // 檢查開始時間 (如果設置了)
+            if (now < paymentOption.validFrom) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "Payment option is not yet active",
+                        activeFrom: paymentOption.validFrom,
+                    },
+                    { status: 400 }
+                );
+            }
+
+            // 檢查結束時間 (如果設置了)
+            if (now > paymentOption.goodUntil) {
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "Payment option has expired",
+                        expiredAt: paymentOption.goodUntil,
+                    },
+                    { status: 400 }
+                );
+            }
+        }
+        // 能跑到這邊就代表這個選項是存在且在期限內的
+
+        // 接下來檢查用戶是否已經存在付款記錄
         // 先更新使用者的狀態
         await updateUserPaymentStatus(userId);
         const userOnDB: User = (await db.collection("users").findOne({
             uuid: userId,
         })) as User;
 
+        // 如果他已經paid就不要給他再付錢了
         const userAlreadyPaid = userOnDB.payment.paid;
         if (userAlreadyPaid) {
             return NextResponse.json(
@@ -149,12 +146,36 @@ const handler = async (req: NextRequest, session: any) => {
             );
         }
 
+        // 接下來constructpayment parameters
+        const formattedDate = formatDate(now);
+        const paymentParams: ECPayFormParams = {
+            MerchantID: MERCHANT_ID,
+            MerchantTradeNo: formattedPaymentId,
+            MerchantTradeDate: formattedDate,
+            PaymentType: "aio",
+            TotalAmount: paymentOption.price,
+            TradeDesc: paymentOption.tradeDescription,
+            ItemName: paymentOption.itemName,
+            ReturnURL: RETURN_URL,
+            ChoosePayment: "ALL",
+            CheckMacValue: "TBA",
+            EncryptType: 1,
+        };
+        paymentParams.CheckMacValue = getCheckMac(paymentParams);
+        console.log("paymentParams", paymentParams);
+        // 連接到 MongoDB
+
+        const paymentRecord: Payment = {
+            paymentId: formattedPaymentId,
+            paymentOwner: userId,
+            paymentStatus: "created",
+            paymentValue: paymentParams.TotalAmount,
+            paymentType: paymentOption.paymentOptionId,
+            paymentParams: paymentParams,
+        };
+
         // 將付款記錄插入到 MongoDB
         await db.collection("payments").insertOne(paymentRecord);
-        // update  payment: {
-        //     paid: boolean;
-        //     payment_id: string[];
-        // };
         await db.collection("users").updateOne(
             { uuid: userId },
             {
