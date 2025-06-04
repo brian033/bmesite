@@ -43,6 +43,7 @@ function PaymentInfo() {
                 </table>
             </div>
             <p className="text-sm text-gray-500 mt-4">註：所有費用單位為新台幣</p>
+            <p className="text-sm text-gray-500 mt-4">繳費專用聯絡信箱：TIBM2003@outlook.com</p>
         </div>
     );
 }
