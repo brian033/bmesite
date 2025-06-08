@@ -16,6 +16,7 @@ export function withCorsAndRole(
             "http://127.0.0.1:3000",
             "http://localhost:34567",
             "https://conftest.brian033.dev",
+            "https://beame2025.cc/",
         ];
 
         const allowOrigin = allowedOrigins.includes(origin) ? origin : "";
