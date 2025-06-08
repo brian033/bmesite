@@ -11,6 +11,8 @@ export type User = {
     createdAt: string;
     contact_email: string;
     phone: string;
+    dietary: "vegan" | "non_vegan" | "new";
+    going_dinner: boolean | "new";
     department: string;
     payment: {
         paid: boolean;

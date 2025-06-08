@@ -5,7 +5,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { sendTemplateEmail } from "@/lib/mailTools";
 
 const handler = async (req: NextRequest, session: any) => {
-    const allowedFields = ["contact_email", "name", "phone", "department"];
+    const allowedFields = [
+        "contact_email",
+        "name",
+        "phone",
+        "department",
+        "dietary",
+        "going_dinner",
+    ];
     const data = await req.json();
 
     for (const key in data) {
@@ -17,6 +24,32 @@ const handler = async (req: NextRequest, session: any) => {
     const client = await clientPromise;
     const db = client.db(process.env.MONGODB_DB);
     const collection = db.collection("users");
+
+    const VALID_DIETARY_OPTIONS = ["vegan", "non_vegan"] as const;
+    const VALID_DINNER_OPTIONS = ["yes", "no"] as const;
+
+    // 驗證 dietary
+    if (data.dietary && !VALID_DIETARY_OPTIONS.includes(data.dietary)) {
+        return NextResponse.json(
+            {
+                error: "Invalid dietary option. Must be either 'vegan' or 'non_vegan'.",
+            },
+            { status: 400 }
+        );
+    }
+
+    // 驗證 going_dinner
+    if (data.going_dinner && !VALID_DINNER_OPTIONS.includes(data.going_dinner)) {
+        return NextResponse.json(
+            {
+                error: "Invalid dinner option. Must be either 'yes' or 'no'.",
+            },
+            { status: 400 }
+        );
+    }
+    if (data.going_dinner) {
+        data.going_dinner = data.going_dinner === "yes";
+    }
 
     const result = await collection.updateOne({ email: session.user.email }, { $set: data });
 
@@ -31,7 +64,9 @@ const handler = async (req: NextRequest, session: any) => {
         // 🔽 檢查是否所有欄位都已填寫（非 "未輸入"），並設定 registered 為 true
         if (
             updatedUser.contact_email !== "未輸入聯絡用信箱" &&
-            updatedUser.department !== "未輸入單位"
+            updatedUser.department !== "未輸入單位" &&
+            typeof updatedUser.going_dinner === "boolean" && // 改用型別檢查
+            VALID_DIETARY_OPTIONS.includes(updatedUser.dietary)
         ) {
             await collection.updateOne(
                 { email: session.user.email },

@@ -3,13 +3,12 @@
 import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
 import EditableField from "./EditableField";
-import Image from "next/image";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import EditableRadioField from "./EditableRadioField";
+import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-
+import { User } from "@/types/user";
 export default function ProfileCard() {
     const { data: session, status } = useSession();
     const inputRef = useRef<HTMLInputElement>(null);
@@ -18,17 +17,7 @@ export default function ProfileCard() {
     if (status === "loading") return <p>載入中...</p>;
     if (!session || !session.user) return <p>未登入</p>;
 
-    const user = session.user as unknown as {
-        name?: string;
-        contact_email?: string;
-        image?: string;
-        phone?: string;
-        address?: string;
-        department?: string;
-        payment?: { paid: boolean; payment_id?: string };
-        role?: string;
-        registered?: boolean;
-    };
+    const user = session.user as User;
 
     const imageSrc =
         typeof user.image === "string" && user.image.startsWith("/pfp")
@@ -89,16 +78,39 @@ export default function ProfileCard() {
                     label="聯絡用Email"
                     value={user.contact_email}
                 />
-
                 <EditableField
                     mandatory={true}
                     api_value="department"
                     label="單位"
                     value={user.department}
                 />
-
+                <EditableRadioField
+                    api_value="dietary"
+                    label="飲食偏好"
+                    value={user.dietary === "new" ? "未選擇" : user.dietary}
+                    options={[
+                        { value: "vegan", label: "素食" },
+                        { value: "non_vegan", label: "葷食" },
+                    ]}
+                    mandatory
+                />
+                <EditableRadioField
+                    api_value="going_dinner"
+                    label="參加晚宴"
+                    value={
+                        typeof user.going_dinner === "boolean"
+                            ? user.going_dinner
+                                ? "yes"
+                                : "no"
+                            : "未選擇"
+                    }
+                    options={[
+                        { value: "yes", label: "參加" },
+                        { value: "no", label: "不參加" },
+                    ]}
+                    mandatory
+                />
                 <EditableField api_value="phone" label="聯絡電話" value={user.phone} />
-
                 <div className="flex items-center justify-between gap-x-4">
                     <span className="font-medium whitespace-nowrap">身份別:</span>
                     <span className="text-sm text-gray-800">

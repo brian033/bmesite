@@ -7,8 +7,7 @@ import ProfileCard from "./components/ProfileCard";
 import DocumentManager from "./components/DocumentManager";
 import PaymentStatusCard from "./components/PaymentStatusCard";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { Info, CheckCircle, RefreshCcw } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Info } from "lucide-react";
 
 // 使頁面接收查詢參數
 export default async function AttendeePage() {
@@ -26,7 +25,7 @@ export default async function AttendeePage() {
                     <Info className="h-4 w-4" />
                     <AlertTitle>提醒</AlertTitle>
                     <AlertDescription>
-                        請填寫聯絡用 Email 與單位後，才能使用完整功能。
+                        請填寫聯絡用 Email, 單位, 飲食偏好和晚宴參加意願後，才能使用完整功能。
                     </AlertDescription>
                 </Alert>
                 <h1>個人資料設定</h1>
