@@ -3,16 +3,20 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const sponsors = [
-    { name: "三久股份有限公司", url: "https://www.suncue.com/" },
-    { name: "行政院農業部農糧署", url: "https://www.afa.gov.tw/" },
-    { name: "國立台灣大學", url: "https://www.ntu.edu.tw/" },
-    { name: "國立台灣大學生物資源暨農學院", url: "https://www.bioagri.ntu.edu.tw/" },
-    { name: "國立台灣大學生物機電工程學系", url: "https://www.bime.ntu.edu.tw/" },
-    { name: "國立台灣大智慧農業教學與研究發展中心", url: "#" },
-    { name: "中華農業機械學會", url: "http://www.cacam.org.tw/" },
+    { name: "三久股份有限公司", url: "#" },
+    { name: "行政院農業部農糧署", url: "#" },
+    { name: "國立臺灣大學", url: "#" },
+    { name: "國立臺灣大學生物資源暨農學院", url: "#" },
+    { name: "國立臺灣大學生物機電工程學系", url: "#" },
+    { name: "國立臺灣大智慧農業教學與研究發展中心", url: "#" },
+    { name: "中華農業機械學會", url: "#" },
     { name: "生機學會", url: "#" },
-    { name: "財團法人農業機械化研究發展中心", url: "https://www.amrc.org.tw/" },
+    { name: "財團法人農業機械化研究發展中心", url: "#" },
     { name: "中華民國臺灣大學生機農機系友會", url: "#" },
+    { name: "國立中興大學生物產業機電工程學系", url: "#" },
+    { name: "國立宜蘭大學生物機電工程學系", url: "#" },
+    { name: "國立嘉義大學生物機電工程學系", url: "#" },
+    { name: "國立屏東科技大學生物機電工程學系", url: "#" },
 ];
 
 export default function Footer() {
@@ -58,7 +62,7 @@ export default function Footer() {
                             </div>
                         </div>
                         <div className="text-sm text-gray-600">
-                            <p>國立台灣大學生物機電工程學系</p>
+                            <p>國立臺灣大學生物機電工程學系</p>
                             <p>10617 台北市大安區羅斯福路四段1號</p>
                             <p>電話: (02) 3366-5350</p>
                             <p>
@@ -73,7 +77,7 @@ export default function Footer() {
                 <div className="mt-8 pt-4 border-t border-gray-200">
                     <div className="flex flex-col md:flex-row justify-between items-center">
                         <p className="text-sm text-gray-500">
-                            © {currentYear} 國立台灣大學生物機電工程學系. 版權所有.
+                            © {currentYear} 國立臺灣大學生物機電工程學系. 版權所有.
                         </p>
                         <div className="mt-4 md:mt-0 flex space-x-4">
                             <Link
