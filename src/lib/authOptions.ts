@@ -39,6 +39,8 @@ export const authOptions = {
                     contact_email: "未輸入聯絡用信箱", // 預設聯絡信箱為使用者的email
                     // additional fields:
                     phone: "未輸入電話", // 預設電話
+                    dietary: "new",
+                    going_dinner: "new",
                     department: "未輸入單位", // 預設部門
                     payment: {
                         paid: false, // 預設未付款

@@ -31,6 +31,8 @@ import {
     ChevronDown,
     UserIcon,
     CreditCardIcon,
+    UtensilsIcon,
+    CalendarIcon,
 } from "lucide-react";
 import {
     DropdownMenu,
@@ -75,6 +77,16 @@ export default function UserTable({
             paid: false,
             unpaid: false,
         },
+        dietary: {
+            vegan: false,
+            non_vegan: false,
+            new: false,
+        },
+        dinner: {
+            going: false,
+            not_going: false,
+            undecided: false,
+        },
     });
 
     const [isSettingWhitelist, setIsSettingWhitelist] = useState(false);
@@ -88,6 +100,27 @@ export default function UserTable({
         status: "success" | "error";
         message: string;
     } | null>(null);
+
+    // 格式化飲食偏好顯示
+    const formatDietary = (dietary: string) => {
+        switch (dietary) {
+            case "vegan":
+                return "素";
+            case "non_vegan":
+                return "葷";
+            case "new":
+            default:
+                return "未選擇";
+        }
+    };
+
+    // 格式化晚宴參加意願顯示
+    const formatDinner = (going_dinner: boolean | string) => {
+        if (going_dinner === true) return "會去";
+        if (going_dinner === false) return "不會去";
+        return "未選擇";
+    };
+
     const openWhitelistDialog = (user: User) => {
         setWhitelistUser(user);
         setWhitelistMessage(null);
@@ -103,6 +136,7 @@ export default function UserTable({
             undecided: currentWhitelist.includes("undecided"),
         });
     };
+
     // 新增: 提交白名單設定
     const submitWhitelistSettings = async () => {
         if (!whitelistUser) return;
@@ -173,6 +207,7 @@ export default function UserTable({
             setIsSettingWhitelist(false);
         }
     };
+
     // 增強的 CSV 導出函數，添加 BOM 標記以支持中文
     const exportToCSV = () => {
         // 定義 CSV 標頭行
@@ -185,6 +220,9 @@ export default function UserTable({
             "已付金額",
             "審稿案數量",
             "帳號類型",
+            "飲食偏好",
+            "參加晚宴",
+            "UUID",
             "建立時間",
         ];
 
@@ -221,6 +259,9 @@ export default function UserTable({
                 formatCSVField(totalPaid.toString()),
                 formatCSVField(userSubmissions.length.toString()),
                 formatCSVField(user.role || ""),
+                formatCSVField(formatDietary(user.dietary)),
+                formatCSVField(formatDinner(user.going_dinner)),
+                formatCSVField(user.uuid || ""),
                 formatCSVField(formatToUTC8(user.createdAt)),
             ];
         });
@@ -273,7 +314,26 @@ export default function UserTable({
                 (filters.payment.paid && user.payment?.paid) ||
                 (filters.payment.unpaid && !user.payment?.paid);
 
-            return searchMatch && roleMatch && paymentMatch;
+            // 飲食偏好過濾
+            const dietarySelected = Object.values(filters.dietary).some((value) => value);
+            const dietaryMatch =
+                !dietarySelected ||
+                (filters.dietary.vegan && user.dietary === "vegan") ||
+                (filters.dietary.non_vegan && user.dietary === "non_vegan") ||
+                (filters.dietary.new && (user.dietary === "new" || !user.dietary));
+
+            // 晚宴參加意願過濾
+            const dinnerSelected = Object.values(filters.dinner).some((value) => value);
+            const dinnerMatch =
+                !dinnerSelected ||
+                (filters.dinner.going && user.going_dinner === true) ||
+                (filters.dinner.not_going && user.going_dinner === false) ||
+                (filters.dinner.undecided &&
+                    (user.going_dinner === "new" ||
+                        user.going_dinner === undefined ||
+                        user.going_dinner === null));
+
+            return searchMatch && roleMatch && paymentMatch && dietaryMatch && dinnerMatch;
         });
 
         setFilteredUsers(results);
@@ -509,6 +569,98 @@ export default function UserTable({
                                 </DropdownMenuContent>
                             </DropdownMenu>
 
+                            {/* 飲食偏好過濾 */}
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className="flex gap-2">
+                                        <UtensilsIcon className="h-4 w-4" />
+                                        飲食偏好
+                                        <ChevronDown className="h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuCheckboxItem
+                                        checked={filters.dietary.vegan}
+                                        onCheckedChange={(checked) =>
+                                            setFilters({
+                                                ...filters,
+                                                dietary: { ...filters.dietary, vegan: checked },
+                                            })
+                                        }
+                                    >
+                                        素食
+                                    </DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem
+                                        checked={filters.dietary.non_vegan}
+                                        onCheckedChange={(checked) =>
+                                            setFilters({
+                                                ...filters,
+                                                dietary: { ...filters.dietary, non_vegan: checked },
+                                            })
+                                        }
+                                    >
+                                        葷食
+                                    </DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem
+                                        checked={filters.dietary.new}
+                                        onCheckedChange={(checked) =>
+                                            setFilters({
+                                                ...filters,
+                                                dietary: { ...filters.dietary, new: checked },
+                                            })
+                                        }
+                                    >
+                                        未選擇
+                                    </DropdownMenuCheckboxItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
+                            {/* 晚宴參加意願過濾 */}
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline" className="flex gap-2">
+                                        <CalendarIcon className="h-4 w-4" />
+                                        參加晚宴
+                                        <ChevronDown className="h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuCheckboxItem
+                                        checked={filters.dinner.going}
+                                        onCheckedChange={(checked) =>
+                                            setFilters({
+                                                ...filters,
+                                                dinner: { ...filters.dinner, going: checked },
+                                            })
+                                        }
+                                    >
+                                        會去
+                                    </DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem
+                                        checked={filters.dinner.not_going}
+                                        onCheckedChange={(checked) =>
+                                            setFilters({
+                                                ...filters,
+                                                dinner: { ...filters.dinner, not_going: checked },
+                                            })
+                                        }
+                                    >
+                                        不會去
+                                    </DropdownMenuCheckboxItem>
+                                    <DropdownMenuCheckboxItem
+                                        checked={filters.dinner.undecided}
+                                        onCheckedChange={(checked) =>
+                                            setFilters({
+                                                ...filters,
+                                                dinner: { ...filters.dinner, undecided: checked },
+                                            })
+                                        }
+                                    >
+                                        未選擇
+                                    </DropdownMenuCheckboxItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+
                             {/* 下載CSV按鈕 */}
                             <Button
                                 onClick={exportToCSV}
@@ -527,6 +679,12 @@ export default function UserTable({
                                     setFilters({
                                         role: { attendee: false, reviewer: false, admin: false },
                                         payment: { paid: false, unpaid: false },
+                                        dietary: { vegan: false, non_vegan: false, new: false },
+                                        dinner: {
+                                            going: false,
+                                            not_going: false,
+                                            undecided: false,
+                                        },
                                     });
                                 }}
                             >
@@ -553,6 +711,9 @@ export default function UserTable({
                             <TableHead className="min-w-[200px]">付款狀態</TableHead>
                             <TableHead>審稿案</TableHead>
                             <TableHead>身份</TableHead>
+                            <TableHead>飲食偏好</TableHead>
+                            <TableHead>參加晚宴</TableHead>
+                            <TableHead>UUID</TableHead>
                             <TableHead>建立時間</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -708,6 +869,17 @@ export default function UserTable({
                                                 </div>
                                             )}
                                     </TableCell>
+                                    <TableCell>
+                                        <Badge variant="outline">
+                                            {formatDietary(user.dietary)}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Badge variant="outline">
+                                            {formatDinner(user.going_dinner)}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell className="font-mono text-xs">{user.uuid}</TableCell>
                                     <TableCell className="whitespace-nowrap">
                                         {formatToUTC8(user.createdAt)}
                                     </TableCell>
