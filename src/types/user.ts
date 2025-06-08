@@ -13,6 +13,8 @@ export type User = {
     phone: string;
     dietary: "vegan" | "non_vegan" | "new";
     going_dinner: boolean | "new";
+    isHelper: boolean;
+    checkIns: checkInPrototype[];
     department: string;
     payment: {
         paid: boolean;
@@ -28,6 +30,14 @@ export type User = {
     };
     reviewing_whitelist?: Array<"oral" | "poster" | "undecided">;
     presentation_type?: string[];
+};
+
+export type checkInPrototype = {
+    date: string;
+    checkIn: boolean;
+    note?: string;
+    createdAt?: string;
+    helper?: string;
 };
 
 export type UploadedPdf = {

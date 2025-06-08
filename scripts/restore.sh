@@ -38,7 +38,7 @@ rm -rf "$UPLOADS_PATH" || { echo "❌ 刪除 uploads 失敗"; exit 1; }
 
 # --- 解壓 uploads zip 檔 ---
 echo "📥 解壓備份 uploads 到 uploads/"
-unzip "$ZIP_FILE" -d "$SCRIPT_DIR/../" || { echo "❌ 解壓 uploads 失敗"; exit 1; }
+unzip -q "$ZIP_FILE" -d "$SCRIPT_DIR/../" || { echo "❌ 解壓 uploads 失敗"; exit 1; }
 
 # --- 傳送 MongoDB 備份檔到容器 ---
 echo "📤 傳送 .bak 備份檔到容器..."
