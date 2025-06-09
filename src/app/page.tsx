@@ -6,7 +6,7 @@ import { CalendarDays, MapPin, Download, Users } from "lucide-react";
 import AnnouncementCard from "./components/AnnouncementCard";
 import ImportantDatesCard from "./components/ImportantDatesCard";
 
-function PaymentInfo() {
+export function PaymentInfo() {
     return (
         <div className="bg-white p-6 rounded-lg shadow-md border border-green-100">
             <h3 className="text-xl font-semibold mb-4 text-center">報名費用</h3>
