@@ -44,4 +44,5 @@ next-env.d.ts
 /db
 /uploads
 /backup
+/public
 priceOptionQuery.txt
