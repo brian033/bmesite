@@ -57,7 +57,7 @@ export default function Page() {
                         <div className="bg-red-50 p-3 rounded-md border border-red-200 mb-6">
                             <p className="text-red-600 flex items-start">
                                 <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
-                                <span>繳費收據請於研討會當天至簽到處領取 (????)</span>
+                                <span>繳費收據請於研討會當天至簽到處領取 (TBD)</span>
                             </p>
                         </div>
                         <PaymentInfo />
@@ -72,7 +72,7 @@ export default function Page() {
                             </div>
 
                             <div className="grid grid-cols-1 gap-3 mb-6">
-                                <Link href="#" className="block">
+                                <Link href="/profile" className="block">
                                     <Button className="w-full bg-green-700 hover:bg-green-800">
                                         <User className="mr-2 h-4 w-4" /> 個人頁面建立審稿案
                                     </Button>
@@ -95,14 +95,26 @@ export default function Page() {
 
                             <div className="space-y-3">
                                 <div>
-                                    <p className="font-medium mb-1">論文組：xxx先生/小姐</p>
+                                    <p className="font-medium mb-1">盧彥文 教授</p>
                                     <p className="flex items-center">
                                         <Mail className="h-4 w-4 mr-2 text-gray-600" />
                                         <a
-                                            href="mailto:12345@gmail.com"
+                                            href="mailto:yenwenlu@ntu.edu.tw"
                                             className="text-blue-600 hover:underline"
                                         >
-                                            12345@gmail.com
+                                            yenwenlu@ntu.edu.tw
+                                        </a>
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="font-medium mb-1">周呈霙 教授</p>
+                                    <p className="flex items-center">
+                                        <Mail className="h-4 w-4 mr-2 text-gray-600" />
+                                        <a
+                                            href="mailto:chengying@ntu.edu.tw"
+                                            className="text-blue-600 hover:underline"
+                                        >
+                                            chengying@ntu.edu.tw
                                         </a>
                                     </p>
                                 </div>
@@ -153,7 +165,7 @@ export default function Page() {
 
                         <div className="bg-green-50 p-4 rounded-md border border-green-100 mb-6">
                             <h3 className="text-xl font-medium mb-3 text-green-800 text-center">
-                                ※ 注意事項 ※ (TBDTBDTBDTBD!!!!!!!!)
+                                ※ 注意事項 ※ (TBA)
                             </h3>
                             <ul className="list-disc list-inside space-y-2">
                                 <li>摘要接受通知後，開放論文全文上傳。</li>
@@ -162,7 +174,7 @@ export default function Page() {
                                     論文發表形式將由Oral 或Poster
                                     者，均需上傳「摘要」與「論文全文」。
                                 </li>
-                                <li>壁報尺寸為 90 cm x 120 cm</li>
+                                <li>海報尺寸為 90 cm x 120 cm</li>
                             </ul>
                         </div>
 

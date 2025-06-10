@@ -40,7 +40,7 @@ export default function Page() {
                 <h1 className="text-3xl font-bold mb-2 text-center">
                     2025 三久生物機電盃全國田間機器人競賽
                 </h1>
-                <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">簡介簡介簡介</p>
+                <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">簡介(TBA)</p>
 
                 {/* 競賽資訊卡片 */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">

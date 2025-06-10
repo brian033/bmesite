@@ -65,39 +65,6 @@ export default function Page() {
                     國立台灣大學位於台北市大安區，交通便利，可透過多種方式抵達。
                     以下提供交通指南及住宿建議，協助您順利參與研討會。
                 </p>
-
-                {/* 會場資訊 */}
-                <div className="mb-12 bg-white p-6 rounded-lg shadow-md border border-green-100">
-                    <div className="flex items-start gap-3 mb-4">
-                        <MapPin className="h-6 w-6 text-green-700 flex-shrink-0 mt-1" />
-                        <div>
-                            <h2 className="text-xl font-semibold mb-1">會場地點</h2>
-                            <p className="text-lg font-medium">國立台灣大學生物機電工程學系</p>
-                            <p className="text-gray-600">106台北市大安區羅斯福路四段1號</p>
-                        </div>
-                    </div>
-
-                    <div className="mt-6 aspect-video relative rounded-lg overflow-hidden border border-gray-200">
-                        <div className="absolute inset-0">
-                            {/* <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3615.47544070795!2d121.54023707537601!3d25.017934377826663!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442aa2429043393%3A0xcfa54254447302e2!2z5ZyL56uL6Ie654Gj5aSn5a2455Sf54mp5qmf6Zu75bel56iL5a2457O7!5e0!3m2!1szh-TW!2stw!4v1749455183869!5m2!1szh-TW!2stw"
-                                width="100%"
-                                height="100%"
-                                style={{ border: 0 }}
-                                allowFullScreen
-                                loading="lazy"
-                                referrerPolicy="no-referrer-when-downgrade"
-                            ></iframe> */}
-                            <Image
-                                src="/travel/map.png"
-                                alt="map"
-                                width={800}
-                                height={600}
-                                className="w-full h-full"
-                            />
-                        </div>
-                    </div>
-                </div>
                 <div className="mb-12 bg-white p-6 rounded-lg shadow-md border border-green-100">
                     <div className="flex items-start gap-3 mb-4">
                         <MapPin className="h-6 w-6 text-green-700 flex-shrink-0 mt-1" />

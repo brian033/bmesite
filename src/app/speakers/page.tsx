@@ -37,7 +37,7 @@ export default function Page() {
     return (
         <div className="flex flex-col min-h-screen">
             {/* 頂部橫幅 */}
-            <div className="relative w-full h-[30vh]">
+            {/* <div className="relative w-full h-[30vh]">
                 <Image
                     src="/webpage/banner.JPG"
                     fill
@@ -45,7 +45,7 @@ export default function Page() {
                     className="object-cover"
                     priority
                 />
-            </div>
+            </div> */}
 
             {/* 主要內容 */}
             <div className="container mx-auto px-4 py-12">

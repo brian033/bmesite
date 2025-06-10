@@ -77,7 +77,7 @@ export default function SchedulePage() {
     return (
         <div className="flex flex-col min-h-screen">
             {/* 頂部橫幅 */}
-            <div className="relative w-full h-[30vh]">
+            {/* <div className="relative w-full h-[30vh]">
                 <Image
                     src="/webpage/banner.JPG"
                     fill
@@ -85,7 +85,7 @@ export default function SchedulePage() {
                     className="object-cover"
                     priority
                 />
-            </div>
+            </div> */}
 
             {/* 主要內容 */}
             <div className="container mx-auto px-4 py-12">
@@ -182,7 +182,6 @@ export default function SchedulePage() {
                     <h3 className="text-lg font-semibold mb-2">注意事項</h3>
                     <ul className="list-disc list-inside space-y-1 text-gray-700">
                         <li>議程可能會有所調整，請以現場公告為準</li>
-                        <li>(TBD)...</li>
                     </ul>
                 </div>
 
