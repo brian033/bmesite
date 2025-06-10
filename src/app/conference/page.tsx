@@ -144,8 +144,11 @@ export default function Page() {
 
                     <div className="bg-white p-6 rounded-lg shadow-md border border-green-100">
                         <p className="mb-4">
-                            本次研討會分為口頭報表(Oral)及海報發表(Poster)兩種形式，格式請參照2025生機與農機學術研討會網站所提供之「論文格式」相
-                            關條件。
+                            本次研討會分為口頭報表(Oral)及海報發表(Poster)兩種形式，格式請參照2025生機與農機學術研討會網站之
+                            <Link href="/downloads" className="text-blue-600 hover:underline">
+                                下載專區
+                            </Link>
+                            所提供之「論文格式」相 關條件。
                         </p>
 
                         <div className="bg-green-50 p-4 rounded-md border border-green-100 mb-6">

@@ -32,11 +32,11 @@ const downloadFiles = [
         icon: <FileText className="h-6 w-6 text-green-700" />,
         files: [
             {
-                name: "摘要格式樣板",
+                name: "摘要格式範本",
                 description: "摘要投稿格式規範與範本",
                 path: "/downloads/abstract_template.docx",
-                size: "25 KB",
-                date: "2025-01-10",
+                size: "21 KB",
+                date: "2025-06-10",
             },
             {
                 name: "論文全文格式範本",
