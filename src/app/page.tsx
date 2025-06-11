@@ -100,7 +100,7 @@ export default function HomePage() {
                     <div className="bg-green-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center border border-green-100">
                         <Users className="h-12 w-12 text-green-700 mb-4" />
                         <h3 className="text-xl font-semibold mb-2">主辦單位</h3>
-                        <p>臺灣生物機電學會</p>
+                        <p>台灣生物機電學會</p>
                     </div>
                 </div>
                 <AnnouncementCard />

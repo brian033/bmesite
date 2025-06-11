@@ -165,16 +165,20 @@ export default function Page() {
 
                         <div className="bg-green-50 p-4 rounded-md border border-green-100 mb-6">
                             <h3 className="text-xl font-medium mb-3 text-green-800 text-center">
-                                ※ 注意事項 ※ (TBA)
+                                ※ 注意事項 ※
                             </h3>
                             <ul className="list-disc list-inside space-y-2">
                                 <li>摘要接受通知後，開放論文全文上傳。</li>
-                                <li>全文(不含摘要)以2頁為限</li>
+                                <li>
+                                    欲線上報名者，請先點選右上角註冊帳號後，填寫基本資料和繳費，方可在研討會當天簽到時領取名牌。
+                                </li>
+                                <li>其他事項將在未來公告。</li>
+                                {/* <li>全文(不含摘要)以2頁為限</li>
                                 <li>
                                     論文發表形式將由Oral 或Poster
                                     者，均需上傳「摘要」與「論文全文」。
                                 </li>
-                                <li>海報尺寸為 90 cm x 120 cm</li>
+                                <li>海報尺寸為 90 cm x 120 cm</li> */}
                             </ul>
                         </div>
 
@@ -183,13 +187,16 @@ export default function Page() {
                                 論文發表規定
                             </h3>
                             <ul className="list-disc list-inside space-y-2">
-                                <li>口頭論文發表為15分鐘(口頭報告12分鐘、問答3分鐘)</li>
+                                <li>投稿需要註冊帳號後才可以建立審稿案。</li>
+                                <li>若全文被接受，需要完成繳費方可在會場發表。</li>
+                                <li>請參照下載專區之格式與範本。</li>
+                                {/* <li>口頭論文發表為15分鐘(口頭報告12分鐘、問答3分鐘)</li>
                                 <li>壁報論文發表為3分鐘(含問答)</li>
                                 <li>壁報競賽：發表人請於壁報張貼場地等候評審委員進行評分</li>
                                 <li>
                                     口頭報告者請在提前到15分鐘至教室上傳簡報檔案，為避免軟體問題，報告時一律使用大會提供的電腦。簡報內建軟體為Office
                                     PowerPoint，若有其格式問題，可轉成PDF檔案。
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                     </div>

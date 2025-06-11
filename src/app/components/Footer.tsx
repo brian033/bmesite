@@ -3,16 +3,15 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 const sponsors = [
-    { name: "三久股份有限公司", url: "#" },
-    { name: "行政院農業部農糧署", url: "#" },
-    { name: "國立臺灣大學", url: "#" },
-    { name: "國立臺灣大學生物資源暨農學院", url: "#" },
+    { name: "台灣生物機電學會", url: "#" },
     { name: "國立臺灣大學生物機電工程學系", url: "#" },
-    { name: "國立臺灣大智慧農業教學與研究發展中心", url: "#" },
+    { name: "國立臺灣大學生物資源暨農學院", url: "#" },
+    { name: "行政院農業部農糧署", url: "#" },
+    { name: "三久股份有限公司", url: "#" },
     { name: "中華農業機械學會", url: "#" },
-    { name: "生機學會", url: "#" },
     { name: "財團法人農業機械化研究發展中心", url: "#" },
     { name: "中華民國臺灣大學生機農機系友會", url: "#" },
+    { name: "國立臺灣大智慧農業教學與研究發展中心", url: "#" },
     { name: "國立中興大學生物產業機電工程學系", url: "#" },
     { name: "國立宜蘭大學生物機電工程學系", url: "#" },
     { name: "國立嘉義大學生物機電工程學系", url: "#" },
@@ -64,13 +63,13 @@ export default function Footer() {
                         <div className="text-sm text-gray-600">
                             <p>國立臺灣大學生物機電工程學系</p>
                             <p>10617 台北市大安區羅斯福路四段1號</p>
-                            <p>電話: (02) 3366-5350</p>
-                            <p>
+                            <p>電話: (02) 3366-5339</p>
+                            {/* <p>
                                 Email:{" "}
                                 <a href="mailto:bime@ntu.edu.tw" className="hover:text-blue-600">
                                     bime@ntu.edu.tw
                                 </a>
-                            </p>
+                            </p> */}
                         </div>
                     </div>
                 </div>
@@ -79,7 +78,7 @@ export default function Footer() {
                         <p className="text-sm text-gray-500">
                             © {currentYear} 國立臺灣大學生物機電工程學系. 版權所有.
                         </p>
-                        <div className="mt-4 md:mt-0 flex space-x-4">
+                        {/* <div className="mt-4 md:mt-0 flex space-x-4">
                             <Link
                                 href="/privacy-policy"
                                 className="text-sm text-gray-500 hover:text-blue-600"
@@ -98,7 +97,7 @@ export default function Footer() {
                             >
                                 聯絡我們
                             </Link>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

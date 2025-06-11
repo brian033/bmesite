@@ -3,9 +3,9 @@ import { Calendar, Clock, MapPin } from "lucide-react";
 
 // 定義議程資料結構
 const conferenceSchedule = {
-    title: "2025 生機與農機學術研討會",
+    title: "2025 生機與農機學術研討會大會議程",
     dates: "114年9月25-26日（星期四~五）",
-    location: "國立台灣大學生物機電工程系 系館",
+    location: "國立臺灣大學生物機電工程系 系館",
     days: [
         {
             date: "114年9月25日(四)",
@@ -67,6 +67,11 @@ const conferenceSchedule = {
                     time: "11:30-12:00",
                     activity: "口頭競賽頒獎及閉幕典禮",
                     location: "知武館4F演講廳",
+                },
+                {
+                    time: "晚上",
+                    activity: "晚宴",
+                    location: "公館薪僑園水源婚宴會館",
                 },
             ],
         },

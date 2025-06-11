@@ -28,7 +28,7 @@ export default function Navbar() {
     if (!mounted) {
         return (
             <nav className="flex justify-between items-center bg-primary text-white px-4 lg:px-8 py-4 font-sans relative">
-                <div className="font-bold text-sm lg:text-lg">2025 農機與生機學術研討會</div>
+                <div className="font-bold text-sm lg:text-lg">2025 生機與農機學術研討會</div>
                 {/* 靜態菜單（無交互） */}
                 <div className="hidden lg:flex lg:gap-4 lg:items-center">
                     <Link href="/" className="py-2 lg:py-0">
