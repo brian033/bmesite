@@ -6,9 +6,9 @@ const speakers = [
     {
         title: "Plenary Speech I",
         titleEn: "Plenary Speech I",
-        speaker: "李紅曦 代理院長",
+        speaker: "李紅曦 司長",
         speakerEn: "Lee, Hung-Hsi",
-        position: "農業科技研究院代理院長",
+        position: "農業部 農業科技司司長",
         positionEn: "",
         photoUrl: "/speakers/speaker1.jpg", // 預設圖片，請替換為實際照片
         host: "邱奕志 理事長",
