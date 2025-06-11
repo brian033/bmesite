@@ -62,7 +62,7 @@ export default function Page() {
             <div className="container mx-auto px-4 py-12">
                 <h1 className="text-3xl font-bold mb-2 text-center">交通與住宿資訊</h1>
                 <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-                    國立台灣大學位於台北市大安區，交通便利，可透過多種方式抵達。
+                    國立臺灣大學位於台北市大安區，交通便利，可透過多種方式抵達。
                     以下提供交通指南及住宿建議，協助您順利參與研討會。
                 </p>
                 <div className="mb-12 bg-white p-6 rounded-lg shadow-md border border-green-100">
@@ -70,7 +70,7 @@ export default function Page() {
                         <MapPin className="h-6 w-6 text-green-700 flex-shrink-0 mt-1" />
                         <div>
                             <h2 className="text-xl font-semibold mb-1">會場地點</h2>
-                            <p className="text-lg font-medium">國立台灣大學生物機電工程學系</p>
+                            <p className="text-lg font-medium">國立臺灣大學生物機電工程學系</p>
                             <p className="text-gray-600">106台北市大安區羅斯福路四段1號</p>
                         </div>
                     </div>

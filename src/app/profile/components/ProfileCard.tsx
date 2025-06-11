@@ -75,7 +75,7 @@ export default function ProfileCard() {
             </div>
 
             <div className="flex flex-col gap-4 flex-grow">
-                <EditableField api_value="name" label="姓名" value={user.name} />
+                <EditableField api_value="name" label="姓名與職稱(製作名牌用)" value={user.name} />
                 <EditableField
                     mandatory={true}
                     api_value="contact_email"
@@ -85,7 +85,7 @@ export default function ProfileCard() {
                 <EditableField
                     mandatory={true}
                     api_value="department"
-                    label="單位"
+                    label="所屬單位(製作名牌用)"
                     value={user.department}
                 />
                 <EditableRadioField
