@@ -41,6 +41,8 @@ export const authOptions = {
                     phone: "未輸入電話", // 預設電話
                     dietary: "new",
                     going_dinner: "new",
+                    isHelper: false,
+                    checkIns: [],
                     department: "未輸入單位", // 預設部門
                     payment: {
                         paid: false, // 預設未付款
@@ -60,23 +62,6 @@ export const authOptions = {
             return true;
         },
 
-        // async jwt({ token, user }) {
-        //     const client = await clientPromise;
-        //     const db = client.db(process.env.MONGODB_DB);
-        //     const collection = db.collection("users");
-
-        //     // const dbUser = await collection.findOne({
-        //     //     email: token.email ?? user?.email,
-        //     // });
-        //     const dbUser = (await collection.findOne({
-        //         email: token.email ?? user?.email,
-        //     })) as DBUser;
-
-        //     if (dbUser) {
-        //         Object.assign(token as typeof token & Partial<DBUser>, dbUser);
-        //     }
-        //     return token;
-        // },
         // JWT patch, downsizing jwt
         async jwt({ token, user }) {
             const client = await clientPromise;

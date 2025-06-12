@@ -4,15 +4,19 @@ import { useSession } from "next-auth/react";
 import { useRef, useState } from "react";
 import EditableField from "./EditableField";
 import EditableRadioField from "./EditableRadioField";
+import QRCodeGenerator from "./QRCodeGenerator";
+import { ChevronDown, ChevronUp, QrCode } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { User } from "@/types/user";
 export default function ProfileCard() {
     const { data: session, status } = useSession();
     const inputRef = useRef<HTMLInputElement>(null);
     const [uploading, setUploading] = useState(false);
+    const [showQRCode, setShowQRCode] = useState(false);
 
     if (status === "loading") return <p>載入中...</p>;
     if (!session || !session.user) return <p>未登入</p>;
@@ -71,7 +75,7 @@ export default function ProfileCard() {
             </div>
 
             <div className="flex flex-col gap-4 flex-grow">
-                <EditableField api_value="name" label="姓名" value={user.name} />
+                <EditableField api_value="name" label="姓名與職稱(製作名牌用)" value={user.name} />
                 <EditableField
                     mandatory={true}
                     api_value="contact_email"
@@ -81,7 +85,7 @@ export default function ProfileCard() {
                 <EditableField
                     mandatory={true}
                     api_value="department"
-                    label="單位"
+                    label="所屬單位(製作名牌用)"
                     value={user.department}
                 />
                 <EditableRadioField
@@ -132,6 +136,35 @@ export default function ProfileCard() {
                         </Badge>
                     )}
                 </div>
+                {user.payment.paid && (
+                    <div className="border-t pt-4 mt-4">
+                        <Button
+                            variant="outline"
+                            onClick={() => setShowQRCode(!showQRCode)}
+                            className="w-full flex items-center justify-between"
+                        >
+                            <div className="flex items-center gap-2">
+                                <QrCode className="h-4 w-4" />
+                                <span>顯示活動當天簽到用QR Code</span>
+                            </div>
+                            {showQRCode ? (
+                                <ChevronUp className="h-4 w-4" />
+                            ) : (
+                                <ChevronDown className="h-4 w-4" />
+                            )}
+                        </Button>
+
+                        {showQRCode && (
+                            <div className="mt-4 animate-in slide-in-from-top-2 duration-300">
+                                <QRCodeGenerator
+                                    uuid={user.uuid}
+                                    title="我的專屬 QR Code"
+                                    size={200}
+                                />
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
         </Card>
     );
