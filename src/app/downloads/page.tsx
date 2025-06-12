@@ -8,23 +8,23 @@ import { Badge } from "@/components/ui/badge";
 // 定義下載檔案資訊
 const downloadFiles = [
     {
-        category: "會議資料",
+        category: "2025生機與農機學術演討會",
         icon: <BookOpen className="h-6 w-6 text-green-700" />,
         files: [
             {
-                name: "研討會議程表",
-                description: "詳細時間地點與議程安排",
-                path: "/downloads/conference_schedule.pdf",
-                size: "1.2 MB",
-                date: "2025-05-15",
+                name: "研討會海報",
+                description: "歡迎列印張貼",
+                path: "/webpage/poster.JPG",
+                size: "6.4 MB",
+                date: "2025-06-12",
             },
-            {
-                name: "會議手冊",
-                description: "會議須知與重要資訊",
-                path: "/downloads/conference_handbook.pdf",
-                size: "3.5 MB",
-                date: "2025-05-15",
-            },
+            // {
+            //     name: "會議手冊",
+            //     description: "會議須知與重要資訊",
+            //     path: "/downloads/conference_handbook.pdf",
+            //     size: "3.5 MB",
+            //     date: "2025-05-15",
+            // },
         ],
     },
     {
@@ -38,47 +38,47 @@ const downloadFiles = [
                 size: "21 KB",
                 date: "2025-06-10",
             },
-            {
-                name: "論文全文格式範本",
-                description: "論文全文投稿格式規範與範本",
-                path: "/downloads/full_paper_template.docx",
-                size: "42 KB",
-                date: "2025-01-10",
-            },
-            {
-                name: "論文投稿流程說明",
-                description: "詳細的投稿步驟與注意事項",
-                path: "/downloads/submission_guide.pdf",
-                size: "1.8 MB",
-                date: "2025-01-10",
-            },
+            // {
+            //     name: "論文全文格式範本",
+            //     description: "論文全文投稿格式規範與範本",
+            //     path: "/downloads/full_paper_template.docx",
+            //     size: "42 KB",
+            //     date: "2025-01-10",
+            // },
+            // {
+            //     name: "論文投稿流程說明",
+            //     description: "詳細的投稿步驟與注意事項",
+            //     path: "/downloads/submission_guide.pdf",
+            //     size: "1.8 MB",
+            //     date: "2025-01-10",
+            // },
         ],
     },
     {
-        category: "機器人競賽資料",
+        category: "2025 三久生物機電盃全國田間機器人競賽",
         icon: <Laptop className="h-6 w-6 text-green-700" />,
         files: [
             {
-                name: "競賽規則",
-                description: "三久生物機電盃全國田間機器人競賽規則",
-                path: "/downloads/robot_competition_rules.pdf",
-                size: "2.3 MB",
-                date: "2025-03-01",
+                name: "競賽海報",
+                description: "歡迎列印張貼！",
+                path: "/robot/robot_poster.pdf",
+                size: "540 KB",
+                date: "2025-06-12",
             },
-            {
-                name: "技術規範說明",
-                description: "參賽團隊須知與技術規範",
-                path: "/downloads/technical_specifications.pdf",
-                size: "1.5 MB",
-                date: "2025-03-01",
-            },
-            {
-                name: "報名表單",
-                description: "競賽報名表格",
-                path: "/downloads/registration_form.xlsx",
-                size: "320 KB",
-                date: "2025-03-01",
-            },
+            // {
+            //     name: "技術規範說明",
+            //     description: "參賽團隊須知與技術規範",
+            //     path: "/downloads/technical_specifications.pdf",
+            //     size: "1.5 MB",
+            //     date: "2025-03-01",
+            // },
+            // {
+            //     name: "報名表單",
+            //     description: "競賽報名表格",
+            //     path: "/downloads/registration_form.xlsx",
+            //     size: "320 KB",
+            //     date: "2025-03-01",
+            // },
         ],
     },
 ];
@@ -91,7 +91,7 @@ export default function DownloadsPage() {
                 <Image
                     src="/webpage/banner.JPG"
                     fill
-                    alt="2025 農機與生機學術研討會"
+                    alt="2025 生機與農機學術研討會"
                     className="object-cover"
                     priority
                 />

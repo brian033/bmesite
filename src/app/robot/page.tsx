@@ -29,7 +29,7 @@ export default function Page() {
                 <Image
                     src="/webpage/banner.JPG"
                     fill
-                    alt="2025 農機與生機學術研討會"
+                    alt="2025 生機與農機學術研討會"
                     className="object-cover"
                     priority
                 />
@@ -40,7 +40,8 @@ export default function Page() {
                 <h1 className="text-3xl font-bold mb-2 text-center">
                     2025 三久生物機電盃全國田間機器人競賽
                 </h1>
-                <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">簡介</p>
+                {/* 這邊可以打簡介喔～ */}
+                {/* <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">簡介</p> */}
                 <div className="flex justify-center my-4">
                     <Image
                         src="/robot/robot_poster.jpg"
@@ -62,13 +63,13 @@ export default function Page() {
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="pt-6 space-y-4">
-                            <div className="flex items-start gap-3">
+                            {/* <div className="flex items-start gap-3">
                                 <FileText className="h-5 w-5 text-green-700 flex-shrink-0 mt-0.5" />
                                 <div>
                                     <h3 className="font-medium">競賽主題</h3>
                                     <p>ＸＸＸＸ</p>
                                 </div>
-                            </div>
+                            </div> */}
 
                             <div className="flex items-start gap-3">
                                 <CalendarDays className="h-5 w-5 text-green-700 flex-shrink-0 mt-0.5" />
@@ -158,8 +159,8 @@ export default function Page() {
                                 <TableHeader className="bg-green-50">
                                     <TableRow>
                                         <TableHead className="font-bold">獎項</TableHead>
-                                        <TableHead className="font-bold">大專組</TableHead>
-                                        <TableHead className="font-bold">高職組</TableHead>
+                                        <TableHead className="font-bold">大專生組</TableHead>
+                                        <TableHead className="font-bold">高中職組</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -193,9 +194,23 @@ export default function Page() {
 
                     <Card className="border border-green-100 shadow-md">
                         <CardContent className="py-8">
-                            <div className="text-center text-gray-500">
-                                <p className="mb-4">競賽相關文件尚未公布</p>
-                                <p className="text-sm">(TBA)</p>
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between border-b pb-3">
+                                    <div className="flex items-center gap-2">
+                                        <FileText className="h-5 w-5 text-green-700" />
+                                        <span>田間機器人海報PDF檔</span>
+                                    </div>
+                                    <Link href="/robot/robot_poster.pdf" target="_blank" download>
+                                        <Button variant="outline" size="sm" className="gap-2">
+                                            <Download className="h-4 w-4" />
+                                            下載
+                                        </Button>
+                                    </Link>
+                                </div>
+
+                                <div className="text-center text-gray-500 pt-2">
+                                    <p className="mb-4">更多田間機器人比賽相關文件將陸續公布</p>
+                                </div>
                             </div>
                         </CardContent>
                     </Card>

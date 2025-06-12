@@ -126,7 +126,7 @@ const handler = async (req: NextRequest, session: any) => {
                 },
                 {
                     to: userRes.contact_email,
-                    subject: "2025農機與生機學術研討會-審稿案更新通知",
+                    subject: "2025生機與農機學術研討會-審稿案更新通知",
                 }
             );
         }

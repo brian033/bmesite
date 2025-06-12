@@ -83,7 +83,7 @@ const handler = async (req: NextRequest, session: any) => {
                 },
                 {
                     to: updatedUser.contact_email,
-                    subject: "感謝報名2025農機與生機學術研討會",
+                    subject: "感謝報名2025生機與農機學術研討會",
                 }
             );
         }
