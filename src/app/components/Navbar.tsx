@@ -47,7 +47,7 @@ export default function Navbar() {
                         住宿與交通
                     </Link>
                     <Link href="/robot" className="py-2 lg:py-0">
-                        田間機器人
+                        農業機器人比賽
                     </Link>
                     <Link href="/downloads" className="py-2 lg:py-0">
                         檔案下載
@@ -133,7 +133,7 @@ export default function Navbar() {
                     onClick={handleNavItemClick}
                     className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
                 >
-                    田間機器人
+                    農業機器人比賽
                 </Link>
                 <Link
                     href="/downloads"

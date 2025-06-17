@@ -1,75 +1,77 @@
-[{
-  "_id": {
-    "$oid": "68492f9fd3e5efc5b671bf3a"
-  },
-  "title": "摘要投稿截止日",
-  "date": "2025-08-01",
-  "displayText": "2025年8月1日",
-  "isExtended": false,
-  "originalDate": null,
-  "originalDisplayText": null,
-  "createdAt": {
-    "$date": "2025-06-11T07:26:23.147Z"
-  },
-  "createdBy": "lee.brian.lbw@gmail.com"
-},
-{
-  "_id": {
-    "$oid": "68492fbbd3e5efc5b671bf3b"
-  },
-  "title": "摘要通過截止日",
-  "date": "2025-08-15",
-  "displayText": "2025年8月15日",
-  "isExtended": false,
-  "originalDate": null,
-  "originalDisplayText": null,
-  "createdAt": {
-    "$date": "2025-06-11T07:26:51.550Z"
-  },
-  "createdBy": "lee.brian.lbw@gmail.com"
-},
-{
-  "_id": {
-    "$oid": "68492fd0d3e5efc5b671bf3c"
-  },
-  "title": "全文投稿截止日",
-  "date": "2025-08-31",
-  "displayText": "2025年8月31日",
-  "isExtended": false,
-  "originalDate": null,
-  "originalDisplayText": null,
-  "createdAt": {
-    "$date": "2025-06-11T07:27:12.580Z"
-  },
-  "createdBy": "lee.brian.lbw@gmail.com"
-},
-{
-  "_id": {
-    "$oid": "68492fe2d3e5efc5b671bf3d"
-  },
-  "title": "田間機器人報名截止日",
-  "date": "2025-08-15",
-  "displayText": "2025年8月15日",
-  "isExtended": false,
-  "originalDate": null,
-  "originalDisplayText": null,
-  "createdAt": {
-    "$date": "2025-06-11T07:27:30.878Z"
-  },
-  "createdBy": "lee.brian.lbw@gmail.com"
-},
-{
-  "_id": {
-    "$oid": "68492ff9d3e5efc5b671bf3e"
-  },
-  "title": "線上報名截止日(水源桌次最後通知)",
-  "date": "2025-09-12",
-  "displayText": "2025年9月12日",
-  "isExtended": false,
-  "originalDate": null,
-  "originalDisplayText": null,
-  "createdAt": {
-    "$date": "2025-06-11T07:27:53.582Z"
-  },
-  "createdBy": "lee.brian.lbw@gmail.com"
-}]
+[
+    {
+        "_id": {
+            "$oid": "68492f9fd3e5efc5b671bf3a"
+        },
+        "title": "摘要投稿截止日",
+        "date": "2025-08-01",
+        "displayText": "2025年8月1日",
+        "isExtended": false,
+        "originalDate": null,
+        "originalDisplayText": null,
+        "createdAt": {
+            "$date": "2025-06-11T07:26:23.147Z"
+        },
+        "createdBy": "lee.brian.lbw@gmail.com"
+    },
+    {
+        "_id": {
+            "$oid": "68492fbbd3e5efc5b671bf3b"
+        },
+        "title": "摘要通過截止日",
+        "date": "2025-08-15",
+        "displayText": "2025年8月15日",
+        "isExtended": false,
+        "originalDate": null,
+        "originalDisplayText": null,
+        "createdAt": {
+            "$date": "2025-06-11T07:26:51.550Z"
+        },
+        "createdBy": "lee.brian.lbw@gmail.com"
+    },
+    {
+        "_id": {
+            "$oid": "68492fd0d3e5efc5b671bf3c"
+        },
+        "title": "全文投稿截止日",
+        "date": "2025-08-31",
+        "displayText": "2025年8月31日",
+        "isExtended": false,
+        "originalDate": null,
+        "originalDisplayText": null,
+        "createdAt": {
+            "$date": "2025-06-11T07:27:12.580Z"
+        },
+        "createdBy": "lee.brian.lbw@gmail.com"
+    },
+    {
+        "_id": {
+            "$oid": "68492fe2d3e5efc5b671bf3d"
+        },
+        "title": "農業機器人比賽報名截止日",
+        "date": "2025-08-15",
+        "displayText": "2025年8月15日",
+        "isExtended": false,
+        "originalDate": null,
+        "originalDisplayText": null,
+        "createdAt": {
+            "$date": "2025-06-11T07:27:30.878Z"
+        },
+        "createdBy": "lee.brian.lbw@gmail.com"
+    },
+    {
+        "_id": {
+            "$oid": "68492ff9d3e5efc5b671bf3e"
+        },
+        "title": "線上報名截止日(水源桌次最後通知)",
+        "date": "2025-09-12",
+        "displayText": "2025年9月12日",
+        "isExtended": false,
+        "originalDate": null,
+        "originalDisplayText": null,
+        "createdAt": {
+            "$date": "2025-06-11T07:27:53.582Z"
+        },
+        "createdBy": "lee.brian.lbw@gmail.com"
+    }
+]

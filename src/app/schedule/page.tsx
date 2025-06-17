@@ -10,10 +10,20 @@ const conferenceSchedule = {
         {
             date: "114年9月25日(四)",
             events: [
-                { time: "08:20-14:00", activity: "報到", location: "生機館1F" },
                 {
-                    time: "09:10-10:30",
+                    time: "08:20",
+                    activity: "開放報到",
+                    location: "生機館1F",
+                    details: ["開放報到時間: 08:20 ~ 14:00"],
+                },
+                {
+                    time: "09:10-10:20",
                     activity: "開幕典禮暨台灣生物機電學會年會",
+                    location: "鄭江樓信義講堂",
+                },
+                {
+                    time: "10:20-10:30",
+                    activity: "大合照時間",
                     location: "鄭江樓信義講堂",
                 },
                 {
@@ -51,7 +61,13 @@ const conferenceSchedule = {
                     parallelLocation: "知武館穿堂、2F走廊",
                 },
                 { time: "15:20-15:40", activity: "茶敘", location: "生機館1F" },
-                { time: "15:40-17:30", activity: "研發成果口頭發表", location: "知武館及生機館" },
+                {
+                    time: "15:40-17:30",
+                    activity: "研發成果口頭發表",
+                    location: "知武館及生機館",
+                    parallel: "農機安全論壇",
+                    parallelLocation: "知武館4F演講廳",
+                },
                 {
                     time: "18:00-20:30",
                     activity: "生物機電與農業機械系統展望論壇",
