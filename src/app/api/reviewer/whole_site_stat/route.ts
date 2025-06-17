@@ -16,7 +16,8 @@ const topicList = {
     能源與節能技術: "H",
     AI與大數據分析: "I",
     精準農業智動化: "J",
-    其他新興科技: "K",
+    農業安全: "K",
+    其他新興科技: "L",
 };
 
 const handler = async (req: NextRequest, session: any) => {
