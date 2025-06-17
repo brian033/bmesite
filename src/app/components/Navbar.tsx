@@ -64,7 +64,7 @@ export default function Navbar() {
         <nav className="flex justify-between items-center bg-primary text-white px-4 lg:px-8 py-4 font-sans relative">
             {/* Logo/標題 */}
             <div className="font-bold text-lg text-center lg:text-left flex-1 lg:flex-initial">
-                2025 農機與生機學術研討會
+                2025 生機與農機學術研討會
             </div>
 
             {/* 漢堡菜單按鈕與登入按鈕並排 - 只在小螢幕顯示 */}

@@ -52,7 +52,7 @@ export default function Page() {
                 <Image
                     src="/webpage/banner.JPG"
                     fill
-                    alt="2025 農機與生機學術研討會"
+                    alt="2025 生機與農機學術研討會"
                     className="object-cover"
                     priority
                 />

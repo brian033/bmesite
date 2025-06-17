@@ -116,7 +116,7 @@ const handler = async (req: NextRequest) => {
                     },
                     {
                         to: user.contact_email,
-                        subject: "2025農機與生機學術研討會-繳費成功通知",
+                        subject: "2025生機與農機學術研討會-繳費成功通知",
                     }
                 );
                 console.log(
