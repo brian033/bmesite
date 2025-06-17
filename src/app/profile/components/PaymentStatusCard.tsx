@@ -92,7 +92,7 @@ export default function PaymentStatusCard({ session }: PaymentStatusCardProps) {
                                     <PaymentButton
                                         paymentOptionId={option.paymentOptionId} // 使用 paymentOptionId 而不是 paymentType
                                         buttonText={`NT$${option.price.toLocaleString()}`} // 動態生成按鈕文字
-                                        variant={option.displayOrder === 1 ? "default" : "outline"}
+                                        variant={"default"}
                                         onSuccess={(data) => {
                                             console.log(`${option.name} 付款已開始處理`, data);
                                             // 可以在這裡加入成功提示，或重定向用戶

@@ -41,6 +41,7 @@ export const authOptions = {
                     phone: "未輸入電話", // 預設電話
                     dietary: "new",
                     going_dinner: "new",
+                    privacy_consent: "new",
                     isHelper: false,
                     checkIns: [],
                     department: "未輸入單位", // 預設部門

@@ -82,12 +82,14 @@ export default function ProfileCard() {
                     label="聯絡用Email"
                     value={user.contact_email}
                 />
+
                 <EditableField
                     mandatory={true}
                     api_value="department"
                     label="所屬單位(製作名牌用)"
                     value={user.department}
                 />
+                <EditableField api_value="phone" label="聯絡電話" value={user.phone} />
                 <EditableRadioField
                     api_value="dietary"
                     label="飲食偏好"
@@ -114,7 +116,23 @@ export default function ProfileCard() {
                     ]}
                     mandatory
                 />
-                <EditableField api_value="phone" label="聯絡電話" value={user.phone} />
+
+                <EditableRadioField
+                    api_value="privacy_consent"
+                    label="同意個資使用(選擇後不能更改)"
+                    value={
+                        typeof user.privacy_consent === "boolean"
+                            ? user.privacy_consent
+                                ? "yes"
+                                : "no"
+                            : "未選擇"
+                    }
+                    options={[
+                        { value: "yes", label: "同意" },
+                        { value: "no", label: "同意" },
+                    ]}
+                    mandatory
+                />
                 <div className="flex items-center justify-between gap-x-4">
                     <span className="font-medium whitespace-nowrap">身份別:</span>
                     <span className="text-sm text-gray-800">

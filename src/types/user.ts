@@ -13,6 +13,7 @@ export type User = {
     phone: string;
     dietary: "vegan" | "non_vegan" | "new";
     going_dinner: boolean | "new";
+    privacy_consent: boolean | "new";
     isHelper: boolean;
     checkIns: checkInPrototype[];
     department: string;
