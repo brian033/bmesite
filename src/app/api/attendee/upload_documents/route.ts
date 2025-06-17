@@ -83,6 +83,7 @@ const handler = async (req: NextRequest, session: any) => {
         "能源與節能技術",
         "AI與大數據分析",
         "精準農業智動化",
+        "農業安全", // <-- 新欄位
         "其他新興科技",
     ];
     // add typeguard for topic, topic needs to be one of the validTopicList else we'll just return error
@@ -110,6 +111,7 @@ const handler = async (req: NextRequest, session: any) => {
             | "能源與節能技術"
             | "AI與大數據分析"
             | "精準農業智動化"
+            | "農業安全" // <-- 新欄位
             | "其他新興科技", // <-- 新欄位
         present_type: presentType, // <-- 新增欄位
     };

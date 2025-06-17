@@ -188,7 +188,8 @@ const DocumentUploader = ({ pdfType, onDocumentUploaded }: DocumentUploaderProps
                                 <SelectItem value="能源與節能技術">能源與節能技術（H）</SelectItem>
                                 <SelectItem value="AI與大數據分析">AI與大數據分析（I）</SelectItem>
                                 <SelectItem value="精準農業智動化">精準農業智動化（J）</SelectItem>
-                                <SelectItem value="其他新興科技">其他新興科技（K）</SelectItem>
+                                <SelectItem value="農業安全"> 農業安全（K）</SelectItem>
+                                <SelectItem value="其他新興科技">其他新興科技（L）</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
