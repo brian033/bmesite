@@ -66,6 +66,7 @@ const EditableRadioField = ({
     return (
         <div className="flex items-center justify-between gap-4">
             <label className="font-medium whitespace-nowrap">{label}:</label>
+
             {editing ? (
                 <div className="flex flex-row items-center ml-auto">
                     {/* 使用 ml-auto 推到最右邊 */}
@@ -118,14 +119,20 @@ const EditableRadioField = ({
                     >
                         {getCurrentLabel()}
                     </span>
-                    <Button
-                        className="cursor-pointer"
-                        onClick={handleEditClick}
-                        variant="outline"
-                        size="sm"
-                    >
-                        編輯
-                    </Button>
+                    {!(
+                        api_value === "privacy_consent" &&
+                        value !== "未選擇" &&
+                        !value.includes("未輸入")
+                    ) && (
+                        <Button
+                            className="cursor-pointer"
+                            onClick={handleEditClick}
+                            variant="outline"
+                            size="sm"
+                        >
+                            編輯
+                        </Button>
+                    )}
                 </div>
             )}
         </div>

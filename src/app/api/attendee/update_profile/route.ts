@@ -12,6 +12,7 @@ const handler = async (req: NextRequest, session: any) => {
         "department",
         "dietary",
         "going_dinner",
+        "privacy_consent",
     ];
     const data = await req.json();
 
@@ -27,6 +28,7 @@ const handler = async (req: NextRequest, session: any) => {
 
     const VALID_DIETARY_OPTIONS = ["vegan", "non_vegan"] as const;
     const VALID_DINNER_OPTIONS = ["yes", "no"] as const;
+    const VALID_PRIVACY_CONSENT = ["yes", "no"] as const;
 
     // 驗證 dietary
     if (data.dietary && !VALID_DIETARY_OPTIONS.includes(data.dietary)) {
@@ -50,6 +52,28 @@ const handler = async (req: NextRequest, session: any) => {
     if (data.going_dinner) {
         data.going_dinner = data.going_dinner === "yes";
     }
+    // 驗證 privacy_consent
+    if (data.privacy_consent && !VALID_PRIVACY_CONSENT.includes(data.privacy_consent)) {
+        return NextResponse.json(
+            {
+                error: "Invalid privacy consent option. Must be either 'yes' or 'no'.",
+            },
+            { status: 400 }
+        );
+    } else if (data.privacy_consent) {
+        // fetch user and check if privacy_consent is already set, only allow update if it is "new"
+        const user = await collection.findOne({ email: session.user.email });
+        if (user && user.privacy_consent !== "new") {
+            return NextResponse.json(
+                {
+                    error: "Privacy consent can only be updated once.",
+                },
+                { status: 400 }
+            );
+        }
+        // 將 "yes" 或 "no" 轉換為布林值
+        data.privacy_consent = data.privacy_consent === "yes";
+    }
 
     const result = await collection.updateOne({ email: session.user.email }, { $set: data });
 
@@ -66,7 +90,8 @@ const handler = async (req: NextRequest, session: any) => {
             updatedUser.contact_email !== "未輸入聯絡用信箱" &&
             updatedUser.department !== "未輸入單位" &&
             typeof updatedUser.going_dinner === "boolean" && // 改用型別檢查
-            VALID_DIETARY_OPTIONS.includes(updatedUser.dietary)
+            VALID_DIETARY_OPTIONS.includes(updatedUser.dietary) &&
+            updatedUser.privacy_consent !== "new" // 確保 privacy_consent 已經被更新過，且不是 "new"
         ) {
             await collection.updateOne(
                 { email: session.user.email },

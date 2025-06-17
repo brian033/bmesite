@@ -1,198 +1,200 @@
-[{
-  "_id": {
-    "$oid": "6845285185c8510a4ff89610"
-  },
-  "paymentOptionId": "early_member",
-  "name": "早鳥學會會員價",
-  "price": 800,
-  "tradeDescription": "2025生機農機學術研討會報名費",
-  "itemName": "2025生機農機學術研討會報名費",
-  "validFrom": {
-    "$date": "2025-05-29T16:00:00.000Z"
-  },
-  "goodUntil": {
-    "$date": "2025-06-15T15:59:59.000Z"
-  },
-  "displayOrder": 1,
-  "displayName": "早鳥優惠 - 學會會員",
-  "description": "學會會員專屬早鳥優惠價格，適用於2025年6月15日前報名者",
-  "createdAt": {
-    "$date": "2025-06-08T06:06:09.710Z"
-  }
-},
-{
-  "_id": {
-    "$oid": "6845285185c8510a4ff89611"
-  },
-  "paymentOptionId": "early_non_member",
-  "name": "早鳥非學會會員價",
-  "price": 900,
-  "tradeDescription": "2025生機農機學術研討會報名費",
-  "itemName": "2025生機農機學術研討會報名費",
-  "validFrom": {
-    "$date": "2025-05-29T16:00:00.000Z"
-  },
-  "goodUntil": {
-    "$date": "2025-06-15T15:59:59.000Z"
-  },
-  "displayOrder": 2,
-  "displayName": "早鳥優惠 - 非會員",
-  "description": "一般參加者早鳥優惠價格，適用於2025年6月15日前報名者",
-  "createdAt": {
-    "$date": "2025-06-08T06:06:09.710Z"
-  }
-},
-{
-  "_id": {
-    "$oid": "6845285185c8510a4ff89612"
-  },
-  "paymentOptionId": "early_student",
-  "name": "早鳥學生價",
-  "price": 600,
-  "tradeDescription": "2025生機農機學術研討會報名費",
-  "itemName": "2025生機農機學術研討會報名費",
-  "validFrom": {
-    "$date": "2025-05-29T16:00:00.000Z"
-  },
-  "goodUntil": {
-    "$date": "2025-06-15T15:59:59.000Z"
-  },
-  "displayOrder": 3,
-  "displayName": "早鳥優惠 - 學生",
-  "description": "學生專屬早鳥優惠價格，適用於2025年6月15日前報名的在校學生",
-  "createdAt": {
-    "$date": "2025-06-08T06:06:09.710Z"
-  }
-},
-{
-  "_id": {
-    "$oid": "6845285185c8510a4ff89613"
-  },
-  "paymentOptionId": "regular_member",
-  "name": "一般學會會員價",
-  "price": 900,
-  "tradeDescription": "2025生機農機學術研討會報名費",
-  "itemName": "2025生機農機學術研討會報名費",
-  "validFrom": {
-    "$date": "2025-06-14T16:00:00.000Z"
-  },
-  "goodUntil": {
-    "$date": "2025-09-24T15:59:59.000Z"
-  },
-  "displayOrder": 4,
-  "displayName": "標準報名 - 學會會員",
-  "description": "學會會員標準報名價格，適用於2025年6月15日至9月24日期間",
-  "createdAt": {
-    "$date": "2025-06-08T06:06:09.710Z"
-  }
-},
-{
-  "_id": {
-    "$oid": "6845285185c8510a4ff89614"
-  },
-  "paymentOptionId": "regular_non_member",
-  "name": "一般非學會會員價",
-  "price": 1000,
-  "tradeDescription": "2025生機農機學術研討會報名費",
-  "itemName": "2025生機農機學術研討會報名費",
-  "validFrom": {
-    "$date": "2025-06-14T16:00:00.000Z"
-  },
-  "goodUntil": {
-    "$date": "2025-09-24T15:59:59.000Z"
-  },
-  "displayOrder": 5,
-  "displayName": "標準報名 - 非會員",
-  "description": "一般參加者標準報名價格，適用於2025年6月15日至9月24日期間",
-  "createdAt": {
-    "$date": "2025-06-08T06:06:09.710Z"
-  }
-},
-{
-  "_id": {
-    "$oid": "6845285185c8510a4ff89615"
-  },
-  "paymentOptionId": "regular_student",
-  "name": "一般學生價",
-  "price": 700,
-  "tradeDescription": "2025生機農機學術研討會報名費",
-  "itemName": "2025生機農機學術研討會報名費",
-  "validFrom": {
-    "$date": "2025-06-14T16:00:00.000Z"
-  },
-  "goodUntil": {
-    "$date": "2025-09-24T15:59:59.000Z"
-  },
-  "displayOrder": 6,
-  "displayName": "標準報名 - 學生",
-  "description": "學生標準報名價格，適用於2025年6月15日至9月24日期間的在校學生",
-  "createdAt": {
-    "$date": "2025-06-08T06:06:09.710Z"
-  }
-},
-{
-  "_id": {
-    "$oid": "6845285185c8510a4ff89616"
-  },
-  "paymentOptionId": "onsite_member",
-  "name": "現場學會會員價",
-  "price": 1000,
-  "tradeDescription": "2025生機農機學術研討會報名費",
-  "itemName": "2025生機農機學術研討會報名費",
-  "validFrom": {
-    "$date": "2025-09-23T16:00:00.000Z"
-  },
-  "goodUntil": {
-    "$date": "2025-09-27T15:59:59.000Z"
-  },
-  "displayOrder": 7,
-  "displayName": "現場報名 - 學會會員",
-  "description": "學會會員現場報名價格，適用於2025年9月24日至27日研討會期間報名",
-  "createdAt": {
-    "$date": "2025-06-08T06:06:09.710Z"
-  }
-},
-{
-  "_id": {
-    "$oid": "6845285185c8510a4ff89617"
-  },
-  "paymentOptionId": "onsite_non_member",
-  "name": "現場非學會會員價",
-  "price": 1100,
-  "tradeDescription": "2025生機農機學術研討會報名費",
-  "itemName": "2025生機農機學術研討會報名費",
-  "validFrom": {
-    "$date": "2025-09-23T16:00:00.000Z"
-  },
-  "goodUntil": {
-    "$date": "2025-09-27T15:59:59.000Z"
-  },
-  "displayOrder": 8,
-  "displayName": "現場報名 - 非會員",
-  "description": "一般參加者現場報名價格，適用於2025年9月24日至27日研討會期間報名",
-  "createdAt": {
-    "$date": "2025-06-08T06:06:09.710Z"
-  }
-},
-{
-  "_id": {
-    "$oid": "6845285185c8510a4ff89618"
-  },
-  "paymentOptionId": "onsite_student",
-  "name": "現場學生價",
-  "price": 800,
-  "tradeDescription": "2025生機農機學術研討會報名費",
-  "itemName": "2025生機農機學術研討會報名費",
-  "validFrom": {
-    "$date": "2025-09-23T16:00:00.000Z"
-  },
-  "goodUntil": {
-    "$date": "2025-09-27T15:59:59.000Z"
-  },
-  "displayOrder": 9,
-  "displayName": "現場報名 - 學生",
-  "description": "學生現場報名價格，適用於2025年9月24日至27日研討會期間報名的在校學生",
-  "createdAt": {
-    "$date": "2025-06-08T06:06:09.710Z"
-  }
-}]
+[
+    {
+        "_id": {
+            "$oid": "6845285185c8510a4ff89610"
+        },
+        "paymentOptionId": "early_member",
+        "name": "早鳥學會會員價",
+        "price": 800,
+        "tradeDescription": "2025生機農機學術研討會報名費",
+        "itemName": "2025生機農機學術研討會報名費",
+        "validFrom": {
+            "$date": "2025-05-29T16:00:00.000Z"
+        },
+        "goodUntil": {
+            "$date": "2025-08-31T15:59:59.000Z"
+        },
+        "displayOrder": 1,
+        "displayName": "早鳥優惠 - 學會會員",
+        "description": "學會會員專屬早鳥優惠價格，適用於2025年8月31日前報名者",
+        "createdAt": {
+            "$date": "2025-06-08T06:06:09.710Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "6845285185c8510a4ff89611"
+        },
+        "paymentOptionId": "early_non_member",
+        "name": "早鳥非學會會員價",
+        "price": 900,
+        "tradeDescription": "2025生機農機學術研討會報名費",
+        "itemName": "2025生機農機學術研討會報名費",
+        "validFrom": {
+            "$date": "2025-05-29T16:00:00.000Z"
+        },
+        "goodUntil": {
+            "$date": "2025-08-31T15:59:59.000Z"
+        },
+        "displayOrder": 2,
+        "displayName": "早鳥優惠 - 非會員",
+        "description": "一般參加者早鳥優惠價格，適用於2025年8月31日前報名者",
+        "createdAt": {
+            "$date": "2025-06-08T06:06:09.710Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "6845285185c8510a4ff89612"
+        },
+        "paymentOptionId": "early_student",
+        "name": "早鳥學生價",
+        "price": 600,
+        "tradeDescription": "2025生機農機學術研討會報名費",
+        "itemName": "2025生機農機學術研討會報名費",
+        "validFrom": {
+            "$date": "2025-05-29T16:00:00.000Z"
+        },
+        "goodUntil": {
+            "$date": "2025-08-31T15:59:59.000Z"
+        },
+        "displayOrder": 3,
+        "displayName": "早鳥優惠 - 學生",
+        "description": "學生專屬早鳥優惠價格，適用於2025年8月31日前報名的在校學生",
+        "createdAt": {
+            "$date": "2025-06-08T06:06:09.710Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "6845285185c8510a4ff89613"
+        },
+        "paymentOptionId": "regular_member",
+        "name": "一般學會會員價",
+        "price": 900,
+        "tradeDescription": "2025生機農機學術研討會報名費",
+        "itemName": "2025生機農機學術研討會報名費",
+        "validFrom": {
+            "$date": "2025-08-31T16:00:00.000Z"
+        },
+        "goodUntil": {
+            "$date": "2025-09-12T15:59:59.000Z"
+        },
+        "displayOrder": 4,
+        "displayName": "標準報名 - 學會會員",
+        "description": "學會會員標準報名價格，適用於2025年8月31日至9月12日期間",
+        "createdAt": {
+            "$date": "2025-06-08T06:06:09.710Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "6845285185c8510a4ff89614"
+        },
+        "paymentOptionId": "regular_non_member",
+        "name": "一般非學會會員價",
+        "price": 1000,
+        "tradeDescription": "2025生機農機學術研討會報名費",
+        "itemName": "2025生機農機學術研討會報名費",
+        "validFrom": {
+            "$date": "2025-08-31T16:00:00.000Z"
+        },
+        "goodUntil": {
+            "$date": "2025-09-12T15:59:59.000Z"
+        },
+        "displayOrder": 5,
+        "displayName": "標準報名 - 非會員",
+        "description": "一般參加者標準報名價格，適用於2025年8月31日至9月12日期間",
+        "createdAt": {
+            "$date": "2025-06-08T06:06:09.710Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "6845285185c8510a4ff89615"
+        },
+        "paymentOptionId": "regular_student",
+        "name": "一般學生價",
+        "price": 700,
+        "tradeDescription": "2025生機農機學術研討會報名費",
+        "itemName": "2025生機農機學術研討會報名費",
+        "validFrom": {
+            "$date": "2025-08-31T16:00:00.000Z"
+        },
+        "goodUntil": {
+            "$date": "2025-09-12T15:59:59.000Z"
+        },
+        "displayOrder": 6,
+        "displayName": "標準報名 - 學生",
+        "description": "學生標準報名價格，適用於2025年8月31日至9月12日期間的在校學生",
+        "createdAt": {
+            "$date": "2025-06-08T06:06:09.710Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "6845285185c8510a4ff89616"
+        },
+        "paymentOptionId": "onsite_member",
+        "name": "現場學會會員價",
+        "price": 1000,
+        "tradeDescription": "2025生機農機學術研討會報名費",
+        "itemName": "2025生機農機學術研討會報名費",
+        "validFrom": {
+            "$date": "2025-09-12T16:00:00.000Z"
+        },
+        "goodUntil": {
+            "$date": "2025-09-27T15:59:59.000Z"
+        },
+        "displayOrder": 7,
+        "displayName": "現場報名 - 學會會員",
+        "description": "學會會員現場報名價格",
+        "createdAt": {
+            "$date": "2025-06-08T06:06:09.710Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "6845285185c8510a4ff89617"
+        },
+        "paymentOptionId": "onsite_non_member",
+        "name": "現場非學會會員價",
+        "price": 1100,
+        "tradeDescription": "2025生機農機學術研討會報名費",
+        "itemName": "2025生機農機學術研討會報名費",
+        "validFrom": {
+            "$date": "2025-09-12T16:00:00.000Z"
+        },
+        "goodUntil": {
+            "$date": "2025-09-27T15:59:59.000Z"
+        },
+        "displayOrder": 8,
+        "displayName": "現場報名 - 非會員",
+        "description": "一般參加者現場報名價格",
+        "createdAt": {
+            "$date": "2025-06-08T06:06:09.710Z"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "6845285185c8510a4ff89618"
+        },
+        "paymentOptionId": "onsite_student",
+        "name": "現場學生價",
+        "price": 800,
+        "tradeDescription": "2025生機農機學術研討會報名費",
+        "itemName": "2025生機農機學術研討會報名費",
+        "validFrom": {
+            "$date": "2025-09-12T16:00:00.000Z"
+        },
+        "goodUntil": {
+            "$date": "2025-09-27T15:59:59.000Z"
+        },
+        "displayOrder": 9,
+        "displayName": "現場報名 - 學生",
+        "description": "學生現場報名價格",
+        "createdAt": {
+            "$date": "2025-06-08T06:06:09.710Z"
+        }
+    }
+]

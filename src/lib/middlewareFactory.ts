@@ -20,8 +20,7 @@ export function middlewareFactory(
             "http://localhost:3000",
             "http://127.0.0.1:3000",
             "http://localhost:34567",
-            "https://conftest.brian033.dev",
-            "https://beame2025.cc/",
+            process.env.NEXT_PUBLIC_SITE_URL || "",
         ];
 
         const allowOrigin = allowedOrigins.includes(origin) ? origin : "";
