@@ -42,7 +42,11 @@ export function PaymentInfo() {
                     </tbody>
                 </table>
             </div>
-            <p className="text-sm text-gray-500 mt-4">註：所有費用單位為新台幣</p>
+            <div className="mt-4 p-3 bg-yellow-100 text-yellow-800 border border-yellow-300 rounded-md font-medium text-center">
+                大會紀念品數量有限，送完為止，建議先行線上報名
+            </div>
+            <p className="text-sm text-gray-500 mt-4">所有費用單位為新台幣</p>
+            <p className="text-sm text-gray-500 mt-4">繳費收據請於研討會當天至簽到處領取</p>
             <p className="text-sm text-gray-500 mt-4">繳費專用聯絡信箱：TIBM2003@outlook.com</p>
         </div>
     );

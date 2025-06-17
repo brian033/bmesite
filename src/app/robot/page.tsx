@@ -38,14 +38,14 @@ export default function Page() {
             {/* 主要內容 */}
             <div className="container mx-auto px-4 py-12">
                 <h1 className="text-3xl font-bold mb-2 text-center">
-                    2025 三久生物機電盃全國田間機器人競賽
+                    2025 三久生物機電盃全國農業機器人競賽
                 </h1>
                 {/* 這邊可以打簡介喔～ */}
                 {/* <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">簡介</p> */}
                 <div className="flex justify-center my-4">
                     <Image
                         src="/robot/robot_poster.jpg"
-                        alt="田間機器人比賽"
+                        alt="農業機器人比賽"
                         className="object-cover"
                         width={700}
                         height={900}
@@ -84,6 +84,9 @@ export default function Page() {
                                 <div>
                                     <h3 className="font-medium">競賽地點</h3>
                                     <p>國立臺灣大學農機館前草皮、生機館102室</p>
+                                    <p>
+                                        競賽隊伍校園於內停車可享有半價優惠，需事先於群組提供車牌。
+                                    </p>
                                 </div>
                             </div>
 
@@ -91,7 +94,7 @@ export default function Page() {
                                 <div className="flex items-start gap-3">
                                     <Users className="h-5 w-5 text-green-700 flex-shrink-0 mt-0.5" />
                                     <div>
-                                        <h3 className="font-medium">田間機器人比賽群組</h3>
+                                        <h3 className="font-medium">農業機器人競賽群組</h3>
                                         <p>掃描QR code加入</p>
                                     </div>
                                 </div>
@@ -118,7 +121,11 @@ export default function Page() {
                         </CardHeader>
                         <CardContent className="pt-6 space-y-4">
                             <p>報名需先繳交報名費1000元，於競賽報到當天全額退費</p>
-
+                            <div className="bg-yellow-50 p-4 rounded-md border border-yellow-200 my-4">
+                                <p className="text-yellow-800 font-medium">
+                                    本競賽提供午餐便當，如欲參加晚宴，請至「2025生機與農機學術研討會」註冊報名
+                                </p>
+                            </div>
                             <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
                                 <h3 className="font-medium mb-2">繳費帳戶</h3>
                                 <div className="text-sm space-y-1">
@@ -198,7 +205,7 @@ export default function Page() {
                                 <div className="flex items-center justify-between border-b pb-3">
                                     <div className="flex items-center gap-2">
                                         <FileText className="h-5 w-5 text-green-700" />
-                                        <span>田間機器人海報PDF檔</span>
+                                        <span>農業機器人海報PDF檔</span>
                                     </div>
                                     <Link href="/robot/robot_poster.pdf" target="_blank" download>
                                         <Button variant="outline" size="sm" className="gap-2">
@@ -209,7 +216,7 @@ export default function Page() {
                                 </div>
 
                                 <div className="text-center text-gray-500 pt-2">
-                                    <p className="mb-4">更多田間機器人比賽相關文件將陸續公布</p>
+                                    <p className="mb-4">更多農業機器人比賽相關文件將陸續公布</p>
                                 </div>
                             </div>
                         </CardContent>

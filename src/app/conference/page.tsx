@@ -54,12 +54,12 @@ export default function Page() {
                             </div>
                         </div>
 
-                        <div className="bg-red-50 p-3 rounded-md border border-red-200 mb-6">
+                        {/* <div className="bg-red-50 p-3 rounded-md border border-red-200 mb-6">
                             <p className="text-red-600 flex items-start">
                                 <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
-                                <span>繳費收據請於研討會當天至簽到處領取 (TBD)</span>
+                                <span>繳費收據請於研討會當天至簽到處領取。</span>
                             </p>
-                        </div>
+                        </div> */}
                         <PaymentInfo />
                     </div>
 

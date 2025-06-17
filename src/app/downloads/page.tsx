@@ -55,7 +55,7 @@ const downloadFiles = [
         ],
     },
     {
-        category: "2025 三久生物機電盃全國田間機器人競賽",
+        category: "2025 三久生物機電盃全國農業機器人競賽",
         icon: <Laptop className="h-6 w-6 text-green-700" />,
         files: [
             {
