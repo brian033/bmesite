@@ -69,16 +69,6 @@ export default function Navbar() {
 
             {/* 漢堡菜單按鈕與登入按鈕並排 - 只在小螢幕顯示 */}
             <div className="lg:hidden flex items-center gap-2">
-                {!user && (
-                    <Button
-                        onClick={() => signIn("google")}
-                        variant="secondary"
-                        size="sm"
-                        className="text-xs py-1 px-2"
-                    >
-                        登入
-                    </Button>
-                )}
                 <Button variant="ghost" size="sm" onClick={() => setIsMenuOpen(!isMenuOpen)}>
                     {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                 </Button>
@@ -142,106 +132,6 @@ export default function Navbar() {
                 >
                     檔案下載
                 </Link>
-                <div className="hidden lg:block border-l border-primary-foreground/20 h-6" />
-                {user && (
-                    <Link
-                        href="/profile"
-                        onClick={handleNavItemClick}
-                        className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
-                    >
-                        個人頁面
-                    </Link>
-                )}
-                {(user?.role === "reviewer" || user?.role === "admin") && (
-                    <Link
-                        href="/reviewer"
-                        onClick={handleNavItemClick}
-                        className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
-                    >
-                        待審介面
-                    </Link>
-                )}
-                {user?.role === "admin" && (
-                    <>
-                        <Link
-                            href="/admin/user_management"
-                            onClick={handleNavItemClick}
-                            className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
-                        >
-                            <Button
-                                variant="destructive"
-                                size="sm"
-                                className="w-30% lg:w-auto flex justify-end "
-                            >
-                                管理使用者
-                            </Button>
-                        </Link>
-                        <Link
-                            href="/admin/payments"
-                            onClick={handleNavItemClick}
-                            className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
-                        >
-                            <Button variant="destructive" size="sm" className="w-30% lg:w-auto ">
-                                金流查詢
-                            </Button>
-                        </Link>
-                    </>
-                )}
-                <div className="lg:hidden">
-                    {status === "loading" ? (
-                        <span>載入中...</span>
-                    ) : user ? (
-                        <div className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10">
-                            {/* <span className="text-center">Hi, {user.name}</span> */}
-                            <Button
-                                onClick={async () => {
-                                    await signOut();
-                                    router.push("/");
-                                    setIsMenuOpen(false);
-                                }}
-                                variant="secondary"
-                                size="sm"
-                                className="w-30% lg:w-auto"
-                            >
-                                登出
-                            </Button>
-                        </div>
-                    ) : (
-                        <Button
-                            onClick={() => signIn("google")}
-                            variant="secondary"
-                            size="sm"
-                            className="w-full"
-                        >
-                            使用Gmail登入/註冊
-                        </Button>
-                    )}
-                </div>
-            </div>
-
-            {/* 使用者信息/登入按鈕 - 在桌面版顯示 */}
-            <div className="hidden lg:block">
-                {status === "loading" ? (
-                    <span>載入中...</span>
-                ) : user ? (
-                    <div className="flex items-center gap-4">
-                        <span className="hidden lg:inline">Hi, {user.name}</span>
-                        <Button
-                            onClick={async () => {
-                                await signOut();
-                                router.push("/");
-                            }}
-                            variant="secondary"
-                            size="sm"
-                        >
-                            登出
-                        </Button>
-                    </div>
-                ) : (
-                    <Button onClick={() => signIn("google")} variant="secondary" size="sm">
-                        使用Gmail登入/註冊
-                    </Button>
-                )}
             </div>
         </nav>
     );
