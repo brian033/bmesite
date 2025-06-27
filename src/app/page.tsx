@@ -133,7 +133,7 @@ export default function HomePage() {
                             "能源與節能技術",
                             "AI與大數據分析",
                             "精準農業智動化",
-                            "農業安全",
+                            "農機安全",
                             "其他新興科技",
                         ].map((topic, index) => (
                             <div
