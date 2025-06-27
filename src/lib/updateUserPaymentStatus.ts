@@ -2,10 +2,8 @@ import clientPromise from "./mongodb";
 import { getCheckMac } from "@/app/api/payment/create-order/route";
 import { Payment } from "@/types/payment";
 
-const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID || "3002607";
-const ECPAY_QUERY_API_URL =
-    process.env.ECPAY_QUERY_API_URL ||
-    "https://payment-stage.ecpay.com.tw/Cashier/QueryTradeInfo/V5";
+const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID;
+const ECPAY_QUERY_API_URL = process.env.ECPAY_QUERY_API_URL;
 
 /**
  * 查詢綠界的訂單狀態
