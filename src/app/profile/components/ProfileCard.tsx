@@ -117,22 +117,6 @@ export default function ProfileCard() {
                     mandatory
                 />
 
-                <EditableRadioField
-                    api_value="privacy_consent"
-                    label="同意個資使用(選擇後不能更改)"
-                    value={
-                        typeof user.privacy_consent === "boolean"
-                            ? user.privacy_consent
-                                ? "yes"
-                                : "no"
-                            : "未選擇"
-                    }
-                    options={[
-                        { value: "yes", label: "同意" },
-                        { value: "no", label: "同意" },
-                    ]}
-                    mandatory
-                />
                 <div className="flex items-center justify-between gap-x-4">
                     <span className="font-medium whitespace-nowrap">身份別:</span>
                     <span className="text-sm text-gray-800">
@@ -154,6 +138,50 @@ export default function ProfileCard() {
                         </Badge>
                     )}
                 </div>
+                <EditableRadioField
+                    api_value="privacy_consent"
+                    label="同意個資使用(選擇後不能更改)"
+                    value={
+                        typeof user.privacy_consent === "boolean"
+                            ? user.privacy_consent
+                                ? "yes"
+                                : "no"
+                            : "未選擇"
+                    }
+                    options={[
+                        { value: "yes", label: "同意" },
+                        { value: "no", label: "不同意" },
+                    ]}
+                    mandatory
+                />
+                {!user.privacy_consent || user.privacy_consent === "new" ? (
+                    <div className="border rounded-md p-3 mb-2">
+                        <p className="text-sm font-medium mb-2">隱私權政策</p>
+                        <div className="h-32 overflow-y-auto text-xs text-gray-600 bg-gray-50 p-2 rounded">
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                                euismod, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget
+                                aliquam nisl nisl eget nisl. Donec euismod, nisl eget ultricies
+                                tincidunt, nunc nisl aliquam nisl, eget aliquam nisl nisl eget nisl.
+                            </p>
+                            <p className="mt-2">
+                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+                                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
+                                quae ab illo inventore veritatis et quasi architecto beatae vitae
+                                dicta sunt explicabo.
+                            </p>
+                            <p className="mt-2">
+                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
+                                fugit, sed quia consequuntur magni dolores eos qui ratione
+                                voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem
+                                ipsum quia dolor sit amet, consectetur, adipisci velit.
+                            </p>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">
+                            請在上方選擇是否同意此隱私權政策
+                        </p>
+                    </div>
+                ) : null}
                 {user.payment.paid && (
                     <div className="border-t pt-4 mt-4">
                         <Button

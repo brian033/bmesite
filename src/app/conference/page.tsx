@@ -25,7 +25,7 @@ const ConferenceTopics = [
     "能源與節能技術",
     "AI與大數據分析",
     "精準農業智動化",
-    "農業安全",
+    "農機安全",
     "其他新興科技",
 ];
 import { PaymentInfo } from "../page";
@@ -95,7 +95,7 @@ export default function Page() {
                             </div>
 
                             <div className="space-y-3">
-                                <div>
+                                {/* <div>
                                     <p className="font-medium mb-1">盧彥文 教授</p>
                                     <p className="flex items-center">
                                         <Mail className="h-4 w-4 mr-2 text-gray-600" />
@@ -106,8 +106,8 @@ export default function Page() {
                                             yenwenlu@ntu.edu.tw
                                         </a>
                                     </p>
-                                </div>
-                                <div>
+                                </div> */}
+                                {/* <div>
                                     <p className="font-medium mb-1">周呈霙 教授</p>
                                     <p className="flex items-center">
                                         <Mail className="h-4 w-4 mr-2 text-gray-600" />
@@ -116,6 +116,18 @@ export default function Page() {
                                             className="text-blue-600 hover:underline"
                                         >
                                             chengying@ntu.edu.tw
+                                        </a>
+                                    </p>
+                                </div> */}
+                                <div>
+                                    <p className="font-medium mb-1">研討會專用信箱</p>
+                                    <p className="flex items-center">
+                                        <Mail className="h-4 w-4 mr-2 text-gray-600" />
+                                        <a
+                                            href="mailto:beame2025.conf@gmail.com"
+                                            className="text-blue-600 hover:underline"
+                                        >
+                                            beame2025.conf@gmail.com
                                         </a>
                                     </p>
                                 </div>

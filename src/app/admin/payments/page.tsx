@@ -5,7 +5,7 @@ import { Payment } from "@/types/payment";
 import PaymentsTable from "./components/PaymentsTable";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-
+import ManualPaymentForm from "./components/ManualPaymentForm";
 /**
  * 付款記錄管理頁面
  *
@@ -74,6 +74,7 @@ export default async function PaymentsPage() {
 
     return (
         <div className="p-3">
+            <ManualPaymentForm />
             <h1 className="text-3xl font-bold mb-6">付款記錄管理</h1>
 
             {/* 警語 Banner */}

@@ -4,10 +4,8 @@ import { middlewareFactory } from "@/lib/middlewareFactory";
 import clientPromise from "@/lib/mongodb";
 import { sendTemplateEmail } from "@/lib/mailTools";
 
-const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID || "3002607";
-const ECPAY_QUERY_API_URL =
-    process.env.ECPAY_QUERY_API_URL ||
-    "https://payment-stage.ecpay.com.tw/Cashier/QueryTradeInfo/V5";
+const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID;
+const ECPAY_QUERY_API_URL = process.env.ECPAY_QUERY_API_URL;
 /**
  * 判斷訂單是否已付款
  * @param responseData 綠界返回的響應數據

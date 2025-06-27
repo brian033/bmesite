@@ -11,15 +11,12 @@ import { User } from "@/types/user";
 import { PaymentOption } from "@/types/paymentOption";
 
 // 綠界支付配置 (應放在環境變數中)
-const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID || "3002607";
-const HASH_KEY = process.env.ECPAY_HASH_KEY || "pwFHCqoQZGmho4w6";
-const HASH_IV = process.env.ECPAY_HASH_IV || "EkRm7iFT261dpevs";
-const ECPAY_API_URL =
-    process.env.ECPAY_API_URL || "https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5";
+const MERCHANT_ID = process.env.ECPAY_MERCHANT_ID;
+const HASH_KEY = process.env.ECPAY_HASH_KEY;
+const HASH_IV = process.env.ECPAY_HASH_IV;
+const ECPAY_API_URL = process.env.ECPAY_API_URL;
 
-const RETURN_URL = process.env.NEXT_PUBLIC_SITE_URL
-    ? `${process.env.NEXT_PUBLIC_SITE_URL}/api/payment/return`
-    : "http://localhost:3000/api/payment/return";
+const RETURN_URL = `${process.env.NEXT_PUBLIC_SITE_URL}/api/payment/return`;
 
 export function getCheckMac(params: any): string {
     // 1. 過濾不需要加入檢查碼的參數

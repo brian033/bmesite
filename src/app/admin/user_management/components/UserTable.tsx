@@ -426,7 +426,10 @@ export default function UserTable({
                                         <div className="flex justify-between">
                                             <span className="font-medium">訂單編號:</span>
                                             <span className="font-mono">
-                                                {payment.paymentParams.MerchantTradeNo}
+                                                {typeof payment.paymentParams === "object" &&
+                                                payment.paymentParams?.MerchantTradeNo
+                                                    ? payment.paymentParams.MerchantTradeNo
+                                                    : "人工輸入付款"}
                                             </span>
                                         </div>
                                         <div className="flex justify-between">
@@ -443,11 +446,7 @@ export default function UserTable({
                                         </div>
                                         <div className="flex justify-between">
                                             <span className="font-medium">類型:</span>
-                                            <span>
-                                                {payment.paymentType === "member"
-                                                    ? "學會會員"
-                                                    : "一般參加者"}
-                                            </span>
+                                            <span>{payment.paymentType}</span>
                                         </div>
 
                                         {/* ECPay 回應 - 已重命名 */}

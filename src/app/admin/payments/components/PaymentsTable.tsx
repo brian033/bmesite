@@ -17,7 +17,6 @@ import { User } from "@/types/user";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { formatToUTC8 } from "@/lib/formatToUTC8";
-
 interface PaymentTableItem {
     paymentId: string;
     createdAt: Date;
@@ -238,7 +237,7 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
                                     <TableCell>{payment.userDepartment}</TableCell>
                                     <TableCell className="space-y-1">
                                         <div className="flex space-x-2">
-                                            <Button
+                                            {/* <Button
                                                 size="sm"
                                                 variant="outline"
                                                 onClick={() => handleViewUser(payment.user)}
@@ -246,20 +245,34 @@ export default function PaymentsTable({ payments }: PaymentsTableProps) {
                                             >
                                                 <Search className="w-4 h-4 mr-1" />
                                                 查看用戶
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                variant="secondary"
-                                                onClick={() => checkOrderStatus(payment.paymentId)}
-                                                disabled={loadingOrderStatus === payment.paymentId}
-                                            >
-                                                {loadingOrderStatus === payment.paymentId ? (
-                                                    <RefreshCw className="w-4 h-4 mr-1 animate-spin" />
-                                                ) : (
-                                                    <RefreshCw className="w-4 h-4 mr-1" />
-                                                )}
-                                                使用綠界API查詢
-                                            </Button>
+                                            </Button> */}
+                                            {payment.paymentType.includes("manual") ? (
+                                                <Button
+                                                    size="sm"
+                                                    variant="secondary"
+                                                    disabled={true}
+                                                >
+                                                    手動付款不能查
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    size="sm"
+                                                    variant="secondary"
+                                                    onClick={() =>
+                                                        checkOrderStatus(payment.paymentId)
+                                                    }
+                                                    disabled={
+                                                        loadingOrderStatus === payment.paymentId
+                                                    }
+                                                >
+                                                    {loadingOrderStatus === payment.paymentId ? (
+                                                        <RefreshCw className="w-4 h-4 mr-1 animate-spin" />
+                                                    ) : (
+                                                        <RefreshCw className="w-4 h-4 mr-1" />
+                                                    )}
+                                                    使用綠界API查詢
+                                                </Button>
+                                            )}
                                         </div>
                                     </TableCell>
                                 </TableRow>

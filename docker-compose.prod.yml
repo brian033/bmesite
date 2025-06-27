@@ -32,10 +32,16 @@ services:
             - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
             - NEXTAUTH_URL=${NEXTAUTH_URL}
             - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+            - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL}
             - EMAIL_USER=${EMAIL_USER}
             - EMAIL_APP_PASSWORD=${EMAIL_APP_PASSWORD}
             - EMAIL_SENDER_NAME=${EMAIL_SENDER_NAME}
             - ADMIN_EMAIL=${ADMIN_EMAIL}
+            - ECPAY_MERCHANT_ID=${ECPAY_MERCHANT_ID}
+            - ECPAY_HASH_KEY=${ECPAY_HASH_KEY}
+            - ECPAY_HASH_IV=${ECPAY_HASH_IV}
+            - ECPAY_QUERY_API_URL=${ECPAY_QUERY_API_URL}
+            - ECPAY_API_URL=${ECPAY_API_URL}
         volumes:
             - ./uploads:/app/uploads # 保留 uploads 可寫入
         ports:
