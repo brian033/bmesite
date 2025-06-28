@@ -25,10 +25,15 @@ export default async function AttendeePage() {
                     <Info className="h-4 w-4" />
                     <AlertTitle>提醒</AlertTitle>
                     <AlertDescription>
-                        請填寫聯絡用 Email, 單位, 飲食偏好和晚宴參加意願後，才能使用完整功能。
+                        請填寫聯絡用 Email, 單位,
+                        飲食偏好,晚宴參加意願和隱私權聲明後，才能繳費和上傳審稿案件。
+                        <br />
+                        To proceed with payment and submit your review assignment, please complete
+                        the required fields: contact email, affiliation, dietary preferences, dinner
+                        attendance, and acknowledgment of the privacy policy.
                     </AlertDescription>
                 </Alert>
-                <h1>個人資料設定</h1>
+                <h1>個人資料設定 Profile settings</h1>
                 <ProfileCard />
             </div>
         );

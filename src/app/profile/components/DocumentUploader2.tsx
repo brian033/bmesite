@@ -170,19 +170,19 @@ const DocumentUploader2 = ({
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-1">
-                        <Label>上傳檔案</Label>
+                        <Label>上傳檔案 File upload</Label>
                         <Input
                             type="file"
                             accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                             onChange={handleFileChange}
                         />
                         <p className="text-xs text-muted-foreground mt-1">
-                            支援的格式：PDF、Word (.doc, .docx)
+                            支援的格式 supported extentions：PDF、Word (.doc, .docx)
                         </p>
                     </div>
 
                     <div className="space-y-1">
-                        <Label>標題</Label>
+                        <Label>標題 Title</Label>
                         <Input
                             type="text"
                             value={noteTitle}
@@ -191,35 +191,56 @@ const DocumentUploader2 = ({
                         />
                     </div>
                     <div className="space-y-1">
-                        <Label>投稿主題</Label>
+                        <Label>投稿主題 Topic</Label>
                         <Select value={noteTopic} onValueChange={(value) => setNoteTopic(value)}>
                             <SelectTrigger className="w-full">
                                 <SelectValue placeholder="請選擇投稿主題" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="生物產業機械">生物產業機械（A）</SelectItem>
-                                <SelectItem value="生物生產工程">生物生產工程（B）</SelectItem>
+                                <SelectItem value="生物產業機械">
+                                    生物產業機械（A） / Bio-Industrial Machinery (A)
+                                </SelectItem>
+                                <SelectItem value="生物生產工程">
+                                    生物生產工程（B） / Bio-Production Engineering (B)
+                                </SelectItem>
                                 <SelectItem value="畜牧自動化與污染防治">
-                                    畜牧自動化與污染防治（C）
+                                    畜牧自動化與污染防治（C） / Livestock Automation & Pollution
+                                    Control (C)
                                 </SelectItem>
                                 <SelectItem value="農業設施與環控工程">
-                                    農業設施與環控工程（D）
+                                    農業設施與環控工程（D） / Agricultural Facilities &
+                                    Environmental Control Engineering (D)
                                 </SelectItem>
-                                <SelectItem value="生物機電控制">生物機電控制（E）</SelectItem>
+                                <SelectItem value="生物機電控制">
+                                    生物機電控制（E） / Bio-Mechatronic Control (E)
+                                </SelectItem>
                                 <SelectItem value="生醫工程與微奈米機電">
-                                    生醫工程與微奈米機電（F）
+                                    生醫工程與微奈米機電（F） / Biomedical & Micro/Nano Mechatronics
+                                    (F)
                                 </SelectItem>
-                                <SelectItem value="生物資訊與系統">生物資訊與系統（G）</SelectItem>
-                                <SelectItem value="能源與節能技術">能源與節能技術（H）</SelectItem>
-                                <SelectItem value="AI與大數據分析">AI與大數據分析（I）</SelectItem>
-                                <SelectItem value="精準農業智動化">精準農業智動化（J）</SelectItem>
-                                <SelectItem value="農機安全">農機安全（K）</SelectItem>
-                                <SelectItem value="其他新興科技">其他新興科技（L）</SelectItem>
+                                <SelectItem value="生物資訊與系統">
+                                    生物資訊與系統（G） / Bioinformatics & Systems (G)
+                                </SelectItem>
+                                <SelectItem value="能源與節能技術">
+                                    能源與節能技術（H） / Energy & Energy-Saving Technologies (H)
+                                </SelectItem>
+                                <SelectItem value="AI與大數據分析">
+                                    AI與大數據分析（I） / AI & Big Data Analytics (I)
+                                </SelectItem>
+                                <SelectItem value="精準農業智動化">
+                                    精準農業智動化（J） / Precision Agriculture & Automation (J)
+                                </SelectItem>
+                                <SelectItem value="農機安全">
+                                    農機安全（K） / Agricultural Machinery Safety (K)
+                                </SelectItem>
+                                <SelectItem value="其他新興科技">
+                                    其他新興科技（L） / Other Emerging Technologies (L)
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
                     <div className="space-y-1">
-                        <Label>發表形式</Label>
+                        <Label>發表形式 Presentation type</Label>
                         <Select
                             value={presentType}
                             onValueChange={(value) => setPresentType(value)}
@@ -230,13 +251,15 @@ const DocumentUploader2 = ({
                             <SelectContent>
                                 <SelectItem value="poster">海報發表（Poster）</SelectItem>
                                 <SelectItem value="oral">口頭發表（Oral）</SelectItem>
-                                <SelectItem value="undecided">Oral/Poster都可以</SelectItem>
+                                <SelectItem value="undecided">
+                                    Oral/Poster都可以（Let the reviewers decide）{" "}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
 
                     <div className="space-y-1">
-                        <Label>簡短敘述</Label>
+                        <Label>簡短敘述 Simple description</Label>
                         <Textarea
                             value={noteDescription}
                             onChange={(e) => setNoteDescription(e.target.value)}

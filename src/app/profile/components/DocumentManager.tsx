@@ -100,9 +100,13 @@ const DocumentManager = ({ session }) => {
     return (
         <div className="flex gap-6 overflow-x-auto pb-4">
             <div className="w-full">
-                <h1 className="text-3xl font-semibold text-gray-800">文件管理</h1>
+                <h1 className="text-3xl font-semibold text-gray-800">
+                    文件管理 Document Management
+                </h1>
                 {/* 顯示提交列表 */}
-                {submissions && <SubmissionCard submissions={submissions} documents={documents} />}
+                {submissions.length > 0 && (
+                    <SubmissionCard submissions={submissions} documents={documents} />
+                )}
 
                 {/* 20250526暫時移除，老師說不要這塊。 */}
                 {/* 顯示草稿列表 */}
@@ -145,7 +149,7 @@ const DocumentManager = ({ session }) => {
                 {showUploader ? (
                     <div className="border p-4 rounded-md bg-gray-50">
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="font-medium">上傳新文件</h3>
+                            <h3 className="font-medium">上傳新摘要 Upload new abstract</h3>
                             <Button
                                 variant="ghost"
                                 size="sm"
@@ -164,7 +168,7 @@ const DocumentManager = ({ session }) => {
                 ) : (
                     <Button onClick={toggleUploader} variant="outline" className="w-full">
                         <PlusCircle className="h-4 w-4 mr-2" />
-                        新摘要送審
+                        新摘要送審 Submit new abstract
                     </Button>
                 )}
             </div>
