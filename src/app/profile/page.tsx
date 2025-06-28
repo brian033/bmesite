@@ -21,10 +21,10 @@ export default async function AttendeePage() {
     if (!session.user.registered) {
         return (
             <div style={{ padding: "2rem" }}>
-                <Alert className="mb-6">
-                    <Info className="h-4 w-4" />
-                    <AlertTitle>提醒</AlertTitle>
-                    <AlertDescription>
+                <Alert className="mb-6 bg-green-50 border-green-200 text-green-800">
+                    <Info className="h-4 w-4 text-green-600" />
+                    <AlertTitle className="text-green-800 font-medium">提醒</AlertTitle>
+                    <AlertDescription className="text-green-700">
                         請填寫聯絡用 Email, 單位,
                         飲食偏好,晚宴參加意願和隱私權聲明後，才能繳費和上傳審稿案件。
                         <br />

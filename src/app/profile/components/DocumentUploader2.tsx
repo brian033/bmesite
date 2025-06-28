@@ -141,12 +141,18 @@ const DocumentUploader2 = ({
     return (
         <Card className="max-w-full mx-auto">
             <CardHeader>
-                <CardTitle className="text-center text-2xl">上傳文件</CardTitle>
                 <p className="text-sm text-muted-foreground mb-4">
                     📌
                     每個標題會建立一個對應的審查案件，若再次送出相同標題的文件，系統將自動更新原有的審查案。
                     <br />
+                    📌 Each title will create a corresponding review case. If a document with the
+                    same title is submitted again, the system will automatically update the existing
+                    case.
+                    <br />
                     ✍️ 簡短敘述是提供給審稿者的內容說明。
+                    <br />
+                    ✍️ A brief description is intended to help reviewers understand the submission
+                    content.
                 </p>
             </CardHeader>
             <CardContent>
@@ -259,7 +265,7 @@ const DocumentUploader2 = ({
                     </div>
 
                     <div className="space-y-1">
-                        <Label>簡短敘述 Simple description</Label>
+                        <Label>簡短敘述 Brief description</Label>
                         <Textarea
                             value={noteDescription}
                             onChange={(e) => setNoteDescription(e.target.value)}
@@ -268,7 +274,7 @@ const DocumentUploader2 = ({
                     </div>
 
                     <Button type="submit" disabled={uploading} className="w-full">
-                        {uploading ? "上傳中..." : "上傳 PDF"}
+                        {uploading ? "Uploading..." : "Upload Document"}
                     </Button>
                 </form>
             </CardContent>
