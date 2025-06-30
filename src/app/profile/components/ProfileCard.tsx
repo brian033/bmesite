@@ -158,23 +158,38 @@ export default function ProfileCard() {
                     <div className="border rounded-md p-3 mb-2">
                         <p className="text-sm font-medium mb-2">隱私權政策</p>
                         <div className="h-32 overflow-y-auto text-xs text-gray-600 bg-gray-50 p-2 rounded">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-                                euismod, nisl eget ultricies tincidunt, nunc nisl aliquam nisl, eget
-                                aliquam nisl nisl eget nisl. Donec euismod, nisl eget ultricies
-                                tincidunt, nunc nisl aliquam nisl, eget aliquam nisl nisl eget nisl.
-                            </p>
+                            <p>蒐集個人資料告知事項暨個人資料提供同意書</p>
                             <p className="mt-2">
-                                Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                                accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
-                                quae ab illo inventore veritatis et quasi architecto beatae vitae
-                                dicta sunt explicabo.
+                                台灣生物機電學會為遵守個人資料保護法令及個人資料保護政策、規章，於向您蒐集個人資料前，依法向您告知下列事項，敬請詳閱。
+                                您瞭解此一同意書符合個人資料保護法及相關法規之要求，且同意台灣生物機電學會留存此同意書，供日後取出查驗。
                             </p>
+                            <p className="mt-2">一、蒐集目的及類別</p>
                             <p className="mt-2">
-                                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut
-                                fugit, sed quia consequuntur magni dolores eos qui ratione
-                                voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem
-                                ipsum quia dolor sit amet, consectetur, adipisci velit.
+                                台灣生物機電學會因主辦 2025
+                                年生機與農機學術研討會之業務、活動、計畫、提供服務及供台灣生物機電學會用於內部行政管理、陳報主管機關或其他合於台灣生物機電學會組織規章定業務、寄送台灣生物機電學會相關活動訊息之蒐集目的，而需獲取您下列個人資料類別：姓名、職稱、所屬單位、連絡電話、電子郵件、飲食偏好。
+                            </p>
+                            <p className="mt-2">二、個人資料利用之期間及方式</p>
+                            <p className="mt-2">
+                                個人資料蒐集至 114 年 10 月 31
+                                日並得以書面及電子等形式處理或利用。搜集之個人資料將於 114 年 11 月
+                                01 日自台灣生物機電學會之網頁及資料庫中刪除。
+                            </p>
+                            <p className="mt-2">三、當事人權利</p>
+                            <p className="mt-2">
+                                您可依前述業務、活動所定規則或依聯絡電子信箱{" "}
+                                <a
+                                    href="mailto:beame2025.conf@gmail.com"
+                                    className="text-blue-600 hover:underline"
+                                >
+                                    beame2025.conf@gmail.com
+                                </a>{" "}
+                                向台灣生物機電學會行使下列權利：(一) 查詢或請求閱覽、(二)
+                                請求補充或更正、(三) 請求停止蒐集、處理及利用、(四)
+                                請求刪除您的個人資料
+                            </p>
+                            <p className="mt-2">四、不提供個人資料之權益影響</p>
+                            <p className="mt-2">
+                                若您未提供正確或不提供個人資料，台灣生物機電學會得拒絕為您提供蒐集目的之相關服務。
                             </p>
                         </div>
                         <p className="text-xs text-gray-500 mt-2">

@@ -22,19 +22,19 @@ export function PaymentInfo() {
                     </thead>
                     <tbody>
                         <tr>
-                            <td className="p-2 border border-green-200">早鳥價</td>
+                            <td className="p-2 border border-green-200">早鳥價 7/14~8/31(23:59)</td>
                             <td className="p-2 border border-green-200">800</td>
                             <td className="p-2 border border-green-200">900</td>
                             <td className="p-2 border border-green-200">600</td>
                         </tr>
                         <tr>
-                            <td className="p-2 border border-green-200">一般價</td>
+                            <td className="p-2 border border-green-200">一般價 9/1~9/12(23:59)</td>
                             <td className="p-2 border border-green-200">900</td>
                             <td className="p-2 border border-green-200">1000</td>
                             <td className="p-2 border border-green-200">700</td>
                         </tr>
                         <tr>
-                            <td className="p-2 border border-green-200">現場報名</td>
+                            <td className="p-2 border border-green-200">現場報名 9/25~9/26</td>
                             <td className="p-2 border border-green-200">1000</td>
                             <td className="p-2 border border-green-200">1100</td>
                             <td className="p-2 border border-green-200">800</td>
