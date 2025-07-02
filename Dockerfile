@@ -26,5 +26,6 @@ COPY --from=builder /app/uploads ./uploads
 COPY --from=builder /app/.next/static ./.next/static
 
 ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["node", "server.js"]
