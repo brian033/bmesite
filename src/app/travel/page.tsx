@@ -218,6 +218,42 @@ export default function Page() {
                         </Card>
                     </div>
                 </div>
+                
+                {/* 晚宴地點 */}
+                <div className="container mx-auto px-4 py-12">
+                    <div className="mb-12 bg-white p-6 rounded-lg shadow-md border border-green-100">
+                        <div className="flex items-start gap-3 mb-4">
+                            <MapPin className="h-6 w-6 text-green-700 flex-shrink-0 mt-1" />
+                            <div>
+                                <h2 className="text-xl font-semibold mb-1">晚宴地點</h2>
+                                <p className="text-lg font-medium">公館薪僑園水源婚宴會館</p>
+                                <p className="text-gray-600">台北市中正區思源街16號2樓</p>
+                                <a
+                                    href="https://www.lamaree.com.tw/gongguan/traffic/"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors"
+                                >
+                                    <ExternalLink className="h-4 w-4" />
+                                    <span>交通資訊</span>
+                                </a>
+                            </div>
+                        </div>
+                        <div className="mt-6 aspect-video relative rounded-lg overflow-hidden border border-gray-200">
+                            <div className="absolute inset-0">
+                                <iframe
+                                    src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d28924.771822476425!2d121.53031800000001!3d25.013824!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a98c9f01e7af%3A0xa0f269377fe2fc46!2z5YWs6aSo6Jaq5YOR5ZyS5rC05rqQ5ama5a605pyD6aSo!5e0!3m2!1szh-TW!2sus!4v1751426164388!5m2!1szh-TW!2sus"
+                                    width="100%"
+                                    height="100%"
+                                    style={{ border: 0 }}
+                                    allowFullScreen
+                                    loading="lazy"
+                                    referrerPolicy="no-referrer-when-downgrade"
+                                ></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 {/* 住宿資訊 */}
                 <div>

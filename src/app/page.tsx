@@ -113,7 +113,7 @@ export default function HomePage() {
                     <h2 className="text-2xl font-bold mb-6 text-center">研討會簡介</h2>
                     <div className="bg-white p-6 rounded-lg shadow-md">
                         <p className="text-gray-700 mb-4">
-                            匯集國內外專家學者共同探討最新研究成果與技術發展。
+                            本次研討會聚焦於智慧農機之創新應用，強調智慧化與安全化，藉分享與觀摩生物機電與農業機械系統科研成果及參與展望研討會，整合生物機電與農業機械領域人才及資源，盤點現有成果應用潛力與未來科研及應用方向與重點，使其能有效地促進臺灣農村再生建設與發展，更契合世界潮流與時代趨勢，具備良好的國際競爭力。
                         </p>
                     </div>
                 </div>

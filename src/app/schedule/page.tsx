@@ -11,23 +11,23 @@ const conferenceSchedule = {
             date: "114年9月25日(四)",
             events: [
                 {
-                    time: "08:20",
+                    time: "09:00-09:30",
                     activity: "開放報到",
                     location: "生機館1F",
-                    details: ["開放報到時間: 08:20 ~ 14:00"],
+                    details: ["開放報到時間: 09:00 ~ 14:00"],
                 },
                 {
-                    time: "09:10-10:20",
+                    time: "09:30-10:00",
                     activity: "開幕典禮暨台灣生物機電學會年會",
                     location: "鄭江樓信義講堂",
                 },
                 {
-                    time: "10:20-10:30",
-                    activity: "大合照時間",
+                    time: "10:00-10:30",
+                    activity: "開幕、貴賓致詞、捐贈與頒獎儀式、大合照時間",
                     location: "鄭江樓信義講堂",
                 },
                 {
-                    time: "10:30-11:15",
+                    time: "10:30-11:05",
                     activity: "Plenary Speech I",
                     location: "鄭江樓信義講堂",
                     details: [
@@ -37,7 +37,7 @@ const conferenceSchedule = {
                     ],
                 },
                 {
-                    time: "11:15-12:00",
+                    time: "11:05-11:40",
                     activity: "Plenary Speech II",
                     location: "鄭江樓信義講堂",
                     details: [
@@ -47,7 +47,16 @@ const conferenceSchedule = {
                     ],
                 },
                 {
-                    time: "12:00-13:30",
+                    time: "11:40-12:10",
+                    activity: "特別講者：中華農機學會國際貢獻獎",
+                    location: "鄭江樓信義講堂",
+                    details: [
+                        "主講人: Dr. Sun-Ok Chung",
+                        "Chungnam National University, Korea",
+                    ],
+                },
+                {
+                    time: "12:30-13:30",
                     activity: "中華農業機械學會年會",
                     location: "知武館4F演講廳",
                     parallel: "午餐",
@@ -70,8 +79,8 @@ const conferenceSchedule = {
                 },
                 {
                     time: "18:00-20:30",
-                    activity: "生物機電與農業機械系統展望論壇",
-                    location: "水源會館",
+                    activity: "晚宴",
+                    location: "公館薪僑園水源婚宴會館",
                 },
             ],
         },
@@ -84,11 +93,11 @@ const conferenceSchedule = {
                     activity: "口頭競賽頒獎及閉幕典禮",
                     location: "知武館4F演講廳",
                 },
-                {
+                /*{
                     time: "晚上",
                     activity: "晚宴",
                     location: "公館薪僑園水源婚宴會館",
-                },
+                },*/
             ],
         },
     ],
