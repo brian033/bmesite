@@ -67,9 +67,6 @@ export default function Page() {
                                 <h2 className="text-xl font-semibold text-center text-green-800">
                                     {speaker.title}
                                 </h2>
-                                <p className="text-center text-gray-500 text-sm">
-                                    {speaker.titleEn}
-                                </p>
                             </div>
 
                             <div className="p-6">

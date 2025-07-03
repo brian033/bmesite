@@ -47,7 +47,7 @@ export function PaymentInfo() {
             </div>
             <p className="text-sm text-gray-500 mt-4">所有費用單位為新台幣</p>
             <p className="text-sm text-gray-500 mt-4">繳費收據請於研討會當天至簽到處領取</p>
-            <p className="text-sm text-gray-500 mt-4">繳費專用聯絡信箱：TIBM2003@outlook.com</p>
+            <p className="text-sm text-gray-500 mt-4">繳費專用聯絡信箱：beame2025.conf@gmail.com</p>
         </div>
     );
 }
