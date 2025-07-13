@@ -170,9 +170,9 @@ export default function ProfileCard() {
                             </p>
                             <p className="mt-2">二、個人資料利用之期間及方式</p>
                             <p className="mt-2">
-                                個人資料蒐集至 114 年 10 月 31
-                                日並得以書面及電子等形式處理或利用。搜集之個人資料將於 114 年 11 月
-                                01 日自台灣生物機電學會之網頁及資料庫中刪除。
+                                個人資料蒐集至 114 年 09 月 30
+                                日並得以書面及電子等形式處理或利用。搜集之個人資料將於 114 年 12 月
+                                31 日自台灣生物機電學會之網頁及資料庫中刪除。
                             </p>
                             <p className="mt-2">三、當事人權利</p>
                             <p className="mt-2">
@@ -197,7 +197,7 @@ export default function ProfileCard() {
                         </p>
                     </div>
                 ) : null}
-                {user.payment.paid && (
+                {/*user.payment.paid && (
                     <div className="border-t pt-4 mt-4">
                         <Button
                             variant="outline"
@@ -225,7 +225,7 @@ export default function ProfileCard() {
                             </div>
                         )}
                     </div>
-                )}
+                )*/}
             </div>
         </Card>
     );
