@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { set } from "react-hook-form";
 
 interface EditableFieldProps {
     api_value: string;
@@ -17,7 +18,10 @@ const EditableField = ({ api_value, label, value, mandatory }: EditableFieldProp
 
     const isMissing = mandatory && newValue.includes("未輸入");
 
-    const handleEditClick = () => setEditing(true);
+    const handleEditClick = () => {
+        setNewValue("");
+        setEditing(true);
+    };
     const handleCancel = () => {
         setEditing(false);
         setNewValue(value);

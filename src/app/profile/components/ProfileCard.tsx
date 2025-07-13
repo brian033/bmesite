@@ -75,34 +75,38 @@ export default function ProfileCard() {
             </div>
 
             <div className="flex flex-col gap-4 flex-grow">
-                <EditableField api_value="name" label="姓名與職稱(製作名牌用)" value={user.name} />
+                <EditableField
+                    api_value="name"
+                    label="姓名與職稱 Name and Title"
+                    value={user.name}
+                />
                 <EditableField
                     mandatory={true}
                     api_value="contact_email"
-                    label="聯絡用Email"
+                    label="收信信箱 Contact Email"
                     value={user.contact_email}
                 />
 
                 <EditableField
                     mandatory={true}
                     api_value="department"
-                    label="所屬單位(製作名牌用)"
+                    label="所屬單位 Affiliation"
                     value={user.department}
                 />
-                <EditableField api_value="phone" label="聯絡電話" value={user.phone} />
+                <EditableField api_value="phone" label="聯絡電話 Phone" value={user.phone} />
                 <EditableRadioField
                     api_value="dietary"
-                    label="飲食偏好"
+                    label="飲食偏好 dietary preferences"
                     value={user.dietary === "new" ? "未選擇" : user.dietary}
                     options={[
-                        { value: "vegan", label: "素食" },
-                        { value: "non_vegan", label: "葷食" },
+                        { value: "vegan", label: "素食 vegan" },
+                        { value: "non_vegan", label: "葷食 non vegan" },
                     ]}
                     mandatory
                 />
                 <EditableRadioField
                     api_value="going_dinner"
-                    label="參加晚宴"
+                    label="參加晚宴 going dinner"
                     value={
                         typeof user.going_dinner === "boolean"
                             ? user.going_dinner
@@ -111,36 +115,36 @@ export default function ProfileCard() {
                             : "未選擇"
                     }
                     options={[
-                        { value: "yes", label: "參加" },
-                        { value: "no", label: "不參加" },
+                        { value: "yes", label: "參加 yes" },
+                        { value: "no", label: "不參加 no" },
                     ]}
                     mandatory
                 />
 
                 <div className="flex items-center justify-between gap-x-4">
-                    <span className="font-medium whitespace-nowrap">身份別:</span>
+                    <span className="font-medium whitespace-nowrap">身份別 role:</span>
                     <span className="text-sm text-gray-800">
                         {user.role === "admin"
-                            ? "管理員"
+                            ? "管理員 admin"
                             : user.role === "reviewer"
-                            ? "審稿者"
-                            : "與會者"}
-                        {user.registered ? " (已填寫資料)" : " (請更新聯絡用Email/單位)"}
+                            ? "審稿者 reviewer"
+                            : "與會者 attendee"}
+                        {user.registered ? " (已填寫資料)" : " (請填寫資料)"}
                     </span>
                 </div>
                 <div className="flex items-center justify-between gap-x-4">
-                    <span className="font-medium whitespace-nowrap">付款狀態:</span>
+                    <span className="font-medium whitespace-nowrap">付款狀態 payment status:</span>
                     {user.payment.paid ? (
-                        <Badge className="bg-green-500">已付款</Badge>
+                        <Badge className="bg-green-500">已付款 Paid</Badge>
                     ) : (
                         <Badge variant="outline" className="text-yellow-500 border-yellow-500">
-                            未付款
+                            未付款 Not Paid
                         </Badge>
                     )}
                 </div>
                 <EditableRadioField
                     api_value="privacy_consent"
-                    label="同意個資使用(選擇後不能更改)"
+                    label="同意個資使用 Privacy Consent"
                     value={
                         typeof user.privacy_consent === "boolean"
                             ? user.privacy_consent
@@ -149,14 +153,14 @@ export default function ProfileCard() {
                             : "未選擇"
                     }
                     options={[
-                        { value: "yes", label: "同意" },
-                        { value: "no", label: "不同意" },
+                        { value: "yes", label: "同意 agree" },
+                        { value: "no", label: "不同意 disagree" },
                     ]}
                     mandatory
                 />
                 {!user.privacy_consent || user.privacy_consent === "new" ? (
                     <div className="border rounded-md p-3 mb-2">
-                        <p className="text-sm font-medium mb-2">隱私權政策</p>
+                        <p className="text-sm font-medium mb-2">隱私權政策 Privacy policy</p>
                         <div className="h-32 overflow-y-auto text-xs text-gray-600 bg-gray-50 p-2 rounded">
                             <p>蒐集個人資料告知事項暨個人資料提供同意書</p>
                             <p className="mt-2">
@@ -206,7 +210,7 @@ export default function ProfileCard() {
                         >
                             <div className="flex items-center gap-2">
                                 <QrCode className="h-4 w-4" />
-                                <span>顯示活動當天簽到用QR Code</span>
+                                <span>Sign in QR Code</span>
                             </div>
                             {showQRCode ? (
                                 <ChevronUp className="h-4 w-4" />

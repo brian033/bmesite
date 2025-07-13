@@ -75,7 +75,7 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
     return (
         <Card className="mt-4">
             <CardHeader>
-                <CardTitle>管理您的審稿案</CardTitle>
+                <CardTitle>審稿案管理 Submission management</CardTitle>
             </CardHeader>
             <CardContent className="p-4">
                 <div className="flex justify-between items-center mb-4">
@@ -84,13 +84,15 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                         className="cursor-pointer"
                         variant={hasActionRequiredSubmissions ? "default" : "outline"}
                     >
-                        {open ? "隱藏我的審稿案" : "查看我的審稿案"}
+                        {open
+                            ? "隱藏我的審稿案 hide submissions"
+                            : "查看我的審稿案 view submissions"}
                         {hasActionRequiredSubmissions && (
-                            <Badge className="ml-2 bg-red-500">需要處理</Badge>
+                            <Badge className="ml-2 bg-red-500">需要處理 please check</Badge>
                         )}
                     </Button>
                     <div className="text-sm text-muted-foreground">
-                        總案件數: {submissions.length}
+                        總案件數 total cases: {submissions.length}
                     </div>
                 </div>
 
@@ -99,6 +101,8 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                         {submissions.length === 0 ? (
                             <p className="text-muted-foreground text-sm text-center p-4 border rounded-md bg-gray-50">
                                 尚無審稿紀錄
+                                <br />
+                                No submissions found.
                             </p>
                         ) : (
                             submissions.map((s: Submission, i) => {
@@ -143,7 +147,7 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                                     {s.submissionTitle}
                                                 </h3>
                                                 <p className="text-sm text-muted-foreground">
-                                                    編號: {serial}
+                                                    編號 Serial: {serial}
                                                 </p>
                                             </div>
                                             <div className="flex flex-wrap gap-2 items-center">
@@ -162,14 +166,15 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                                         variant="outline"
                                                         className="bg-blue-50 text-blue-700 border-blue-200"
                                                     >
-                                                        {reviewerDocumentsCount} 個審稿回饋文件
+                                                        {reviewerDocumentsCount} 個審稿回饋文件 (
+                                                        {reviewerDocumentsCount} reviewer uploads)
                                                     </Badge>
                                                 )}
 
                                                 <Badge variant="outline" className="bg-gray-50">
                                                     {s.submissionType === "abstracts"
-                                                        ? "摘要"
-                                                        : "全文"}
+                                                        ? "摘要 abstracts"
+                                                        : "全文 full paper"}
                                                 </Badge>
                                             </div>
                                         </div>
@@ -181,13 +186,13 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                                     <div>
                                                         <p className="font-medium text-orange-800">
                                                             {s.submissionStatus === "replied"
-                                                                ? "請修改後再次提交"
-                                                                : "請提交全文"}
+                                                                ? "請修改後再次提交 please resubmit after modifications"
+                                                                : "請提交全文 please submit full paper"}
                                                         </p>
                                                         <p className="text-sm text-orange-700 mt-1">
                                                             {s.submissionStatus === "replied"
-                                                                ? "審稿者要求您針對意見修改後重新提交。"
-                                                                : "您的摘要已通過審核，請提交全文論文。"}
+                                                                ? "審稿者要求您針對意見修改後重新提交。 reviewers have requested you to resubmit after addressing their comments."
+                                                                : "您的摘要已通過審核，請提交全文論文。 Your abstract has been accepted, please submit the full paper."}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -200,14 +205,18 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 mb-4">
                                             <div className="flex items-center gap-2">
                                                 <span className="text-muted-foreground w-24">
-                                                    主題:
+                                                    主題
+                                                    <br />
+                                                    topic:
                                                 </span>
                                                 <span>{s.submissionTopic || "（未設定）"}</span>
                                             </div>
 
                                             <div className="flex items-center gap-2">
                                                 <span className="text-muted-foreground w-24">
-                                                    發表形式:
+                                                    發表形式
+                                                    <br />
+                                                    presentation type:
                                                 </span>
                                                 <span>
                                                     {s.submissionPresentType === "oral"
@@ -218,14 +227,18 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
 
                                             <div className="flex items-center gap-2">
                                                 <span className="text-muted-foreground w-24">
-                                                    檔案數量:
+                                                    檔案數量
+                                                    <br />
+                                                    file count:
                                                 </span>
                                                 <span>{s.submissionFiles.length}</span>
                                             </div>
 
                                             <div className="flex items-center gap-2">
                                                 <span className="text-muted-foreground w-24">
-                                                    建立時間:
+                                                    建立時間
+                                                    <br />
+                                                    created at:
                                                 </span>
                                                 <span className="flex items-center gap-1">
                                                     <Calendar className="h-4 w-4" />
@@ -235,7 +248,9 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
 
                                             <div className="flex items-center gap-2">
                                                 <span className="text-muted-foreground w-24">
-                                                    最後更新:
+                                                    最後更新
+                                                    <br />
+                                                    last update:
                                                 </span>
                                                 <span className="flex items-center gap-1">
                                                     <Clock className="h-4 w-4" />
@@ -250,7 +265,8 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                                 <summary className="font-medium mb-3 flex items-center gap-2 cursor-pointer list-none">
                                                     <div className="flex items-center gap-2 flex-1">
                                                         <ExternalLink className="h-4 w-4" />
-                                                        相關文件 ({submissionDocs.length})
+                                                        相關文件 related documents (
+                                                        {submissionDocs.length})
                                                         <svg
                                                             className="h-4 w-4 transition-transform group-open:rotate-180"
                                                             xmlns="http://www.w3.org/2000/svg"
@@ -267,7 +283,10 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                                 </summary>
 
                                                 <div className="pt-2">
-                                                    <p>點開以查看文件細節</p>
+                                                    <p>
+                                                        點開以查看文件細節 click to view document
+                                                        details
+                                                    </p>
                                                     {submissionDocs.map((doc, j) => (
                                                         <DocumentDetail
                                                             document={doc}
@@ -330,13 +349,19 @@ function DocumentDetail({
                     {isReviewerDocument ? (
                         <span className="text-blue-600">
                             審稿者 {document.reviewerName || "未知"} 上傳的文件
+                            <br />
+                            uploaded by reviewer{" "}
                         </span>
                     ) : (
-                        <span className="text-green-600">您自行上傳的文件</span>
+                        <span className="text-green-600">
+                            您自行上傳的文件
+                            <br />
+                            Your upload
+                        </span>
                     )}
                 </p>
 
-                <p>上傳時間：{formatToUTC8(document.createdAt)}</p>
+                <p>上傳時間 upload time：{formatToUTC8(document.createdAt)}</p>
 
                 {document.description && (
                     <div
@@ -346,13 +371,16 @@ function DocumentDetail({
                                 : "bg-green-100 border border-green-200"
                         }`}
                     >
-                        <p className="font-medium mb-1">文件說明：</p>
+                        <p className="font-medium mb-1">文件說明 document description：</p>
                         <p className="whitespace-pre-line">{document.description}</p>
                     </div>
                 )}
 
-                <p>主題：{document.topic || "（未設定）"}</p>
-                <p>檔案類型：{document.pdfType === "full_paper" ? "全文" : "摘要"}</p>
+                <p>主題 topic：{document.topic || "（未設定）"}</p>
+                <p>
+                    檔案類型 type：
+                    {document.pdfType === "full_paper" ? "全文 full paper" : "摘要 abstract"}
+                </p>
 
                 <div className="mt-4">
                     <Button
@@ -373,7 +401,7 @@ function DocumentDetail({
                             rel="noopener noreferrer"
                             download={document.pdfType === "full_paper"}
                         >
-                            下載檔案
+                            下載檔案 download file
                         </a>
                     </Button>
 

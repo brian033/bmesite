@@ -50,6 +50,9 @@ export default function PaymentStatusCard({ session }: PaymentStatusCardProps) {
                 <div className="p-4">
                     <h1 className="text-lg font-bold mb-4 text-center">
                         您尚未繳交會議參加費用，可以投稿進行審核，不過需要繳費後才可以在現場發表海報/口頭報告，繳費後會優先審稿。
+                        <br />
+                        You can start submitting abstracts, but you need to pay the fee to present
+                        your poster/oral presentation on-site if it got accepted.
                     </h1>
 
                     {loading && (
