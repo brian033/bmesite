@@ -55,14 +55,14 @@ export default function PaymentStatusCard({ session }: PaymentStatusCardProps) {
                         your poster/oral presentation on-site if it got accepted.
                     </h1>
 
-                    {loading && (
+                    {/*loading && (
                         <div className="text-center py-8">
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
                             <p className="mt-2">載入付款選項中...</p>
                         </div>
-                    )}
+                    )*/}
 
-                    {error && (
+                    {/*error && (
                         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
                             <p>{error}</p>
                             <button
@@ -72,16 +72,14 @@ export default function PaymentStatusCard({ session }: PaymentStatusCardProps) {
                                 重新載入
                             </button>
                         </div>
-                    )}
+                    )*/}
 
-                    {!loading && !error && paymentOptions.length === 0 && (
-                        <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-md">
-                            目前沒有可用的付款選項。請稍後再試或聯繫管理員。
-                        </div>
-                    )}
+                    <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-md">
+                        目前沒有可用的付款選項。請等待繳款功能開放。There are currently no available payment options. Please wait for the payment feature to become available.
+                    </div>
 
                     <div className="flex flex-row flex-wrap space-x-4">
-                        {paymentOptions.map((option) => (
+                        {/*paymentOptions.map((option) => (
                             <div
                                 key={option.paymentOptionId}
                                 className="bg-white m-3 p-4 rounded-lg shadow-md flex-1"
@@ -103,7 +101,7 @@ export default function PaymentStatusCard({ session }: PaymentStatusCardProps) {
                                     />
                                 </div>
                             </div>
-                        ))}
+                        ))*/}
                     </div>
                 </div>
             </CardContent>
