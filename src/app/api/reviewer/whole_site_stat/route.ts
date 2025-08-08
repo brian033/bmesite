@@ -59,8 +59,14 @@ const handler = async (req: NextRequest, session: any) => {
             },
             still_in_abstract: {
                 oral: 0,
+                oral_rest: 0,
+                oral_rejected: 0,
                 poster: 0,
+                poster_rest: 0,
+                poster_rejected: 0,
                 undecided: 0,
+                undecided_rest: 0,
+                undecided_rejected: 0
             },
         };
     });
@@ -81,8 +87,14 @@ const handler = async (req: NextRequest, session: any) => {
         },
         still_in_abstract: {
             oral: 0,
+            oral_rest: 0,
+            oral_rejected: 0,
             poster: 0,
+            poster_rest: 0,
+            poster_rejected: 0,
             undecided: 0,
+            undecided_rest: 0,
+            undecided_rejected: 0
         },
     };
 
@@ -102,6 +114,7 @@ const handler = async (req: NextRequest, session: any) => {
         // 根據提交類型和發表形式分類統計
         const presentType = sub.submissionPresentType || "undecided";
         const isAccepted = sub.submissionStatus === "accepted";
+        const isRejected = sub.submissionStatus === "rejected";
 
         if (sub.submissionType === "full_paper") {
             // 全文投稿
@@ -114,9 +127,37 @@ const handler = async (req: NextRequest, session: any) => {
                 topicAnalytics["ALL"].full_paper_accepted[presentType] += 1;
             }
         } else {
-            // 還在摘要階段
             topicAnalytics[validTopic].still_in_abstract[presentType] += 1;
             topicAnalytics["ALL"].still_in_abstract[presentType] += 1;
+
+            // 還在摘要階段
+            if (presentType === "oral"){
+                if (isRejected) {
+                    topicAnalytics[validTopic].still_in_abstract["oral_rejected"] += 1;
+                    topicAnalytics["ALL"].still_in_abstract["oral_rejected"] += 1;
+                } else {
+                    topicAnalytics[validTopic].still_in_abstract["oral_rest"] += 1;
+                    topicAnalytics["ALL"].still_in_abstract["oral_rest"] += 1;
+                }
+            }
+            if (presentType === "poster"){
+                if (isRejected) {
+                    topicAnalytics[validTopic].still_in_abstract["poster_rejected"] += 1;
+                    topicAnalytics["ALL"].still_in_abstract["poster_rejected"] += 1;
+                } else {
+                    topicAnalytics[validTopic].still_in_abstract["poster_rest"] += 1;
+                    topicAnalytics["ALL"].still_in_abstract["poster_rest"] += 1;
+                }
+            }
+            if (presentType === "undecided"){
+                if (isRejected) {
+                    topicAnalytics[validTopic].still_in_abstract["undecided_rejected"] += 1;
+                    topicAnalytics["ALL"].still_in_abstract["undecided_rejected"] += 1;
+                } else {
+                    topicAnalytics[validTopic].still_in_abstract["undecided_rest"] += 1;
+                    topicAnalytics["ALL"].still_in_abstract["undecided_rest"] += 1;
+                }
+            }
         }
     });
 

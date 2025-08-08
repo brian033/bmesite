@@ -34,6 +34,12 @@ interface AnalyticItem {
         oral: number;
         poster: number;
         undecided: number;
+        oral_rest: number;
+        oral_rejected: number;
+        poster_rest: number;
+        poster_rejected: number;
+        undecided_rest: number;
+        undecided_rejected: number;
     };
 }
 
@@ -296,10 +302,10 @@ export default function SubmissionStats() {
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead className="w-[180px]">主題</TableHead>
-                                        <TableHead className="text-center">口頭報告</TableHead>
-                                        <TableHead className="text-center">海報展示</TableHead>
-                                        <TableHead className="text-center">未決定</TableHead>
-                                        <TableHead className="text-center">小計</TableHead>
+                                        <TableHead className="text-center">口頭報告 (其他/已拒絕)</TableHead>
+                                        <TableHead className="text-center">海報展示 (其他/已拒絕)</TableHead>
+                                        <TableHead className="text-center">未決定 (其他/已拒絕)</TableHead>
+                                        <TableHead className="text-center">小計 (其他/已拒絕)</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -308,6 +314,15 @@ export default function SubmissionStats() {
                                             item.still_in_abstract.oral +
                                             item.still_in_abstract.poster +
                                             item.still_in_abstract.undecided;
+                                        const total_rest = 
+                                            item.still_in_abstract.oral_rest +
+                                            item.still_in_abstract.poster_rest +
+                                            item.still_in_abstract.undecided_rest;
+                                            
+                                        const total_rejected = 
+                                            item.still_in_abstract.oral_rejected +
+                                            item.still_in_abstract.poster_rejected +
+                                            item.still_in_abstract.undecided_rejected;
 
                                         return (
                                             <TableRow key={item.topic}>
@@ -315,19 +330,27 @@ export default function SubmissionStats() {
                                                     {item.topic === "ALL" ? "總計" : item.topic}
                                                 </TableCell>
                                                 <TableCell className="text-center">
-                                                    {item.still_in_abstract.oral}
+                                                    {item.still_in_abstract.oral_rest}/
+                                                    {item.still_in_abstract.oral_rejected}
                                                 </TableCell>
                                                 <TableCell className="text-center">
-                                                    {item.still_in_abstract.poster}
+                                                    {item.still_in_abstract.poster_rest}/
+                                                    {item.still_in_abstract.poster_rejected}
                                                 </TableCell>
                                                 <TableCell className="text-center">
-                                                    {item.still_in_abstract.undecided}
+                                                    {item.still_in_abstract.undecided_rest}/
+                                                    {item.still_in_abstract.undecided_rejected}
                                                 </TableCell>
                                                 <TableCell className="text-center">
                                                     <Badge
-                                                        variant={total > 0 ? "default" : "outline"}
+                                                        variant={total_rest > 0 ? "default" : "outline"}
                                                     >
-                                                        {total}
+                                                        {total_rest}
+                                                    </Badge>/
+                                                    <Badge
+                                                        variant="destructive"
+                                                    >
+                                                        {total_rejected}
                                                     </Badge>
                                                 </TableCell>
                                             </TableRow>
