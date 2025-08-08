@@ -146,7 +146,9 @@ const DocumentManager = ({ session }) => {
                         上傳新摘要草稿
                     </Button>
                 )} */}
-                {showUploader ? (
+
+                {/* 以下於截止日後關閉，並到 api/attendee/upload_document_and_submit 刪除 handler 註解 */}
+                {/*showUploader ? (
                     <div className="border p-4 rounded-md bg-gray-50">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="font-medium">上傳新摘要 Upload new abstract</h3>
@@ -170,7 +172,7 @@ const DocumentManager = ({ session }) => {
                         <PlusCircle className="h-4 w-4 mr-2" />
                         新摘要送審 Submit new abstract
                     </Button>
-                )}
+                )*/}
             </div>
         </div>
     );

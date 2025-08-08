@@ -11,6 +11,13 @@ import { Submission } from "@/types/submission";
 const validPdfTypes = ["abstracts"];
 
 const handler = async (req: NextRequest, session: any) => {
+
+    // 若要開啟上傳功能請把下面四行註解
+    return NextResponse.json(
+        { error: "此上傳功能已關閉" },
+        { status: 403 }
+    );
+
     // 從表單數據中提取文件和 pdf 類型
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
