@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 // 定義下載檔案資訊
 const downloadFiles = [
     {
-        category: "2025生機與農機學術演討會",
+        category: "2025生機與農機學術研討會",
         icon: <BookOpen className="h-6 w-6 text-green-700" />,
         files: [
             {
@@ -18,6 +18,13 @@ const downloadFiles = [
                 size: "6.4 MB",
                 date: "2025-06-12",
             },
+            {
+                name: "註冊教學",
+                description: "會議註冊與繳費說明",
+                path: "/downloads/registration.pdf",
+                size: "1.1 MB",
+                date: "2025-08-12",
+            }
             // {
             //     name: "會議手冊",
             //     description: "會議須知與重要資訊",
