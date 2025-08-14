@@ -53,7 +53,7 @@ const robotCompetitionOrganizers = {
         { name: "國立中興大學生物產業機電工程學系", url: "#" },
         { name: "國立宜蘭大學生物機電工程學系", url: "#" },
         { name: "國立嘉義大學生物機電工程學系", url: "#" },
-        { name: "國立屏東科技大學生物機電工程學系", url: "#" },
+        { name: "國立屏東科技大學生物機電工程系", url: "#" },
     ],
 };
 
