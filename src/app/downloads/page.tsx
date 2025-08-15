@@ -45,20 +45,18 @@ const downloadFiles = [
                 size: "21 KB",
                 date: "2025-06-10",
             },
-            // {
-            //     name: "論文全文格式範本",
-            //     description: "論文全文投稿格式規範與範本",
-            //     path: "/downloads/full_paper_template.docx",
-            //     size: "42 KB",
-            //     date: "2025-01-10",
-            // },
-            // {
-            //     name: "論文投稿流程說明",
-            //     description: "詳細的投稿步驟與注意事項",
-            //     path: "/downloads/submission_guide.pdf",
-            //     size: "1.8 MB",
-            //     date: "2025-01-10",
-            // },
+            {
+                name: "論文全文格式範本",
+                description: "論文全文投稿格式規範與範本",
+                path: "https://docs.google.com/document/d/1owm3UXYxEJ89ZG2ZiopiF-6FJxjFGc2FeqveyWbCAPc/edit?usp=sharing",
+                date: "2025-08-16",
+            },
+            {
+                name: "壁報發表須知",
+                description: "壁報尺寸格式與競賽規定",
+                path: "https://docs.google.com/document/d/1P_B9vZrhJCUSglp8N7d0Ik3UfTC8y_tQ3OfL8ZDCHyw/edit?usp=sharing",
+                date: "2025-08-16",
+            },
         ],
     },
     {
