@@ -13,9 +13,53 @@
 
 ## ✨ Project Overview
 
-This is a sophisticated **full-stack conference management platform** specifically developed for the **2025 Conference on Biomechatronics Engineering and Agricultural Machinery** (2025 年生機與農機學術研討會). Currently deployed at **[beame2025.cc](https://beame2025.cc/)**, the platform handles the complete conference lifecycle from user registration to paper review and payment processing.
+This is a sophisticated **full-stack conference management platform** specifically developed for the **2025 Conference on Biomechatronics Engineering and Agricultural Machinery** (2025 年生機與農機學術研討會). Currently deployed at **[beame2025.cc](https://beame2025.cc/)**.
 
-### 🚀 Key Technical Achievements
+### 🎯 Complete Conference Lifecycle Management
+
+This **end-to-end full-stack solution** handles every aspect of conference management:
+
+```
+📢 Announcements → 👤 Registration → 💳 Payment → 📄 Submission →
+🔍 Review Process → ✅ Acceptance → 📱 QR Check-in → 🎉 Event Completion
+```
+
+**📋 Full Business Process Coverage:**
+
+- **📢 Information Publishing**: Dynamic announcements, important dates, speaker information with **real-time admin panel editing** - organizers can manage all content directly from the frontend without backend access. **This is a solution designed for non-technical event organizers.**
+- **👥 User Registration**: Google OAuth authentication with multi-role management
+- **💳 Payment Processing**: Automated ECPay integration with time-based pricing (early bird, regular, on-site)
+- **📄 Document Submission**: PDF/Word upload with real-time preview and validation
+- **🔍 Document Review System**: Two-stage review workflow (abstract → full paper) with revision cycles
+- **📧 Communication Hub**: Automated email notifications for every workflow transition
+- **📱 Event Management**: QR code-based check-in system for on-site attendance tracking
+- **📊 Administrative Control**: Comprehensive admin dashboard for user, payment, and submission management
+
+## 🎨 Platform Screenshots
+
+### 🏠 Public Interface
+
+![Homepage](./docs/screenshots/homepage.png)
+_Dynamic homepage with conference information, announcements, and speaker details_
+
+### 👤 User Dashboard
+
+![User Profile](./docs/screenshots/user-dashboard.png)
+_Personal dashboard for document submission, payment status, and review tracking_
+
+### 🔍 Review System
+
+![Reviewer Dashboard](./docs/screenshots/reviewer-dashboard.png)
+_Comprehensive reviewer interface with document preview and batch operations_
+
+### ⚙️ Admin Panel
+
+![Admin Dashboard](./docs/screenshots/admin-dashboard.png)
+_Non-technical admin panel for content management, user roles, and system configuration_
+
+> **Note**: Screenshots showcase the live system currently serving [beame2025.cc](https://beame2025.cc/)
+
+## 🚀 Key Technical Achievements
 
 - **Multi-role Authentication System** with granular permissions
 - **Complex Document Review Workflow** with status management
@@ -83,68 +127,55 @@ PDF:         PDF.js + Mammoth.js
 
 ```mermaid
 flowchart TD
-    A[📤 User Submits Document] --> B[📧 Email: Submission Confirmation]
-    B --> C[⏳ Status: Pending Review]
-    C --> D[👤 Shows on the assigned reviewer's dashboard]
-    D --> E[🔍 Status: Under Review]
+    A[📤 User Submits Document] --> B[⏳ Pending Review]
+    B --> C[🔍 Under Review]
 
-    E --> F{📋 Reviewer's opinion}
+    C --> D{📋 Reviewer Decision}
 
-    F -->|✅ Accept proposal| G[📧 Email: Acceptance Notification]
-    G --> H[✨ Status: proposal accepted]
-    H --> I[🎯 Invite Full Paper Submission]
+    D -->|✅ Accept| E[✨ Abstract Accepted]
+    D -->|❌ Reject| F[🚫 Rejected - Final]
+    D -->|📝 Needs Revision| G[↩️ Replied - Needs Changes]
 
-    F -->|❌ Reject| J[📧 Email: Rejection Notification]
-    J --> K[🚫 Status: Rejected - Final]
+    G --> H[✏️ User Revises Abstract<br/>📝 Reviewer provides comments<br/>📎 Reviewer can upload modified file]
+    H --> I[⏳ Waiting Review]
+    I --> C
 
-    F -->|📝 Revision Required| L[📧 Email: Revision Request]
-    L --> M[↩️ Status: Replied]
-    M --> N[✏️ User Revises & Resubmits]
-    N --> O[📧 Email: Resubmission Confirmation]
-    O --> P[⏳ Status: Waiting Review]
-    P --> E
+    E --> J[📄 Full Paper Submission]
+    J --> K[⏳ Full Paper Under Review]
+    K --> L{📋 Full Paper Review}
 
-    I --> Q[📄 Full Paper Submission]
-    Q --> R[📧 Email: Full Paper Received]
-    R --> T[⏳ Status: Full Paper Under Review]
-    T --> U{📋 Reviewer's Final Decision}
-    
-    U -->|✅ Accept Final Paper| V[📧 Email: Final Acceptance]
-    V --> W[🎉 Status: Final Paper Accepted]
-    
-    U -->|❌ Reject Final Paper| X[📧 Email: Final Rejection]
-    X --> Y[🚫 Status: Final Paper Rejected]
-    
-    U -->|📝 Final Paper Revision Required| Z[📧 Email: Final Paper Revision Request]
-    Z --> AA[↩️ Status: Final Paper Replied]
-    AA --> BB[✏️ User Revises Final Paper]
-    BB --> CC[📧 Email: Final Paper Resubmission]
-    CC --> DD[⏳ Status: Final Paper Waiting Review]
-    DD --> U
-    
-    W --> S[🏁 Status: Conference Ready]
-    Y --> EE[🏁 Status: Final - Not Accepted]
+    L -->|✅ Accept| M[🎉 Final Paper Accepted]
+    L -->|❌ Reject| N[🚫 Final Paper Rejected]
+    L -->|📝 Needs Revision| O[↩️ Final Paper Needs Changes]
 
-    style A fill:#e1f5fe
-    style G fill:#e8f5e8
-    style J fill:#ffebee
-    style L fill:#fff3e0
-    style R fill:#f3e5f5
-    style V fill:#e8f5e8
-    style X fill:#ffebee
-    style Z fill:#fff3e0
-    style W fill:#c8e6c9
-    style Y fill:#ffcdd2
+    O --> P[✏️ User Revises Final Paper<br/>📝 Reviewer provides comments<br/>📎 Reviewer can upload modified files]
+    P --> Q[⏳ Final Paper Waiting Review]
+    Q --> L
+
+    M --> R[🏁 Conference Ready]
+    N --> S[🏁 Final - Not Accepted]
+
+    style A fill:#1976d2,color:#fff
+    style E fill:#388e3c,color:#fff
+    style F fill:#d32f2f,color:#fff
+    style G fill:#f57c00,color:#fff
+    style M fill:#2e7d32,color:#fff
+    style N fill:#c62828,color:#fff
+    style O fill:#f57c00,color:#fff
+    style R fill:#2e7d32,color:#fff
+    style S fill:#c62828,color:#fff
 ```
 
 **Key Features:**
 
-- **Automated Email Notifications** at every critical step
+- **Automated Email Notifications** 📧 sent at every state transition
+- **Two-Stage Review Process**: Abstract → Full Paper review
+- **Revision Loops**: Both stages support multiple revision cycles
+- **Interactive Review System**: Reviewers can provide written comments and upload modified documents
 - **PDF/Word document upload** with validation and preview
-- **Flexible Review Process** with accept/reject/revision workflow
+- **Reviewer Dashboard Integration** with real-time status updates
 - **Reviewer Whitelist System** for targeted assignment
-- **Revision Loop Support** allowing multiple resubmissions
-- **Status Tracking** with real-time updates for all stakeholders
+- **Status Tracking** with instant notifications to all stakeholders
 
 ### 💳 Dynamic Payment System
 
@@ -217,14 +248,14 @@ middlewareFactory(
 - ECPay merchant account (optional for payments)
 - SMTP email service credentials
 
-### One-Command Setup
+### Easy Setup
 
 ```bash
 # 1. Clone the repository
-git clone <repository-url>
+git clone https://github.com/brian033/bmesite
 cd bime_conf
 
-# 2. Create required directories
+# 2. Populate required directories
 mkdir uploads db
 
 # 3. Configure environment variables
@@ -256,12 +287,13 @@ docker exec mongo mongoimport --db confDb --collection announcements --file /app
 docker exec mongo mongoimport --db confDb --collection importantDates --file /app/basic_datas/confDb.importantDates.json
 ```
 
+Or use MongoDB Compass to load data with interactive ui
+
 ## 🌟 Development Highlights
 
 ### Problem-Solving Approach
 
 - **Complex State Management**: Implemented custom hooks for document workflow states
-- **File Upload Optimization**: Built chunked upload system for large PDF files
 - **Payment Security**: Implemented ECPay hash verification and webhook handling
 - **UI/UX Consistency**: Created reusable component library with Radix UI
 
@@ -271,14 +303,14 @@ docker exec mongo mongoimport --db confDb --collection importantDates --file /ap
 - **Image Optimization** with Next.js built-in features
 - **Database Indexing** for efficient query performance
 - **Containerized Deployment** for consistent environments
+- **Cloudflare tunnel support** no need to configure Firewall settings
 
 ## 📈 Business Impact
 
 - Currently serving the **2025 Conference on Biomechatronics Engineering and Agricultural Machinery**
 - Handling **100+ user registrations** and document submissions
 - Processing **conference fees** through automated payment system
-- Reducing administrative workload by **80%** through workflow automation
-- Maintaining **99% uptime** at [beame2025.cc](https://beame2025.cc/)
+- Reducing administrative workload through workflow automation
 
 ## 👨‍💻 Developer Information
 
@@ -295,5 +327,3 @@ docker exec mongo mongoimport --db confDb --collection importantDates --file /ap
 **Live Demo**: Visit [beame2025.cc](https://beame2025.cc/) to see the platform in action.
 
 ---
-
-_This project showcases full-stack development capabilities, system architecture design, and business logic implementation suitable for enterprise-level applications._
