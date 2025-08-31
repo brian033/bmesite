@@ -69,7 +69,8 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
 
     // 檢查是否有狀態為 replied 或 waiting 的提交案
     const hasActionRequiredSubmissions = submissions.some(
-        (s) => s.submissionStatus === "replied" || s.submissionStatus === "waiting"
+        // (s) => s.submissionStatus === "replied" || s.submissionStatus === "waiting"
+        (s) => s.submissionStatus === "replied"
     );
 
     return (
@@ -113,10 +114,10 @@ export default function SubmissionCard({ submissions, documents }: SubmissionCar
                                         doc.isReviewerUpload
                                 ).length;
 
-                                // 檢查是否可以上傳文件
+                                // 檢查是否可以上傳文件（改成只有退回的可以上傳）
                                 const canUpload =
-                                    s.submissionStatus === "replied" ||
-                                    s.submissionStatus === "waiting";
+                                    s.submissionStatus === "replied"; // ||
+                                    // s.submissionStatus === "waiting";
 
                                 // 提交案的文件數組，包括投稿者和審稿者的
                                 const submissionDocs = documents.filter((doc) =>
