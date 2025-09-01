@@ -32,8 +32,8 @@ const conferenceSchedule = {
                     location: "鄭江樓信義講堂",
                     details: [
                         "主持人: 台灣生物機電學會邱奕志 理事長",
-                        "主講人: 農業科技司李紅曦司長",
-                        "演講題目: (未定)",
+                        "主講人: 農業科技司陳瑞榮副司長",
+                        "演講題目: 次世代台灣農機的發展方向與趨勢",
                     ],
                 },
                 {
@@ -43,7 +43,7 @@ const conferenceSchedule = {
                     details: [
                         "主持人: 台灣生物機電學會邱奕志 理事長",
                         "主講人: 中興大學詹富智校長",
-                        "演講題目: (未定)",
+                        "演講題目: Bridging Nature and Machines: Safeguarding Orchids in the Digital Era: From Novel Virus Discovery to Next-Generation AI and Biosensing Technologies for Plant Health Management",
                     ],
                 },
                 {

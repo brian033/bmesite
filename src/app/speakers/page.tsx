@@ -6,15 +6,15 @@ const speakers = [
     {
         title: "Plenary Speech I",
         titleEn: "Plenary Speech I",
-        speaker: "李紅曦 司長",
-        speakerEn: "Lee, Hung-Hsi",
-        position: "農業部 農業科技司司長",
+        speaker: "陳瑞榮 副司長",
+        speakerEn: "Chen, Jui-Jung",
+        position: "農業部 農業科技司副司長",
         positionEn: "",
-        photoUrl: "/speakers/speaker1.jpg", // 預設圖片，請替換為實際照片
+        photoUrl: "/speakers/speaker3.png", // 預設圖片，請替換為實際照片
         host: "邱奕志 理事長",
         hostTitle: "台灣生物機電學會理事長",
-        topic: "(未定)",
-        topicEn: "(TBD)",
+        topic: "次世代台灣農機的發展方向與趨勢",
+        topicEn: "",
         notes: "",
     },
     {
@@ -27,8 +27,8 @@ const speakers = [
         photoUrl: "/speakers/speaker2.jpg", // 預設圖片，請替換為實際照片
         host: "邱奕志 理事長",
         hostTitle: "台灣生物機電學會理事長",
-        topic: "(未定)",
-        topicEn: "(TBD)",
+        topic: "",
+        topicEn: "Bridging Nature and Machines: Safeguarding Orchids in the Digital Era: From Novel Virus Discovery to Next-Generation AI and Biosensing Technologies for Plant Health Management",
         notes: "",
     },
 ];
