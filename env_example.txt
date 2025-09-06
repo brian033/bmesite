@@ -5,7 +5,23 @@ GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 MONGO_AUTHSOURCE=
 NEXTAUTH_SECRET=
-NEXTAUTH_URL= # Change this to your production URL
+NEXTAUTH_URL=
 NEXT_PUBLIC_SITE_URL=
 NEXT_PUBLIC_API_URL=
 CLOUDFLARE_TUNNEL_TOKEN=
+
+
+# ecpay official testing account
+# Ref: https://developers.ecpay.com.tw/?p=2856&gad_source=1&gad_campaignid=21331775467&gbraid=0AAAAADLSIOWFLUgHH3pu8Gs5xV9bSRwBd&gclid=CjwKCAjw2brFBhBOEiwAVJX5GLuyFMUPm_DHrlSK6R0udQ67KjM8chK65eB8rLbbAe_etUjoJB7mXxoC9F0QAvD_BwE
+
+ECPAY_MERCHANT_ID=3002607
+ECPAY_HASH_KEY=pwFHCqoQZGmho4w6
+ECPAY_HASH_IV=EkRm7iFT261dpevs
+ECPAY_API_URL=https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5
+ECPAY_QUERY_API_URL=https://payment-stage.ecpay.com.tw/Cashier/QueryTradeInfo/V5
+
+EMAIL_USER=
+EMAIL_APP_PASSWORD=
+EMAIL_ACC_PWD=
+EMAIL_SENDER_NAME=生機農機學術研討會
+ADMIN_EMAIL=
