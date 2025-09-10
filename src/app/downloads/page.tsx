@@ -70,6 +70,20 @@ const downloadFiles = [
                 size: "540 KB",
                 date: "2025-06-12",
             },
+            {
+                name: "競賽秩序冊",
+                description: "",
+                path: "/robot/robot_guideline.pdf",
+                size: "24460 KB",
+                date: "2025-09-11",
+            },
+            {
+                name: "競賽分組編號",
+                description: "",
+                path: "/robot/robot_team.pdf",
+                size: "858 KB",
+                date: "2025-09-11",
+            },
             // {
             //     name: "技術規範說明",
             //     description: "參賽團隊須知與技術規範",
