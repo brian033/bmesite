@@ -245,7 +245,7 @@ export default function SchedulePage() {
                     });
                     
                     // Calculate column span for main event
-                    let columnStart = 2;
+                    const columnStart = 2;
                     let columnEnd;
                     
                     if (event.parallel) {
