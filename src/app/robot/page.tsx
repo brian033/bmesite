@@ -214,6 +214,30 @@ export default function Page() {
                                         </Button>
                                     </Link>
                                 </div>
+                                <div className="flex items-center justify-between border-b pb-3">
+                                    <div className="flex items-center gap-2">
+                                        <FileText className="h-5 w-5 text-green-700" />
+                                        <span>農業機器人競賽秩序冊</span>
+                                    </div>
+                                    <Link href="/robot/robot_guideline.pdf" target="_blank" download>
+                                        <Button variant="outline" size="sm" className="gap-2">
+                                            <Download className="h-4 w-4" />
+                                            下載
+                                        </Button>
+                                    </Link>
+                                </div>
+                                <div className="flex items-center justify-between border-b pb-3">
+                                    <div className="flex items-center gap-2">
+                                        <FileText className="h-5 w-5 text-green-700" />
+                                        <span>農業機器人競賽分組編號</span>
+                                    </div>
+                                    <Link href="/robot/robot_team.pdf" target="_blank" download>
+                                        <Button variant="outline" size="sm" className="gap-2">
+                                            <Download className="h-4 w-4" />
+                                            下載
+                                        </Button>
+                                    </Link>
+                                </div>
 
                                 <div className="text-center text-gray-500 pt-2">
                                     <p className="mb-4">更多農業機器人比賽相關文件將陸續公布</p>
