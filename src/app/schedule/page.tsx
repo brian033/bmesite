@@ -85,7 +85,7 @@ const conferenceSchedule = {
         },
         {
             activity: "中華農業機械學會年會",
-            location: "知武館4F演講廳",
+            location: "知武館4F演講廳(401)",
             start_time_index: 6,
             num_of_time_slot: 2,
             num_of_columns: 1,
@@ -112,7 +112,12 @@ const conferenceSchedule = {
             start_time_index: 11,
             num_of_time_slot: 3,
             parallel: "農機安全論壇",
-            parallelLocation: "知武館4F演講廳",
+            parallelLocation: "知武館4F演講廳(401)",
+            parallelDetails: [
+                "主持人: 蔡燿全博士",
+                "主講人: 謝清祿博士",
+                "與談人: 丁冠中博士、艾群博士、林達德博士、楊智凱組長",
+            ],
             parallel_num_of_time_slot: 1,
             parallel_num_of_columns: 1,
         },
@@ -162,7 +167,7 @@ const conferenceSchedule = {
     },
     {
         date: "114年9月26日(五)",
-        eventTimes: ["09:00-10:50", "11:30-12:00"],
+        eventTimes: ["09:00-10:50", "11:00-11:30", "11:30-12:00"],
         events: [
         {
             activity: "研發成果口頭發表",
@@ -171,9 +176,15 @@ const conferenceSchedule = {
             num_of_time_slot: 1,
         },
         {
-            activity: "口頭競賽頒獎及閉幕典禮",
-            location: "知武館4F演講廳",
+            activity: "農機安全論壇之精彩回顧",
+            location: "知武館4F演講廳(401)",
             start_time_index: 1,
+            num_of_time_slot: 1,
+        },
+        {
+            activity: "口頭競賽頒獎及閉幕典禮",
+            location: "知武館4F演講廳(401)",
+            start_time_index: 2,
             num_of_time_slot: 1,
         },
         ],
@@ -303,6 +314,15 @@ export default function SchedulePage() {
                                 <MapPin className="h-3 w-3 inline mr-1" />
                                 {event.parallelLocation}
                               </p>
+                              {event.parallelDetails && (
+                                <div className="mt-2 ml-2 pl-2 border-l-2 border-green-200">
+                                  {event.parallelDetails.map((pDetail, i) => (
+                                    <p key={i} className="text-xs text-gray-700 mb-1">
+                                      {pDetail}
+                                    </p>
+                                  ))}
+                                </div>
+                              )}
                             </div>
                           </div>
                         )}
