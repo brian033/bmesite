@@ -12,6 +12,34 @@ const downloadFiles = [
         icon: <BookOpen className="h-6 w-6 text-green-700" />,
         files: [
             {
+                name: "大會手冊",
+                description: "",
+                path: "/downloads/handbook.pdf",
+                size: "4.6 MB",
+                date: "2025-09-15",
+            },
+            {
+                name: "口頭發表議程表 – 總表",
+                description: "",
+                path: "/downloads/oral_overview.pdf",
+                size: "372 KB",
+                date: "2025-09-15",
+            },
+            {
+                name: "口頭發表議程表 – 各場次安排",
+                description: "",
+                path: "/downloads/oral_timetable.pdf",
+                size: "379 KB",
+                date: "2025-09-15",
+            },
+            {
+                name: "壁報發表議程表",
+                description: "",
+                path: "/downloads/poster.pdf",
+                size: "304 KB",
+                date: "2025-09-15",
+            },
+            {
                 name: "研討會海報",
                 description: "歡迎列印張貼",
                 path: "/webpage/poster.JPG",
