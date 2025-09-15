@@ -52,6 +52,9 @@ export default function Navbar() {
                     <Link href="/downloads" className="py-2 lg:py-0">
                         檔案下載
                     </Link>
+                    <Link href="/sponsors" className="py-2 lg:py-0">
+                        贊助廠商
+                    </Link>
                 </div>
                 {/* 佔位符 */}
                 <div className="hidden lg:block"></div>
@@ -141,6 +144,13 @@ export default function Navbar() {
                     className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
                 >
                     檔案下載
+                </Link>
+                <Link
+                    href="/sponsors"
+                    onClick={handleNavItemClick}
+                    className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                >
+                    贊助廠商
                 </Link>
                 <div className="hidden lg:block border-l border-primary-foreground/20 h-6" />
                 {user && (
