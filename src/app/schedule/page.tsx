@@ -17,12 +17,12 @@ const conferenceSchedule = {
             "11:40-12:10", // 5
             "12:30-13:00", // 6
             "13:00-13:30", // 7
-            "13:30-14:40", // 8
-            "14:40-15:20", // 9
+            "13:30-15:00", // 8
+            "15:00-15:20", // 9
             "15:20-15:40", // 10
             "15:40-16:40", // 11
-            "16:40-17:00", // 12
-            "17:00-17:30", // 13
+            "16:40-17:20", // 12
+            "17:20-17:30", // 13
             "18:00-20:30", // 14
         ],
         events: [
@@ -36,21 +36,21 @@ const conferenceSchedule = {
         },
         {
             activity: "開幕典禮暨台灣生物機電學會年會",
-            location: "鄭江樓信義講堂",
+            location: "鄭江樓北棟信義講堂",
             start_time_index: 1,
             num_of_time_slot: 1,
             num_of_columns: 3,
         },
         {
             activity: "開幕、貴賓致詞、捐贈與頒獎儀式、大合照時間",
-            location: "鄭江樓信義講堂",
+            location: "鄭江樓北棟信義講堂",
             start_time_index: 2,
             num_of_time_slot: 1,
             num_of_columns: 3,
         },
         {
             activity: "Plenary Speech I",
-            location: "鄭江樓信義講堂",
+            location: "鄭江樓北棟信義講堂",
             details: [
                 "主持人: 台灣生物機電學會邱奕志 理事長",
                 "主講人: 農業科技司陳瑞榮副司長",
@@ -62,7 +62,7 @@ const conferenceSchedule = {
         },
         {
             activity: "Plenary Speech II",
-            location: "鄭江樓信義講堂",
+            location: "鄭江樓北棟信義講堂",
             details: [
                 "主持人: 台灣生物機電學會邱奕志 理事長",
                 "主講人: 中興大學詹富智校長",
@@ -74,7 +74,7 @@ const conferenceSchedule = {
         },
         {
             activity: "特別講者：中華農機學會國際貢獻獎",
-            location: "鄭江樓信義講堂",
+            location: "鄭江樓北棟信義講堂",
             details: [
                 "主講人: Dr. Sun-Ok Chung",
                 "Chungnam National University, Korea",
@@ -102,7 +102,7 @@ const conferenceSchedule = {
         },
         {
             activity: "茶敘",
-            location: "生機館1F",
+            location: "生機館、知武館1F",
             start_time_index: 10,
             num_of_time_slot: 1,
         },
@@ -130,35 +130,35 @@ const conferenceSchedule = {
         posterEvent: [
             {
                 activity: "第一組壁報布置",
-                location: "知武館2F/3F走廊",
+                location: "知武館2F/3F/4F走廊",
                 start_time_index: 6,
                 num_of_time_slot: 1,
                 isParallel: true,
             },
             {
                 activity: "研發成果第一組壁報發表",
-                location: "知武館2F/3F走廊",
+                location: "知武館2F/3F/4F走廊",
                 start_time_index: 7,
                 num_of_time_slot: 2,
                 isParallel: true,
             },
             {
                 activity: "第一組壁報拆除/第二組壁報布置",
-                location: "知武館2F/3F走廊",
+                location: "知武館2F/3F/4F走廊",
                 start_time_index: 9,
                 num_of_time_slot: 1,
                 isParallel: true,
             },
             {
                 activity: "研發成果第二組壁報發表",
-                location: "知武館2F/3F走廊",
+                location: "知武館2F/3F/4F走廊",
                 start_time_index: 10,
                 num_of_time_slot: 3,
                 isParallel: true,
             },
             {
                 activity: "第二組壁報拆除",
-                location: "知武館2F/3F走廊",
+                location: "知武館2F/3F/4F走廊",
                 start_time_index: 13,
                 num_of_time_slot: 1,
                 isParallel: true,
@@ -167,13 +167,17 @@ const conferenceSchedule = {
     },
     {
         date: "114年9月26日(五)",
-        eventTimes: ["09:00-10:50", "11:00-11:30", "11:30-12:00"],
+        eventTimes: ["09:00-11:00", "11:00-11:30", "11:30-12:00"],
         events: [
         {
             activity: "研發成果口頭發表",
             location: "知武館及生機館",
             start_time_index: 0,
             num_of_time_slot: 1,
+            parallel: "報到",
+            parallelLocation: "生機館1F",
+            parallel_num_of_time_slot: 0,
+            parallel_num_of_columns: 1,
         },
         {
             activity: "農機安全論壇之精彩回顧",
@@ -259,8 +263,10 @@ export default function SchedulePage() {
                     const columnStart = 2;
                     let columnEnd;
                     
-                    if (event.parallel) {
+                    if (event.parallel && hasOverlappingPosterEvents) {
                       columnEnd = 3; // If has parallel, only take column 2
+                    } else if (event.parallel && !hasOverlappingPosterEvents) {
+                      columnEnd = 4; // If no parallel but has overlapping poster events, span columns 2-3
                     } else if (hasOverlappingPosterEvents) {
                       columnEnd = 4; // If no parallel but has overlapping poster events, span columns 2-3
                     } else {
@@ -302,7 +308,7 @@ export default function SchedulePage() {
                           <div
                             className="p-3 hover:bg-blue-50 border border-blue-200 bg-blue-25 rounded"
                             style={{
-                              gridColumn: "3 / 4",
+                              gridColumn: `${columnEnd} / ${columnEnd+1}`,
                               gridRow: `${event.start_time_index + 1} / ${event.start_time_index + 1 + (event.parallel_num_of_time_slot || event.num_of_time_slot)}`,
                             }}
                           >
