@@ -43,7 +43,7 @@ const downloadFiles = [
                 name: "研討會海報",
                 description: "歡迎列印張貼",
                 path: "/webpage/poster.JPG",
-                size: "6.4 MB",
+                size: "414 KB",
                 date: "2025-06-12",
             },
             {
@@ -102,7 +102,7 @@ const downloadFiles = [
                 name: "競賽秩序冊",
                 description: "",
                 path: "/robot/robot_guideline.pdf",
-                size: "24460 KB",
+                size: "18.9 MB",
                 date: "2025-09-11",
             },
             {
