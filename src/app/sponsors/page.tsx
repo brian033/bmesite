@@ -20,7 +20,7 @@ const sponsors = [
         description: "",
     },
     {
-        name: "佑麟實業有限公司",
+        name: "祐麟實業有限公司",
         poster: "/sponsors/sponsor_4.jpg", 
         description: "",
     },
@@ -31,10 +31,12 @@ export default function SponsorsPage() {
         <div className="flex flex-col min-h-screen bg-gray-50">
             {/* 主要內容 */}
             <div className="container mx-auto px-4 py-12">
-                <h1 className="text-4xl font-bold mb-4 text-center text-green-800">贊助廠商</h1>
-                <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto text-lg">
-                    感謝以下企業與機構對本次研討會的大力支持，讓我們能夠成功舉辦這場學術盛會，促進生機與農機領域的知識交流與技術發展。
-                </p>
+                <div className="mb-12">
+                    <h1 className="text-3xl font-bold text-center mb-6">贊助廠商</h1>
+                    <p className="text-center text-gray-600 max-w-2xl mx-auto">
+                        感謝以下企業與機構對本次研討會的大力支持，讓我們能夠成功舉辦這場學術盛會，促進生機與農機領域的知識交流與技術發展。
+                    </p>
+                </div>
 
                 {/* 贊助商展示區塊 */}
                 <div className="space-y-16 grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
