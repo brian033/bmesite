@@ -67,8 +67,15 @@ export default function HomePage() {
             </div>
 
             <div className="container mx-auto px-4 pt-4">
-                <div className="p-3 bg-red-100 text-red-800 border border-red-300 rounded-md font-medium text-left">
-                當使用 Line 或 Messenger 等第三方 APP 的預設瀏覽器開啟此網站，可能因為安全性造成會員註冊發生錯誤，若您是透過這些 APP 得知此網站，請複製研討會網站網址（https://beame2025.cc/）到手機瀏覽器（例如：Chrome 或 Safari）進行註冊。謝謝您的配合。若您沒有 Gmail 帳號無法使用網站註冊，可參考<a href="https://beame2025.cc/downloads/registration.pdf">檔案下載＞註冊教學中（https://beame2025.cc/downloads/registration.pdf）</a>的報名替代表單進行註冊。
+                <div className="p-3 bg-red-100 text-red-800 border border-red-300 rounded-md font-medium text-left break-words">
+                    當使用 Line 或 Messenger 等第三方 APP
+                    的預設瀏覽器開啟此網站，可能因為安全性造成會員註冊發生錯誤，若您是透過這些 APP
+                    得知此網站，請複製研討會網站網址（https://beame2025.cc/）到手機瀏覽器（例如：Chrome
+                    或 Safari）進行註冊。謝謝您的配合。若您沒有 Gmail 帳號無法使用網站註冊，可參考
+                    <a href="https://beame2025.cc/downloads/registration.pdf">
+                        檔案下載＞註冊教學中（https://beame2025.cc/downloads/registration.pdf）
+                    </a>
+                    的報名替代表單進行註冊。
                 </div>
             </div>
 
