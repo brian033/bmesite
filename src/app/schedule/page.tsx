@@ -35,14 +35,14 @@ const conferenceSchedule = {
             num_of_columns: 3,
         },
         {
-            activity: "開幕典禮暨台灣生物機電學會年會",
+            activity: "台灣生物機電學會年會",
             location: "鄭江樓北棟信義講堂",
             start_time_index: 1,
             num_of_time_slot: 1,
             num_of_columns: 3,
         },
         {
-            activity: "開幕、貴賓致詞、捐贈與頒獎儀式、大合照時間",
+            activity: "開幕典禮、貴賓致詞、捐贈與頒獎儀式、大合照時間",
             location: "鄭江樓北棟信義講堂",
             start_time_index: 2,
             num_of_time_slot: 1,
@@ -167,7 +167,7 @@ const conferenceSchedule = {
     },
     {
         date: "114年9月26日(五)",
-        eventTimes: ["09:00-11:00", "11:00-11:30", "11:30-12:00"],
+        eventTimes: ["09:30-11:00", "11:00-11:30", "11:30-12:00"],
         events: [
         {
             activity: "研發成果口頭發表",
@@ -186,7 +186,7 @@ const conferenceSchedule = {
             num_of_time_slot: 1,
         },
         {
-            activity: "口頭競賽頒獎及閉幕典禮",
+            activity: "口頭報告競賽頒獎及閉幕典禮",
             location: "知武館4F演講廳(401)",
             start_time_index: 2,
             num_of_time_slot: 1,
