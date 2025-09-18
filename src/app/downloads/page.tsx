@@ -52,7 +52,7 @@ const downloadFiles = [
                 path: "/downloads/registration.pdf",
                 size: "1.1 MB",
                 date: "2025-08-12",
-            }
+            },
             // {
             //     name: "會議手冊",
             //     description: "會議須知與重要資訊",
@@ -164,7 +164,7 @@ export default function DownloadsPage() {
                                 {category.files.map((file, fileIndex) => (
                                     <Card
                                         key={fileIndex}
-                                        className="border border-green-100 shadow-md"
+                                        className="border border-green-100 shadow-md flex flex-col h-full"
                                     >
                                         <CardHeader className="bg-green-50 border-b border-green-100 py-4">
                                             <div className="flex items-start gap-3">
@@ -174,8 +174,10 @@ export default function DownloadsPage() {
                                                 </CardTitle>
                                             </div>
                                         </CardHeader>
-                                        <CardContent className="pt-4">
-                                            <p className="text-gray-600 mb-4">{file.description}</p>
+                                        <CardContent className="pt-4 flex-1 flex flex-col">
+                                            <p className="text-gray-600 mb-4 flex-1">
+                                                {file.description}
+                                            </p>
                                             <div className="flex items-center justify-between text-xs text-gray-500">
                                                 <div className="flex items-center gap-1">
                                                     <span>檔案大小: {file.size}</span>
