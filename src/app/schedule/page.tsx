@@ -329,6 +329,13 @@ export default function SchedulePage() {
                                   ))}
                                 </div>
                               )}
+                              {event.parallel == "農機安全論壇" && (
+                                <div className="mt-2 ml-2 pl-2 border-l-2 border-green-200">
+                                  <p className="text-xs text-gray-700 mb-1"><a target="_blank" rel="noopener noreferrer" href="/agricultural_machinery_safety/agricultural_machinery_safety.pdf">投影片</a></p>
+                                  <p className="text-xs text-gray-700 mb-1"><a target="_blank" rel="noopener noreferrer"href="/agricultural_machinery_safety/appendix_a.pdf">附件一</a></p>
+                                  <p className="text-xs text-gray-700 mb-1"><a target="_blank" rel="noopener noreferrer" href="/agricultural_machinery_safety/appendix_b.pdf">附件二</a></p>
+                                </div>
+                              )}
                             </div>
                           </div>
                         )}

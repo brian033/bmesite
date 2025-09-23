@@ -19,6 +19,13 @@ const downloadFiles = [
                 date: "2025-09-15",
             },
             {
+                name: "研討會論文集",
+                description: "密碼將於研討會提供",
+                path: "/downloads/proceedings.pdf",
+                size: "41.19 MB",
+                date: "2025-09-24",
+            },
+            {
                 name: "口頭發表議程表 – 總表",
                 description: "",
                 path: "/downloads/oral_overview.pdf",
