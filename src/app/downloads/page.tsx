@@ -8,6 +8,26 @@ import { Badge } from "@/components/ui/badge";
 // 定義下載檔案資訊
 const downloadFiles = [
     {
+        category: "獲獎名單",
+        icon: <BookOpen className="h-6 w-6 text-green-700" />,
+        files: [
+            {
+                name: "口頭發表獲獎名單",
+                description: "",
+                path: "/awards/BEAME2025_OralAwards.pdf",
+                size: "426 KB",
+                date: "2025-09-26",
+            },
+            {
+                name: "壁報發表獲獎名單",
+                description: "",
+                path: "/awards/BEAME2025_PosterAwards.pdf",
+                size: "116 KB",
+                date: "2025-09-26",
+            },
+        ],
+    },
+    {
         category: "2025生機與農機學術研討會",
         icon: <BookOpen className="h-6 w-6 text-green-700" />,
         files: [
