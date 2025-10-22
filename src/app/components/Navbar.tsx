@@ -55,6 +55,9 @@ export default function Navbar() {
                     <Link href="/sponsors" className="py-2 lg:py-0">
                         贊助廠商
                     </Link>
+                    <Link href="/gallery" className="py-2 lg:py-0">
+                        相片庫
+                    </Link>
                 </div>
                 {/* 佔位符 */}
                 <div className="hidden lg:block"></div>
@@ -151,6 +154,13 @@ export default function Navbar() {
                     className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
                 >
                     贊助廠商
+                </Link>
+                <Link
+                    href="/gallery"
+                    onClick={handleNavItemClick}
+                    className="py-2 lg:py-0 flex justify-end lg:mx-0 mx-10"
+                >
+                    相片庫
                 </Link>
                 <div className="hidden lg:block border-l border-primary-foreground/20 h-6" />
                 {user && (
