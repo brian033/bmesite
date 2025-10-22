@@ -2,7 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X, Download, ZoomIn, ZoomOut } from "lucide-react";
 import { PhotoItem } from "../types";
@@ -39,7 +39,8 @@ export default function PhotoModal({ photo, isOpen, onClose, baseUrl, prefix }: 
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent className="max-w-7xl max-h-[95vh] p-0 overflow-hidden">
+            <DialogContent className="max-w-7xl max-h-[95vh] p-0 overflow-hidden [&>button]:top-2 [&>button]:right-2">
+                <DialogTitle className="sr-only">{photo.name}</DialogTitle>
                 <div className="relative flex flex-col h-full">
                     {/* Header */}
                     <div className="flex items-center justify-between p-4 border-b bg-background/95 backdrop-blur-sm">
@@ -65,10 +66,7 @@ export default function PhotoModal({ photo, isOpen, onClose, baseUrl, prefix }: 
                             </Button>
                             <Button variant="outline" size="sm" onClick={handleDownload}>
                                 <Download className="h-4 w-4" />
-                                <span className="hidden sm:inline ml-2">下載</span>
-                            </Button>
-                            <Button variant="outline" size="sm" onClick={onClose}>
-                                <X className="h-4 w-4" />
+                                <span className="hidden sm:inline ml-2">下載原圖</span>
                             </Button>
                         </div>
                     </div>
