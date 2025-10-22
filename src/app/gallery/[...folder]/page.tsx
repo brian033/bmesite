@@ -151,36 +151,6 @@ export default function FolderPage() {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            {/* Breadcrumb Navigation */}
-            <div className="flex items-center gap-2 mb-6 text-sm text-muted-foreground">
-                <Link href="/gallery" className="hover:text-foreground transition-colors">
-                    <Home className="h-4 w-4" />
-                </Link>
-                <ChevronRight className="h-4 w-4" />
-                {pathSegments.map((segment, index) => {
-                    const isLast = index === pathSegments.length - 1;
-                    const path = pathSegments.slice(0, index + 1).join("/");
-
-                    return (
-                        <React.Fragment key={segment}>
-                            {isLast ? (
-                                <span className="text-foreground font-medium">{segment}</span>
-                            ) : (
-                                <>
-                                    <Link
-                                        href={`/gallery/${encodeURI(path)}`}
-                                        className="hover:text-foreground transition-colors"
-                                    >
-                                        {segment}
-                                    </Link>
-                                    <ChevronRight className="h-4 w-4" />
-                                </>
-                            )}
-                        </React.Fragment>
-                    );
-                })}
-            </div>
-
             {/* Header */}
             <div className="text-center mb-8">
                 <h1 className="text-3xl font-bold mb-4">{displayName}</h1>

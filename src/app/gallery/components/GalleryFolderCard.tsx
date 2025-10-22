@@ -18,7 +18,8 @@ export default function GalleryFolderCard({ folder, baseUrl, prefix }: GalleryFo
     const folderPath = encodeURI(folder.folder);
 
     // Extract display name from folder path
-    const displayName = folder.folder.split("/").pop() || folder.folder;
+    const parts = folder.folder.split("/");
+    const displayName = parts.length > 1 ? parts.slice(1).join("/") : folder.folder;
 
     return (
         <Link href={`/gallery/${folderPath}`} className="group">
