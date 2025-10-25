@@ -51,19 +51,6 @@ export default function PhotoModal({ photo, isOpen, onClose, baseUrl, prefix }: 
                             </p>
                         </div>
                         <div className="flex items-center gap-2">
-                            <Button
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setIsZoomed(!isZoomed)}
-                                className="hidden sm:flex"
-                            >
-                                {isZoomed ? (
-                                    <ZoomOut className="h-4 w-4" />
-                                ) : (
-                                    <ZoomIn className="h-4 w-4" />
-                                )}
-                                {isZoomed ? "縮小" : "放大"}
-                            </Button>
                             <Button variant="outline" size="sm" onClick={handleDownload}>
                                 <Download className="h-4 w-4" />
                                 <span className="hidden sm:inline ml-2">下載原圖</span>
