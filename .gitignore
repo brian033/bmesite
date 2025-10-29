@@ -44,5 +44,8 @@ next-env.d.ts
 /db
 /uploads
 /backup
+/event_gallery/gallery_out
+/event_gallery/生物機電研討會照片
+/event_gallery/.env
 priceOptionQuery.txt
 depGuide.md

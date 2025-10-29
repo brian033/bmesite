@@ -10,6 +10,16 @@ const nextConfig: NextConfig = {
             bodySizeLimit: "10mb",
         },
     },
+    images: {
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "cdn.beame2025.cc",
+                port: "",
+                pathname: "/gallery/**",
+            },
+        ],
+    },
 };
 
 export default nextConfig;
