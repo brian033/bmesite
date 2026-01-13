@@ -21,6 +21,8 @@ import {
     Info,
 } from "lucide-react";
 import Link from "next/link";
+import { ContestVideo } from "../components/ContestVideo";
+
 export default function Page() {
     return (
         <div className="flex flex-col min-h-screen">
@@ -42,14 +44,10 @@ export default function Page() {
                 </h1>
                 {/* 這邊可以打簡介喔～ */}
                 {/* <p className="text-center text-gray-600 mb-12 max-w-3xl mx-auto">簡介</p> */}
-                <div className="flex justify-center my-4">
-                    <Image
-                        src="/robot/robot_poster.jpg"
-                        alt="農業機器人比賽"
-                        className="object-cover"
-                        width={700}
-                        height={900}
-                    />
+
+                {/* 活動花絮影片 */}
+                <div className="my-8">
+                    <ContestVideo />
                 </div>
 
                 {/* 競賽資訊卡片 */}
@@ -190,6 +188,17 @@ export default function Page() {
                             </Table>
                         </div>
                     </Card>
+                </div>
+
+                {/* 競賽海報 */}
+                <div className="flex justify-center my-8">
+                    <Image
+                        src="/robot/robot_poster.jpg"
+                        alt="農業機器人比賽海報"
+                        className="object-cover rounded-lg shadow-md"
+                        width={700}
+                        height={900}
+                    />
                 </div>
 
                 {/* 相關資料下載 */}
