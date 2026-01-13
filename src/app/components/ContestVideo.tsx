@@ -10,7 +10,7 @@ interface ContestVideoProps {
 
 export function ContestVideo({
     src = "https://cdn.beame2025.cc/contest_video/index.m3u8",
-    title = "活動花絮",
+    title = "活動花絮影片(點擊播放)",
 }: ContestVideoProps) {
     const videoRef = useRef<HTMLVideoElement>(null);
     const [error, setError] = useState<string | null>(null);
@@ -23,7 +23,7 @@ export function ContestVideo({
 
         if (Hls.isSupported()) {
             hls = new Hls({
-                debug: true, // Enable debug logs in console to see what's happening
+                debug: true,
                 enableWorker: true,
                 lowLatencyMode: true,
             });
@@ -84,7 +84,7 @@ export function ContestVideo({
                     className="w-full h-full object-contain"
                     controls
                     playsInline
-                    poster="/robot/robot_poster.jpg" // Optional: nice to have a poster while loading
+                    poster="/robot/robot_poster.jpg"
                 />
             </div>
         </div>
